@@ -8,7 +8,7 @@ class openstack::common::glance {
     class { '::glance::api':
       keystone_password   => $::openstack::config::glance_password,
       auth_host           => $::openstack::config::controller_address_management,
-      auth_uri            => "http://${::openstack::config::controller_address_management}:5000/v2.0",
+      auth_uri            => "http://${::openstack::config::controller_address_management}:5000/",
       keystone_tenant     => 'services',
       keystone_user       => 'glance',
       database_connection => $::openstack::resources::connectors::glance,
