@@ -7,7 +7,8 @@ class openstack::common::glance {
   if $::openstack::profile::base::is_storage {
     class { '::glance::api':
       keystone_password   => $::openstack::config::glance_password,
-      auth_host           => $::openstack::config::controller_address_management,
+      auth_uri            => "http://${::openstack::config::controller_address_management}:5000/v2.0"
+      identity_uri        => "http://${::openstack::config::controller_address_management}:35357"
       keystone_tenant     => 'services',
       keystone_user       => 'glance',
       database_connection => $::openstack::resources::connectors::glance,
