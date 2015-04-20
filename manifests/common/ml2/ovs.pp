@@ -5,6 +5,7 @@ class openstack::common::ml2::ovs {
   $data_address        = ip_for_network($data_network)
   $enable_tunneling    = $::openstack::config::neutron_tunneling # true
   $tunnel_types        = $::openstack::config::neutron_tunnel_types #['gre']
+  $bridge_mappings     = $::openstack::config::neutron_bridge_mappings # []
 
   class { '::neutron::agents::ml2::ovs':
     enable_tunneling => $enable_tunneling,

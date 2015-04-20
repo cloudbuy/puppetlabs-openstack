@@ -63,6 +63,7 @@ class openstack::config (
   $neutron_type_drivers = undef,
   $neutron_mechanism_drivers = undef,
   $neutron_tunnel_id_ranges = undef,
+  $neutron_bridge_mappings = undef,
   $ceilometer_address_management = undef,
   $ceilometer_mongo_username = undef,
   $ceilometer_mongo_password = undef,
