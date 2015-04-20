@@ -14,7 +14,7 @@ class openstack::profile::neutron::router {
   ### Router service installation
   class { '::neutron::agents::l3':
     debug                   => $::openstack::config::debug,
-    external_network_bridge => undef,
+    external_network_bridge => '',
     enabled                 => true,
   }
 
