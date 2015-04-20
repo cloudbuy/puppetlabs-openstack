@@ -10,7 +10,7 @@ class openstack::profile::firewall::post {
     proto  => 'gre',
     state  => ['NEW'],
     action => 'accept',
-    source => $::openstack::config::network_data,
+#    source => $::openstack::config::network_data,
   } ->
   firewall { '9999 - Reject remaining traffic':
     proto  => 'all',
