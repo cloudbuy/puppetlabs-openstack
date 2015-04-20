@@ -12,5 +12,6 @@ class openstack::common::ml2::ovs {
     local_ip         => $data_address,
     enabled          => true,
     tunnel_types     => $tunnel_types,
+    bridge_mappings  => $bridge_mappings
   }
 }
