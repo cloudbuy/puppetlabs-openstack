@@ -9,7 +9,6 @@ class openstack::profile::firewall::post {
   firewall { '9100 - Accept all vm network traffic':
     proto  => 'gre',
     action => 'accept',
-    source => '0.0.0.0/0',
     source => $::openstack::config::network_data,
   } ->
   firewall { '9999 - Reject remaining traffic':
