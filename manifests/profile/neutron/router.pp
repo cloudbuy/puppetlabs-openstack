@@ -19,8 +19,15 @@ class openstack::profile::neutron::router {
   }
 
   class { '::neutron::agents::dhcp':
-    debug   => $::openstack::config::debug,
-    enabled => true,
+    debug               => $::openstack::config::debug,
+    enabled             => true,
+    dnsmasq_config_file => '/etc/neutron/dnsmasq-neutron.conf',
+  }
+
+  file { '/etc/neutron/dnsmasq-neutron.conf':
+    owner   => 'root',
+    group   => 0,
+    content => 'dhcp-option-force=26,1454',
   }
 
   class { '::neutron::agents::metadata':
