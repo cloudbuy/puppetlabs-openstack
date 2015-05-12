@@ -15,7 +15,7 @@ class openstack::profile::neutron::router {
   class { '::neutron::agents::l3':
     debug                   => $::openstack::config::debug,
     external_network_bridge => '',
-    enabled                 => true,
+    enabled                 => false,
   }
 
   class { '::neutron::agents::dhcp':
