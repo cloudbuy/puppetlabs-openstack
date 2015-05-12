@@ -54,7 +54,8 @@ class openstack::profile::neutron::router {
   }
 
   class { '::neutron::services::fwaas':
-    enabled => true,
+    enabled              => true,
+    vpnaas_agent_package => true,
   }
 
   # TODO: provide a means to configure these nicely
