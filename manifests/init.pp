@@ -492,7 +492,7 @@ class openstack (
       keystone_use_httpd            => hiera(openstack::keystone::use_httpd, false),
       glance_password               => hiera(openstack::glance::password),
       glance_api_servers            => hiera(openstack::glance::api_servers),
-      images                        => hiera(openstack::images),
+      images                        => hiera(openstack::images, []),
       cinder_password               => hiera(openstack::cinder::password),
       cinder_volume_size            => hiera(openstack::cinder::volume_size),
       swift_password                => hiera(openstack::swift::password),
