@@ -8,7 +8,6 @@ class openstack::profile::neutron::router {
 
   include ::openstack::common::neutron
   include ::openstack::common::ml2::ovs
-  include ::openstack::common::ml2
 
 
   ### Router service installation
@@ -50,7 +49,6 @@ class openstack::profile::neutron::router {
     enabled => true,
   }
 
-  # TODO: provide a means to configure these nicely
 #  $external_bridge = 'brex'
 #  $external_network = $::openstack::config::network_external
 #  $external_device = device_for_network($external_network)
@@ -66,4 +64,11 @@ class openstack::profile::neutron::router {
 #    # External bridge already has the external device's IP, thus the external
 #    # device has already been linked
 #  }
+#
+#  $defaults = { 'ensure' => 'present' }
+#  create_resources('neutron_network', $::openstack::config::networks, $defaults)
+#  create_resources('neutron_subnet', $::openstack::config::subnets, $defaults)
+#  create_resources('neutron_router', $::openstack::config::routers, $defaults)
+#  create_resources('neutron_router_interface', $::openstack::config::router_interfaces, $defaults)
+
 }

@@ -42,6 +42,10 @@ mod "openstacklib",
   :git => "git://github.com/stackforge/puppet-openstacklib",
   :ref => "master"
 
+mod "openstack_extras",
+  :git => "git://github.com/stackforge/puppet-openstack_extras",
+  :ref => "master"
+
 mod "tempest",
   :git => "git://github.com/stackforge/puppet-tempest",
   :ref => "master"
@@ -62,13 +66,17 @@ mod "epel",
   :git => "git://github.com/stahnma/puppet-module-epel",
   :ref => "master"
 
+mod "erlang",
+  :git => "git://github.com/garethr/garethr-erlang",
+  :ref => "master"
+
 mod "inifile",
   :git => "git://github.com/puppetlabs/puppetlabs-inifile",
   :ref => "1.0.x"
 
 mod "mysql",
   :git => "git://github.com/puppetlabs/puppetlabs-mysql",
-  :ref => "master"
+  :ref => "3.3.x"
 
 mod "stdlib",
   :git => "git://github.com/puppetlabs/puppetlabs-stdlib",
