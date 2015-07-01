@@ -408,7 +408,7 @@ class openstack (
       network_external_ippool_end   => hiera(openstack::network::external::ippool::end),
       network_external_gateway      => hiera(openstack::network::external::gateway),
       network_external_dns          => hiera(openstack::network::external::dns),
-      network_neutron_private       => hiera(openstack::network::neutron::private),
+      network_neutron_private       => hiera(openstack::network::neutron::private, undef),
       controller_address_api        => hiera(openstack::controller::address::api),
       controller_address_management => hiera(openstack::controller::address::management),
       storage_address_api           => hiera(openstack::storage::address::api),
