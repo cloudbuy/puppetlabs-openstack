@@ -6,7 +6,7 @@ class openstack::profile::galera {
   class { '::galera::server':
     root_password    => $::openstack::config::mysql_root_password,
     restart          => true,
-    package_manage   => false,
+    package_manage   => true,
     override_options => {
       'mysqld' => {
         'bind_address'                    => $management_network,
