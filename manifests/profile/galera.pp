@@ -3,7 +3,7 @@ class openstack::profile::galera {
 
   $management_network = $::openstack::config::network_management
 
-  class { '::mysql::server':
+  class { '::galera::server':
     root_password    => $::openstack::config::mysql_root_password,
     restart          => true,
     package_manage   => false,
