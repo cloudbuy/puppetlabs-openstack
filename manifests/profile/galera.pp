@@ -4,6 +4,10 @@ class openstack::profile::galera {
   $management_network = $::openstack::config::network_management
   $management_address = ip_for_network($management_network)
 
+  $cluster_addresses = hiera_hash('openstack::controllers').map |Hash $ctrl| {
+    $ctrl['management']
+  }
+
   class { '::galera::server':
     root_password    => $::openstack::config::mysql_root_password,
     restart          => true,
@@ -20,7 +24,7 @@ class openstack::profile::galera {
         'wsrep_provider'                 => '/usr/lib/libgalera_smm.so',
         'wsrep_provider_options'         => 'gcache.size=300M; gcache.page_size=1G',
         'wsrep_cluster_name'             => '',
-        'wsrep_cluster_address'          => 'gcomm://',
+        'wsrep_cluster_address'          => "gcomm://${join($cluster_addresses, ',')}",
         'wsrep_sst_method'               => 'rsync',
       }
     }
