@@ -2,6 +2,7 @@
 class openstack::profile::galera {
 
   $management_network = $::openstack::config::network_management
+  $management_address = ip_for_network($management_network)
 
   class { '::galera::server':
     root_password    => $::openstack::config::mysql_root_password,
@@ -9,7 +10,7 @@ class openstack::profile::galera {
     package_manage   => true,
     override_options => {
       'mysqld' => {
-        'bind_address'                   => $management_network,
+        'bind_address'                   => $management_address,
         'default-storage-engine'         => 'innodb',
         'binlog_format'                  => 'ROW',
         'innodb_autoinc_lock_mode'       => 2,
