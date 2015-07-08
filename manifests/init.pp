@@ -16,6 +16,9 @@
 # class is used, it needs appear first in node parse order to ensure proper variable
 # initialization.
 #
+# [*ha*]
+#   Use the new Highly Available set up and configuration params
+#
 # [*region*]
 #   The region name to set up the OpenStack services.
 #
@@ -313,6 +316,7 @@
 #
 class openstack (
   $use_hiera = true,
+  $ha = undef,
   $region = undef,
   $network_api = undef,
   $network_external = undef,
@@ -399,6 +403,7 @@ class openstack (
 ) {
   if $use_hiera {
     class { '::openstack::config':
+      ha                            => hiera(openstack::ha, false),
       region                        => hiera(openstack::region),
       network_api                   => hiera(openstack::network::api),
       network_external              => hiera(openstack::network::external),
@@ -409,6 +414,7 @@ class openstack (
       network_external_gateway      => hiera(openstack::network::external::gateway),
       network_external_dns          => hiera(openstack::network::external::dns),
       network_neutron_private       => hiera(openstack::network::neutron::private, undef),
+      controllers                   => hiera(openstack::controllers, undef),
       controller_address_api        => hiera(openstack::controller::address::api, undef),
       controller_address_management => hiera(openstack::controller::address::management, undef),
       storage_address_api           => hiera(openstack::storage::address::api, undef),
@@ -485,6 +491,7 @@ class openstack (
     }
   } else {
     class { '::openstack::config':
+      ha                            => $ha,
       region                        => $region,
       network_api                   => $network_api,
       network_external              => $network_external,

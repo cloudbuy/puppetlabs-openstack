@@ -1,6 +1,7 @@
 # private global parameters class. Do not use directly!
 class openstack::config (
   $use_hiera = undef,
+  $ha = undef,
   $region = undef,
   $network_api = undef,
   $network_external = undef,
@@ -11,6 +12,7 @@ class openstack::config (
   $network_external_gateway = undef,
   $network_external_dns = undef,
   $network_neutron_private = undef,
+  $controllers = undef,
   $controller_address_api = undef,
   $controller_address_management = undef,
   $storage_address_api = undef,
