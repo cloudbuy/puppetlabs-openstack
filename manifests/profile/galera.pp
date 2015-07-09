@@ -4,8 +4,8 @@ class openstack::profile::galera {
   $management_network = $::openstack::config::network_management
   $management_address = ip_for_network($management_network)
 
-  $cluster_addresses = hiera_array('openstack::controllers').map |Hash $ctrl| {
-    $ctrl['management']
+  $cluster_addresses = $::openstack::config::controllers.map |String $name, Hash $info| {
+    $info['management']
   }
 
   class { '::galera::server':
