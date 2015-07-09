@@ -8,7 +8,7 @@ class openstack::profile::haproxy::controller {
   $management_address = $::openstack::config::controller_address_management
 
   class { '::haproxy':
-    defaults_options => [
+    defaults_options => {
       'log'     => 'global',
       'mode'    => 'http',
       'option'  => [
@@ -18,14 +18,14 @@ class openstack::profile::haproxy::controller {
         'log-health-checks',
       ],
       'retries' => 3,
-    ],
+    },
     global_options => {
       'tune.bufsize'    => 32768, # 32kb,
       'tune.maxrewrite' => 16384, # 16kb,
       'daemon'          => undef,
       'stats'           => ['socket /var/run/haproxy.sock level admin'],
       'spread-checks'   => 5,
-    ]
+    }
   }
 
   # Compute the server_names and server_addresses once, they'll be common amongst most of the balancemembers
