@@ -33,12 +33,12 @@ class openstack::profile::haproxy::controller {
   $server_addresses = $::openstack::config::controllers.map |String $name, Hash $info| { $info['management'] }
 
   define api_service($port, $server_names, $server_addresses) {
-    haproxy::listen { $name:
+    ::haproxy::listen { $name:
       bind => {"${management_address}:${port}" => []},
     }
 
     $ports = $server_names.map |$_| { $port }
-    haproxy::balancemember { $name:
+    ::haproxy::balancemember { $name:
       listening_service => $name,
       ports             => $ports,
       ipaddresses       => $server_addresses,
