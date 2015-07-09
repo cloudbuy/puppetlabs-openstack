@@ -9,20 +9,22 @@ class openstack::profile::haproxy::controller {
 
   class { '::haproxy':
     defaults_options => [
-      'log     global',
-      'mode    http',
-      'option  httplog',
-      'option  dontlognull',
-      'option  redispatch',
-      'option  log-health-checks',
-      'retries 3',
+      'log'     => 'global',
+      'mode'    => 'http',
+      'option'  => [
+        'httplog',
+        'dontlognull',
+        'redispatch',
+        'log-health-checks',
+      ],
+      'retries' => 3,
     ],
-    global_options => [
-      'tune.bufsize    32768 # 32kb',
-      'tune.maxrewrite 16384 # 16kb',
-      'daemon',
-      'stats socket /var/run/haproxy.sock level admin',
-      'spread-checks 5'
+    global_options => {
+      'tune.bufsize'    => 32768, # 32kb,
+      'tune.maxrewrite' => 16384, # 16kb,
+      'daemon'          => undef,
+      'stats'           => ['socket /var/run/haproxy.sock level admin'],
+      'spread-checks'   => 5,
     ]
   }
 
