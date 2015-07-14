@@ -32,13 +32,17 @@ class openstack::profile::nova::api {
   class { '::nova::compute::neutron': }
 
   class { '::nova::vncproxy':
-    host    => $::openstack::controller_address_api,
+    host    => $::openstack::common::nova::nova_api_host,
     enabled => true,
+  }
+
+  class { '::nova::objectstore':
+    bind_address => $::openstack::common::nova::nova_api_host,
+    enabled      => true,
   }
 
   class { [
     'nova::scheduler',
-    'nova::objectstore',
     'nova::cert',
     'nova::consoleauth',
     'nova::conductor'
