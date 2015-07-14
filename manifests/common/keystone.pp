@@ -7,7 +7,7 @@ class openstack::common::keystone {
       $service_name = undef
     }
     if ($::openstack::config::ha == true) {
-      $management_address = $::openstack::profile::base:management_address
+      $management_address = $::openstack::profile::base::management_address
     } else {
       $management_address = $::openstack::config::controller_address_management
     }
