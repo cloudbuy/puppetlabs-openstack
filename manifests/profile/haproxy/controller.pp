@@ -9,7 +9,7 @@ class openstack::profile::haproxy::controller {
 
   class { '::haproxy':
     defaults_options => {
-      'log'     => 'global',
+      'log'     => '/dev/log local0 info',
       'mode'    => 'http',
       'option'  => [
         'httplog',
