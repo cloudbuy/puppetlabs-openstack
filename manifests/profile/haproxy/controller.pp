@@ -48,6 +48,7 @@ class openstack::profile::haproxy::controller {
       ports             => $port,
       ipaddresses       => $server_addresses,
       server_names      => $server_names,
+      options           => 'check',
     }
   }
 
