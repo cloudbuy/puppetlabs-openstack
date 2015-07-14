@@ -38,12 +38,12 @@ class openstack::profile::haproxy::controller {
     }
 
     $ports = $server_names.map |$_| { $port }
-    #haproxy::balancemember { $name:
-    #  listening_service => $name,
-    #  ports             => $ports,
-    #  ipaddresses       => $server_addresses,
-    #  server_names      => $server_names,
-    #}
+    haproxy::balancermember { $name:
+      listening_service => $name,
+      ports             => $ports,
+      ipaddresses       => $server_addresses,
+      server_names      => $server_names,
+    }
   }
 
   openstack::profile::haproxy::controller::api_service { 'keystone-admin':
