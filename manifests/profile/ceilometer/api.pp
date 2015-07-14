@@ -32,6 +32,7 @@ class openstack::profile::ceilometer::api {
   class { '::ceilometer::api':
     keystone_host     => $controller_management_address,
     keystone_password => $::openstack::config::ceilometer_password,
+    host              => $::openstack::common::ceilometer::ceilometer_host,
   }
 
   class { '::ceilometer::db':

@@ -10,7 +10,6 @@ class openstack::common::ceilometer {
 
   class { '::ceilometer':
     metering_secret => $::openstack::config::ceilometer_meteringsecret,
-    host            => $ceilometer_host,
     debug           => $::openstack::config::debug,
     verbose         => $::openstack::config::verbose,
     rabbit_hosts    => $::openstack::config::rabbitmq_hosts,
