@@ -7,8 +7,10 @@ class openstack::common::neutron {
   $is_controller = $::openstack::profile::base::is_controller
 
   if ($::openstack::config::ha) and ($is_controller) {
+    $neutron_bind_api              = $::openstack::profile::base::management_address
     $controller_management_address = $::openstack::profile::base::management_address
   } else {
+    $neutron_bind_api              = '0.0.0.0'
     $controller_management_address = $::openstack::config::controller_address_management
   }
 
@@ -27,6 +29,7 @@ class openstack::common::neutron {
     rabbit_host           => $controller_management_address,
     core_plugin           => $::openstack::config::neutron_core_plugin,
     allow_overlapping_ips => true,
+    bind_host             => $neutron_bind_api,
     rabbit_user           => $::openstack::config::rabbitmq_user,
     rabbit_password       => $::openstack::config::rabbitmq_password,
     rabbit_hosts          => $::openstack::config::rabbitmq_hosts,
