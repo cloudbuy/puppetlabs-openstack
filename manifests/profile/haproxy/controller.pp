@@ -41,6 +41,9 @@ class openstack::profile::haproxy::controller {
   define api_service($address, $port, $server_names, $server_addresses) {
     haproxy::listen { $name:
       bind => {"${address}:${port}" => []},
+      options => {
+        'option' => 'httpchk HEAD /',
+      }
     }
 
     haproxy::balancermember { $name:
