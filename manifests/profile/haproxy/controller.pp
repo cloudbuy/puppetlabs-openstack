@@ -42,10 +42,9 @@ class openstack::profile::haproxy::controller {
       bind => {"${address}:${port}" => []},
     }
 
-    $ports = $server_names.map |$_| { $port }
     haproxy::balancermember { $name:
       listening_service => $name,
-      ports             => $ports,
+      ports             => $port,
       ipaddresses       => $server_addresses,
       server_names      => $server_names,
     }
