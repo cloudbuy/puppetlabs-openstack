@@ -30,7 +30,8 @@ class openstack::profile::haproxy::controller {
       'daemon'          => undef,
       'stats'           => ['socket /var/run/haproxy.sock level admin'],
       'spread-checks'   => 5,
-    }
+    },
+    service_manage => false
   }
 
   # Compute the server_names and server_addresses once, they'll be common amongst most of the balancemembers
