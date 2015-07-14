@@ -1,14 +1,17 @@
 class openstack::common::keystone {
   if $::openstack::profile::base::is_controller {
-    $admin_bind_host = '0.0.0.0'
     if $::openstack::config::keystone_use_httpd == true {
       $service_name = 'httpd'
     } else {
       $service_name = undef
     }
     if ($::openstack::config::ha == true) {
+      $admin_bind_host    = $::openstack::profile::base::management_address
+      $public_bind_host   = $::openstack::profile::base::management_address
       $management_address = $::openstack::profile::base::management_address
     } else {
+      $admin_bind_host    = '0.0.0.0'
+      $public_bind_host   = '0.0.0.0'
       $management_address = $::openstack::config::controller_address_management
     }
   } else {
@@ -28,6 +31,7 @@ class openstack::common::keystone {
     debug               => $::openstack::config::debug,
     enabled             => $::openstack::profile::base::is_controller,
     admin_bind_host     => $admin_bind_host,
+    public_bind_host    => $public_bind_host,
     mysql_module        => '2.2',
     service_name        => $service_name,
   }
