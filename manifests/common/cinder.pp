@@ -2,16 +2,18 @@
 # Private, and should not be used on its own
 class openstack::common::cinder {
 
-  $management_address  = $::openstack::config::controller_address_management
+
+  if ($::openstack::config::ha) {
+    $cinder_host        = $::openstack::profile::base::management_address
+    $management_address = $::openstack::profile::base::management_address
+  } else {
+    $cinder_host = '0.0.0.0'
+    $management_address  = $::openstack::config::controller_address_management
+  }
+
   $user                = $::openstack::config::mysql_user_cinder
   $pass                = $::openstack::config::mysql_pass_cinder
   $database_connection = "mysql://${user}:${pass}@${management_address}/cinder"
-
-  if ($::openstack::config::ha) {
-    $cinder_host = $::openstack::profile::base::management_address
-  } else {
-    $cinder_host = '0.0.0.0'
-  }
 
   class { '::cinder':
     database_connection => $database_connection,
