@@ -18,6 +18,11 @@ class openstack::profile::haproxy::controller {
         'log-health-checks',
       ],
       'retries' => 3,
+      'timeout' => [
+        'connect 5000ms',
+        'client 50000ms',
+        'server 50000ms',
+      ]
     },
     global_options => {
       'tune.bufsize'    => 32768, # 32kb,
