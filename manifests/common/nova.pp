@@ -5,15 +5,20 @@
 # depends on openstack::profile::base having been added to a node
 class openstack::common::nova {
 
-  $management_network = $::openstack::config::network_management
-  $management_address = ip_for_network($management_network)
-
   $storage_management_address = $::openstack::config::storage_address_management
   $controller_management_address = $::openstack::config::controller_address_management
 
+  if ($::openstack::config::ha) {
+    $nova_api_host      = $::openstack::profile::base::management_address
+    $management_address = $::openstack::profile::base::management_address
+  } else {
+    $nova_api_host      = '0.0.0.0'
+    $management_address = $::openstack::config::controller_address_management
+  }
+
   $user                = $::openstack::config::mysql_user_nova
   $pass                = $::openstack::config::mysql_pass_nova
-  $database_connection = "mysql://${user}:${pass}@${controller_management_address}/nova"
+  $database_connection = "mysql://${user}:${pass}@${management_address}/nova"
 
   class { '::nova':
     database_connection => $database_connection,

@@ -2,7 +2,6 @@
 # Private, and should not be used on its own
 class openstack::common::cinder {
 
-
   if ($::openstack::config::ha) {
     $cinder_host        = $::openstack::profile::base::management_address
     $management_address = $::openstack::profile::base::management_address
