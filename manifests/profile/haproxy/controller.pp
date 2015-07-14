@@ -61,6 +61,7 @@ class openstack::profile::haproxy::controller {
   }
 
   openstack::profile::haproxy::controller::api_service { 'nova':
+    address          => $management_address,
     port             => 8774,
     server_names     => $server_names,
     server_addresses => $server_addresses,
