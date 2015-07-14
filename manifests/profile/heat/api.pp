@@ -5,10 +5,18 @@ class openstack::profile::heat::api {
   openstack::resources::firewall { 'Heat API': port     => '8004', }
   openstack::resources::firewall { 'Heat CFN API': port => '8000', }
 
-  $controller_management_address = $::openstack::config::controller_address_management
+
+  if ($::openstack::config::ha) {
+    $heat_api_host      = $::openstack::profile::base::management_address
+    $management_address = $::openstack::profile::base::management_address
+  } else {
+    $heat_api_host      = $::openstack::config::controller_address_api
+    $management_address = $::openstack::config::controller_address_management
+  }
+
   $user                          = $::openstack::config::mysql_user_heat
   $pass                          = $::openstack::config::mysql_pass_heat
-  $database_connection           = "mysql://${user}:${pass}@${controller_management_address}/heat"
+  $database_connection           = "mysql://${user}:${pass}@${management_address}/heat"
 
   class { '::heat::keystone::auth':
     password         => $::openstack::config::heat_password,
@@ -39,11 +47,11 @@ class openstack::profile::heat::api {
   }
 
   class { '::heat::api':
-    bind_host => $::openstack::config::controller_address_api,
+    bind_host => $heat_api_host,
   }
 
   class { '::heat::api_cfn':
-    bind_host => $::openstack::config::controller_address_api,
+    bind_host => $heat_api_host,
   }
 
   class { '::heat::engine':
