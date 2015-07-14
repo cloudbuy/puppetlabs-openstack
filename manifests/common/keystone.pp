@@ -6,12 +6,17 @@ class openstack::common::keystone {
     } else {
       $service_name = undef
     }
+    if ($::openstack::config::ha == true) {
+      $management_address = $::openstack::profile::base:management_address
+    } else {
+      $management_address = $::openstack::config::controller_address_management
+    }
   } else {
-    $admin_bind_host = $::openstack::config::controller_address_management
-    $service_name    = undef
+    $admin_bind_host    = $::openstack::config::controller_address_management
+    $management_address = $::openstack::config::controller_address_management
+    $service_name       = undef
   }
 
-  $management_address  = $::openstack::config::controller_address_management
   $user                = $::openstack::config::mysql_user_keystone
   $pass                = $::openstack::config::mysql_pass_keystone
   $database_connection = "mysql://${user}:${pass}@${management_address}/keystone"

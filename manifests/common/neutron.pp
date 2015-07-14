@@ -6,7 +6,11 @@
 class openstack::common::neutron {
   $is_controller = $::openstack::profile::base::is_controller
 
-  $controller_management_address = $::openstack::config::controller_address_management
+  if ($::openstack::config::ha) and ($is_controller) {
+    $controller_management_address = $::openstack::profile::base::management_address
+  } else {
+    $controller_management_address = $::openstack::config::controller_address_management
+  }
 
   $data_network = $::openstack::config::network_data
   $data_address = ip_for_network($data_network)
