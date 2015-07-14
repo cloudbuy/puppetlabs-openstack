@@ -7,11 +7,18 @@ class openstack::common::cinder {
   $pass                = $::openstack::config::mysql_pass_cinder
   $database_connection = "mysql://${user}:${pass}@${management_address}/cinder"
 
+  if ($::openstack::config::ha) {
+    $cinder_host = $::openstack::profile::base::management_address
+  } else {
+    $cinder_host = '0.0.0.0'
+  }
+
   class { '::cinder':
     database_connection => $database_connection,
     rabbit_host         => $::openstack::config::controller_address_management,
     rabbit_userid       => $::openstack::config::rabbitmq_user,
     rabbit_password     => $::openstack::config::rabbitmq_password,
+    host                => $cinder_host,
     debug               => $::openstack::config::debug,
     verbose             => $::openstack::config::verbose,
     mysql_module        => '2.2',
