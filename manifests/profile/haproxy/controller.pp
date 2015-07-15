@@ -9,7 +9,7 @@ class openstack::profile::haproxy::controller {
 
   class { '::haproxy':
     defaults_options => {
-      'log'     => '/dev/log local0 info',
+      'log'     => 'global',
       'mode'    => 'http',
       'option'  => [
         'httplog',
@@ -25,6 +25,7 @@ class openstack::profile::haproxy::controller {
       ]
     },
     global_options => {
+      'log'             => '/dev/log local0 info',
       'tune.bufsize'    => 32768, # 32kb,
       'tune.maxrewrite' => 16384, # 16kb,
       'daemon'          => '',
