@@ -27,7 +27,7 @@ class openstack::profile::haproxy::controller {
     global_options => {
       'tune.bufsize'    => 32768, # 32kb,
       'tune.maxrewrite' => 16384, # 16kb,
-      'daemon'          => undef,
+      'daemon'          => '',
       'stats'           => ['socket /var/run/haproxy.sock level admin'],
       'spread-checks'   => 5,
     },
