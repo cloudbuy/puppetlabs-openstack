@@ -29,6 +29,10 @@ class openstack::profile::haproxy::controller {
       'tune.bufsize'    => 32768, # 32kb,
       'tune.maxrewrite' => 16384, # 16kb,
       'daemon'          => '',
+      'uid'             => 604,
+      'gid'             => 604,
+      'debug'           => '',
+      'pidfile'         => '/var/run/haproxy.pid',
       'stats'           => ['socket /var/run/haproxy.sock level admin'],
       'spread-checks'   => 5,
     },
@@ -43,7 +47,11 @@ class openstack::profile::haproxy::controller {
     haproxy::listen { $name:
       bind => {"${address}:${port}" => []},
       options => {
-        'option' => 'httpchk HEAD /',
+        'option'  => [
+          'httpchk HEAD /',
+          'forwardfor',
+        ],
+        'balance' => 'roundrobin',
       }
     }
 
@@ -52,7 +60,7 @@ class openstack::profile::haproxy::controller {
       ports             => $port,
       ipaddresses       => $server_addresses,
       server_names      => $server_names,
-      options           => 'check',
+      options           => 'weight 1 check inter 2000 fall 3',
     }
   }
 
