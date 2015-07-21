@@ -9,7 +9,7 @@ class openstack::profile::haproxy::controller {
 
   class { '::haproxy':
     defaults_options => {
-      'log'     => '/dev/log local0 info',
+      'log'     => 'global',
       'mode'    => 'http',
       'option'  => [
         'httplog',
@@ -25,9 +25,14 @@ class openstack::profile::haproxy::controller {
       ]
     },
     global_options => {
+      'log'             => '/dev/log local0 info',
       'tune.bufsize'    => 32768, # 32kb,
       'tune.maxrewrite' => 16384, # 16kb,
-      'daemon'          => undef,
+      'daemon'          => '',
+      'uid'             => 604,
+      'gid'             => 604,
+      'debug'           => '',
+      'pidfile'         => '/var/run/haproxy.pid',
       'stats'           => ['socket /var/run/haproxy.sock level admin'],
       'spread-checks'   => 5,
     },
@@ -42,7 +47,12 @@ class openstack::profile::haproxy::controller {
     haproxy::listen { $name:
       bind => {"${address}:${port}" => []},
       options => {
-        'option' => 'httpchk HEAD /',
+        'option'  => [
+          'httpchk HEAD /',
+          'tcpka',
+          'forwardfor',
+        ],
+        'balance' => 'source',
       }
     }
 
@@ -51,7 +61,7 @@ class openstack::profile::haproxy::controller {
       ports             => $port,
       ipaddresses       => $server_addresses,
       server_names      => $server_names,
-      options           => 'check',
+      options           => 'check inter 2000 rise 2 fall 5',
     }
   }
 
@@ -79,6 +89,20 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'nova-ec2':
     address          => $management_address,
     port             => 8773,
+    server_names     => $server_names,
+    server_addresses => $server_addresses,
+  }
+
+  openstack::profile::haproxy::controller::api_service { 'nova-metadata':
+    address          => $management_address,
+    port             => 8775,
+    server_names     => $server_names,
+    server_addresses => $server_addresses,
+  }
+
+  openstack::profile::haproxy::controller::api_service { 'nova-novnc':
+    address          => $management_address,
+    port             => 6080,
     server_names     => $server_names,
     server_addresses => $server_addresses,
   }
@@ -114,6 +138,13 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'heat-cfn':
     address          => $management_address,
     port             => 8000,
+    server_names     => $server_names,
+    server_addresses => $server_addresses,
+  }
+
+  openstack::profile::haproxy::controller::api_service { 'horizon':
+    address          => $management_address,
+    port             => 80,
     server_names     => $server_names,
     server_addresses => $server_addresses,
   }
