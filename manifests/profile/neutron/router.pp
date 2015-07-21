@@ -15,8 +15,6 @@ class openstack::profile::neutron::router {
     debug                   => $::openstack::config::debug,
     external_network_bridge => 'brex',
     enabled                 => true,
-    package_ensure          => absent,
-    manage_service          => false,
   }
 
   class { '::neutron::agents::dhcp':
@@ -39,9 +37,9 @@ class openstack::profile::neutron::router {
     enabled => true,
   }
 
-  class { '::neutron::agents::vpnaas':
-    enabled => true,
-  }
+#  class { '::neutron::agents::vpnaas':
+#    enabled => true,
+#  }
 
   class { '::neutron::agents::metering':
     enabled => true,
@@ -49,7 +47,6 @@ class openstack::profile::neutron::router {
 
   class { '::neutron::services::fwaas':
     enabled              => true,
-    vpnaas_agent_package => true,
   }
 
 #  $external_bridge = 'brex'
