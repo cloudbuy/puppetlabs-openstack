@@ -14,7 +14,7 @@ class openstack::profile::keepalived::controller {
   keepalived::vrrp::instance { 'VI_api':
     interface         => $api_device,
     state             => $state,
-    virtual_router_id => $::::openstack::config::controller_keepalived_router_id,
+    virtual_router_id => $::openstack::config::controller_keepalived_router_id,
     priority          => $priority,
     auth_type         => 'PASS',
     auth_pass         => $::openstack::config::controller_keepalived_pass,
