@@ -1,7 +1,7 @@
 class openstack::profile::keepalived::controller {
   class { '::keepalived': }
 
-  $api_device = device_for_network($::openstack::config::controller_address_api)
+  $api_device = device_for_network($::openstack::profile::base::api_address)
 
   if ($::openstack::profile::base::is_primary_controller) {
     $state = 'MASTER'
