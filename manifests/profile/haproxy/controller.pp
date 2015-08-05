@@ -157,15 +157,15 @@ class openstack::profile::haproxy::controller {
   }
 
   haproxy::listen { 'mysql':
-    bind    => {"${management_address}:3306"},
+    bind    => {"${management_address}:3306" => []},
     options => {
-      'mode'   => 'tcp',
-      'option' => [
+      'mode'    => 'tcp',
+      'option'  => [
         'mysql-check',
         'tcpka',
       ],
+      'balance' => 'source',
     },
-    'balance'  => 'source',
   }
 
   haproxy::balancermember { 'mysql':
