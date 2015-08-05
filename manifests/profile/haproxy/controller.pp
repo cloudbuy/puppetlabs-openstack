@@ -7,6 +7,7 @@ class openstack::profile::haproxy::controller {
 
   $management_address = $::openstack::config::controller_address_management
 
+  sysctl::value { 'net.ipv4.ip_nonlocal_bind': value => 1 }->
   class { '::haproxy':
     defaults_options => {
       'log'     => 'global',
