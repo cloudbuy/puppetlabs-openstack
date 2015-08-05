@@ -155,4 +155,24 @@ class openstack::profile::haproxy::controller {
     server_names     => $server_names,
     server_addresses => $server_addresses,
   }
+
+  haproxy::listen { 'mysql':
+    bind    => {"${management_address}:3306"},
+    options => {
+      'mode'   => 'tcp',
+      'option' => [
+        'mysql-check',
+        'tcpka',
+      ],
+    },
+    'balance'  => 'source',
+  }
+
+  haproxy::balancermember { 'mysql':
+    listening_service => 'mysql',
+    ports             => 3306,
+    ipaddresses       => $server_addresses,
+    server_names      => $server_names,
+    options           => 'check inter 2000 rise 2 fall 5',
+  }
 }
