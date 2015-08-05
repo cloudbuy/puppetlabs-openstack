@@ -43,6 +43,8 @@ class openstack::profile::haproxy::controller {
   $server_names = keys($::openstack::config::controllers)
   $server_addresses = $::openstack::config::controllers.map |String $name, Hash $info| { $info['management'] }
 
+  $glance_servers = $::openstack::config::glance_api_servers.match(/([^:]+)/)[1]
+
   define api_service($address, $port, $server_names, $server_addresses) {
     haproxy::listen { $name:
       bind => {"${address}:${port}" => []},
@@ -124,8 +126,8 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'glance':
     address          => $management_address,
     port             => 9292,
-    server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_names     => $glance_servers,
+    server_addresses => $glance_servers,
   }
 
   openstack::profile::haproxy::controller::api_service { 'heat':
