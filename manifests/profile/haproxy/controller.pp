@@ -160,7 +160,7 @@ class openstack::profile::haproxy::controller {
     options => {
       'mode'    => 'tcp',
       'option'  => [
-        'mysql-check',
+        'mysql-check haproxy',
         'tcplog',
       ],
       'balance' => 'source',
