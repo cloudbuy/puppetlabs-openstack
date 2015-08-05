@@ -34,6 +34,12 @@ class openstack::profile::galera {
     python_enable => true,
   }
 
+  $cluster_addresses.each |String $addr| {
+    mysql_user { "haproxy@${addr}":
+      ensure => present
+    }
+  }
+
   Service['mysqld'] -> Anchor['database-service']
 
   class { 'mysql::server::account_security': }
