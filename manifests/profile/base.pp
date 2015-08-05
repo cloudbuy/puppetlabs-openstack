@@ -40,4 +40,10 @@ class openstack::profile::base {
     
   $is_controller = ($management_matches and $api_matches)
   $is_storage    = ($storage_management_matches and $storage_api_matches)
+
+  if ($management_matches and $api_matches) and ($::openstack::config::ha) {
+    $is_primary_controller = pick($::openstack::config::controllers[$hostname]['primary'], false)
+  } else {
+    $is_primary_controller = false
+  }
 }
