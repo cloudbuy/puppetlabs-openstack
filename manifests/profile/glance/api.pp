@@ -22,7 +22,7 @@ class openstack::profile::glance::api {
     keystone_tenant     => 'services',
     keystone_user       => 'glance',
     database_connection => $database_connection,
-    registry_host       => $::openstack::config::storage_address_management,
+    registry_host       => $::management_address,
     verbose             => $::openstack::config::verbose,
     debug               => $::openstack::config::debug,
     enabled             => $::openstack::profile::base::is_storage,
