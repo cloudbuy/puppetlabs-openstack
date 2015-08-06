@@ -39,14 +39,14 @@ class openstack::profile::haproxy::controller {
     },
   }
 
-  # Compute the server_names and server_addresses once, they'll be common amongst most of the balancemembers
+  # Compute the server_names and server_addrs once, they'll be common amongst most of the balancemembers
   $server_names = keys($::openstack::config::controllers)
   $server_addrs = $::openstack::config::controllers.map |String $name, Hash $addr| { $addr['management'] }
 
   $glance_names = keys($::openstack::config::storage)
   $glance_addrs = $::openstack::config::storage.map |String $name, Hash $addr| { $addr['management'] }
 
-  define api_service($address, $port, $server_names, $server_addresses) {
+  define api_service($address, $port, $server_names, $server_addrs) {
     haproxy::listen { $name:
       bind => {"${address}:${port}" => []},
       options => {
@@ -59,13 +59,13 @@ class openstack::profile::haproxy::controller {
       }
     }
 
-    notify { "${name} - addresses ${server_addresses}": }
+    notify { "${name} - addresses ${server_addrs}": }
     notify { "${name} - names ${server_names}": }
 
     haproxy::balancermember { $name:
       listening_service => $name,
       ports             => $port,
-      ipaddresses       => $server_addresses,
+      ipaddresses       => $server_addrs,
       server_names      => $server_names,
       options           => 'check inter 2000 rise 2 fall 5',
     }
@@ -75,91 +75,91 @@ class openstack::profile::haproxy::controller {
     address          => $management_address,
     port             => 35357,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'keystone-public':
     address          => $management_address,
     port             => 5000,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'nova':
     address          => $management_address,
     port             => 8774,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'nova-ec2':
     address          => $management_address,
     port             => 8773,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'nova-metadata':
     address          => $management_address,
     port             => 8775,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'nova-novnc':
     address          => $management_address,
     port             => 6080,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'neutron':
     address          => $management_address,
     port             => 9696,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'cinder':
     address          => $management_address,
     port             => 8776,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'glance':
     address          => $management_address,
     port             => 9292,
     server_names     => $glance_names,
-    server_addresses => $glance_addrs,
+    server_addrs => $glance_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'heat':
     address          => $management_address,
     port             => 8004,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'heat-cfn':
     address          => $management_address,
     port             => 8000,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'horizon':
     address          => $management_address,
     port             => 80,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'ceilometer':
     address          => $management_address,
     port             => 8777,
     server_names     => $server_names,
-    server_addresses => $server_addresses,
+    server_addrs => $server_addrs,
   }
 
   haproxy::listen { 'mysql':
@@ -177,7 +177,7 @@ class openstack::profile::haproxy::controller {
   haproxy::balancermember { 'mysql':
     listening_service => 'mysql',
     ports             => 3306,
-    ipaddresses       => $server_addresses,
+    ipaddresses       => $server_addrs,
     server_names      => $server_names,
     options           => 'check inter 2000 rise 2 fall 5',
   }
