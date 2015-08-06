@@ -17,15 +17,14 @@ class openstack::profile::base {
   $controller_management_address = $::openstack::config::controller_address_management
   $storage_management_address = $::openstack::config::storage_address_management
 
-
   $api_network = $::openstack::config::network_api
   $api_address = ip_for_network($api_network)
   $controller_api_address = $::openstack::config::controller_address_api
   $storage_api_address    = $::openstack::config::storage_address_api
 
   if ($::openstack::config::ha) {
-    $controller_management_addresses = $::openstack::config::controllers.map|String $name, Hash $data| { $data['management'] }
-    $controller_api_addresses = $::openstack::config::controllers.map|String $name, Hash $data| { $data['api'] }
+    $controller_management_addresses = $::openstack::config::controllers.map|String $name, Hash $addr| { $addr['management'] }
+    $controller_api_addresses = $::openstack::config::controllers.map|String $name, Hash $addr| { $addr['api'] }
 
     $management_matches = member($controller_management_addresses, $management_address)
     $api_matches = member($controller_api_addresses, $api_address)
