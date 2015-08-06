@@ -13,6 +13,7 @@ class openstack::config (
   $network_external_dns = undef,
   $network_neutron_private = undef,
   $controllers = undef,
+  $storage = undef,
   $controller_address_api = undef,
   $controller_address_management = undef,
   $controller_keepalived_router_id = undef,

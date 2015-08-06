@@ -41,9 +41,10 @@ class openstack::profile::haproxy::controller {
 
   # Compute the server_names and server_addresses once, they'll be common amongst most of the balancemembers
   $server_names = keys($::openstack::config::controllers)
-  $server_addresses = $::openstack::config::controllers.map |String $name, Hash $info| { $info['management'] }
+  $server_addrs = $::openstack::config::controllers.map |String $name, Hash $addr| { $addr['management'] }
 
-  $glance_servers = $::openstack::config::glance_api_servers.match(/([^:]+)/)[1]
+  $glance_names = keys($::openstack::config::storage)
+  $glance_addrs = $::openstack::config::storage.map |String $name, Hash $addr| { $addr['management'] }
 
   define api_service($address, $port, $server_names, $server_addresses) {
     haproxy::listen { $name:
@@ -126,8 +127,8 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'glance':
     address          => $management_address,
     port             => 9292,
-    server_names     => $glance_servers,
-    server_addresses => $glance_servers,
+    server_names     => $glance_names,
+    server_addresses => $glance_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'heat':

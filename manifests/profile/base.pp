@@ -23,9 +23,6 @@ class openstack::profile::base {
   $controller_api_address = $::openstack::config::controller_address_api
   $storage_api_address    = $::openstack::config::storage_address_api
 
-  $storage_management_matches = ($management_address == $storage_management_address)
-  $storage_api_matches = ($api_address == $storage_api_address)
-
   if ($::openstack::config::ha) {
     $controller_management_addresses = $::openstack::config::controllers.map|String $name, Hash $data| { $data['management'] }
     $controller_api_addresses = $::openstack::config::controllers.map|String $name, Hash $data| { $data['api'] }
@@ -33,9 +30,18 @@ class openstack::profile::base {
     $management_matches = member($controller_management_addresses, $management_address)
     $api_matches = member($controller_api_addresses, $api_address)
 
+    $storage_management_addresses = $::openstack::config::storage.map|String $name, Hash $addr| { $addr['management'] }
+    $storage_api_addresses = $::openstack::config::storage.map|String $name, Hash $addr| { $addr['api'] }
+
+    $storage_management_matches = member($storage_management_addresses, $management_address)
+    $storage_api_matches = member($storage_api_addresses, $api_address)
+
   } else {
     $management_matches = ($management_address == $controller_management_address)
     $api_matches = ($api_address == $controller_api_address)
+
+    $storage_management_matches = ($management_address == $storage_management_address)
+    $storage_api_matches = ($api_address == $storage_api_address)
   }
     
   $is_controller = ($management_matches and $api_matches)
