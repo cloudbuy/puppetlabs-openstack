@@ -29,7 +29,10 @@ class openstack::profile::glance::api {
     os_region_name      => $::openstack::config::region,
   }
 
-  class { '::glance::backend::file': }
+  class { '::glance::backend::rbd':
+    rbd_store_user => 'glance',
+    rbd_store_pool => 'glance-images',
+  }
 
   class { '::glance::registry':
     keystone_password   => $::openstack::config::glance_password,
