@@ -59,9 +59,6 @@ class openstack::profile::haproxy::controller {
       }
     }
 
-    notify { "${name} - addresses ${server_addrs}": }
-    notify { "${name} - names ${server_names}": }
-
     haproxy::balancermember { $name:
       listening_service => $name,
       ports             => $port,
