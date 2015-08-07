@@ -124,6 +124,9 @@ class openstack::profile::haproxy::controller {
     server_addrs => $server_addrs,
   }
 
+  openstack::resources::firewall { 'Glance API': port      => '9292', }
+  openstack::resources::firewall { 'Glance Registry': port => '9191', }
+
   openstack::profile::haproxy::controller::api_service { 'glance':
     address          => $management_address,
     port             => 9292,
