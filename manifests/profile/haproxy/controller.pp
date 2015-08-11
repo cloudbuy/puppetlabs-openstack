@@ -51,7 +51,7 @@ class openstack::profile::haproxy::controller {
       bind => {"${address}:${port}" => []},
       options => {
         'option'  => [
-          'httpchk HEAD / HTTP/1.1\r\nConnection:\ close',
+          "httpchk HEAD / HTTP/1.1\r\nConnection:\ close\r\nHost:\ ${address}",
           'tcpka',
           'forwardfor',
         ],
