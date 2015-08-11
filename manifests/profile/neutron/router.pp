@@ -49,19 +49,27 @@ class openstack::profile::neutron::router {
     enabled              => true,
   }
 
-#  $external_bridge = 'brex'
-#  $external_network = $::openstack::config::network_external
-#  $external_device = device_for_network($external_network)
-#  vs_bridge { $external_bridge:
-#    ensure => present,
-#  }
-#  if $external_device != $external_bridge {
-#    vs_port { $external_device:
-#      ensure => present,
-#      bridge => $external_bridge,
-#    }
-#  } else {
-#    # External bridge already has the external device's IP, thus the external
-#    # device has already been linked
-#  }
+  if ($::openstack::config::network_external) {
+    $external_bridge = $::openstack::config::network_external_bridge
+
+    if ($::openstack::config::network_external_device) {
+      $external_device = $::openstack::config::network_external_device
+    } else {
+      $external_network = $::openstack::config::network_external
+      $external_device = device_for_network($external_network)
+    }
+
+    vs_bridge { $external_bridge:
+      ensure => present,
+    }
+    if $external_device != $external_bridge {
+      vs_port { $external_device:
+        ensure => present,
+        bridge => $external_bridge
+      }
+    } else {
+      # External bridge already has the external device's IP, thus the external
+      # device has already been linked
+    }
+  }
 }

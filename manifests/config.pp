@@ -5,6 +5,8 @@ class openstack::config (
   $region = undef,
   $network_api = undef,
   $network_external = undef,
+  $network_external_bridge = undef,
+  $network_external_device = undef,
   $network_management = undef,
   $network_data = undef,
   $network_external_ippool_start = undef,
