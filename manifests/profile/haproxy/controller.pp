@@ -69,58 +69,58 @@ class openstack::profile::haproxy::controller {
   }
 
   openstack::profile::haproxy::controller::api_service { 'keystone-admin':
-    address          => $management_address,
-    port             => 35357,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 35357,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'keystone-public':
-    address          => $management_address,
-    port             => 5000,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 5000,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'nova':
-    address          => $management_address,
-    port             => 8774,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 8774,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'nova-ec2':
-    address          => $management_address,
-    port             => 8773,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 8773,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'nova-metadata':
-    address          => $management_address,
-    port             => 8775,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 8775,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'nova-novnc':
-    address          => $management_address,
-    port             => 6080,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 6080,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'neutron':
-    address          => $management_address,
-    port             => 9696,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 9696,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'cinder':
-    address          => $management_address,
-    port             => 8776,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 8776,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
@@ -128,37 +128,37 @@ class openstack::profile::haproxy::controller {
   openstack::resources::firewall { 'Glance Registry': port => '9191', }
 
   openstack::profile::haproxy::controller::api_service { 'glance':
-    address          => $management_address,
-    port             => 9292,
-    server_names     => $glance_names,
+    address      => $management_address,
+    port         => 9292,
+    server_names => $glance_names,
     server_addrs => $glance_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'heat':
-    address          => $management_address,
-    port             => 8004,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 8004,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'heat-cfn':
-    address          => $management_address,
-    port             => 8000,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 8000,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'horizon':
-    address          => $management_address,
-    port             => 80,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 80,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
   openstack::profile::haproxy::controller::api_service { 'ceilometer':
-    address          => $management_address,
-    port             => 8777,
-    server_names     => $server_names,
+    address      => $management_address,
+    port         => 8777,
+    server_names => $server_names,
     server_addrs => $server_addrs,
   }
 
@@ -168,6 +168,7 @@ class openstack::profile::haproxy::controller {
       'mode'    => 'tcp',
       'option'  => [
         'mysql-check user haproxy',
+        'tcpka',
         'tcplog',
       ],
       'balance' => 'source',
