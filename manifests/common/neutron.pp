@@ -24,9 +24,6 @@ class openstack::common::neutron {
   $pass                = $::openstack::config::mysql_pass_neutron
   $database_connection = "mysql://${user}:${pass}@${controller_management_address}/neutron"
 
-  # Load the module required for tracking state in the GRE protocol
-  kmod::load { 'nf_conntrack_proto_gre': }
-
   class { '::neutron':
     rabbit_host           => $controller_management_address,
     core_plugin           => $::openstack::config::neutron_core_plugin,
