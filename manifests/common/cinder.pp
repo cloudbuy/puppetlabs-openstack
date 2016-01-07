@@ -2,7 +2,7 @@
 # Private, and should not be used on its own
 class openstack::common::cinder {
 
-  if ($::openstack::config::ha) {
+  if ($::openstack::config::ha and $::openstack::profile::base::is_controller) {
     $cinder_host        = $::openstack::profile::base::management_address
     $management_address = $::openstack::profile::base::management_address
   } else {
