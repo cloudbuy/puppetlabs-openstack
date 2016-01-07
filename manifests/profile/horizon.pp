@@ -14,6 +14,13 @@ class openstack::profile::horizon {
     secret_key      => $::openstack::config::horizon_secret_key,
     cache_server_ip => $::openstack::config::controller_address_management,
     keystone_url    => "http://${::openstack::config::controller_address_api}:5000/v2.0",
+    neutron_options => {
+      enable_lb             => false,
+      enable_firewall       => false,
+      enable_quotas         => true,
+      enable_security_group => true,
+      enable_vpn            => true,
+    }
   }
 
   openstack::resources::firewall { 'Apache (Horizon)': port => '80' }
