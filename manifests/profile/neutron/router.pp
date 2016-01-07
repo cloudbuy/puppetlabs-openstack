@@ -6,6 +6,11 @@ class openstack::profile::neutron::router {
 
   $controller_management_address = $::openstack::config::controller_address_management
 
+  $dnsmasq_config_file = $::openstack::config::neutron_instance_mtu ? {
+    undef   => undef,
+    default => '/etc/neutron/dnsmasq-neutron.conf'
+  }
+
   include ::openstack::common::neutron
   include ::openstack::common::ml2::ovs
 
@@ -13,13 +18,24 @@ class openstack::profile::neutron::router {
   ### Router service installation
   class { '::neutron::agents::l3':
     debug                   => $::openstack::config::debug,
-    external_network_bridge => 'br-ex',
+    external_network_bridge => '',
     enabled                 => true,
   }
 
   class { '::neutron::agents::dhcp':
-    debug   => $::openstack::config::debug,
-    enabled => true,
+    debug               => $::openstack::config::debug,
+    dnsmasq_config_file => $dnsmasq_config_file,
+    enabled             => true,
+  }
+
+  if ($dnsmasq_config_file) {
+    file { '/etc/neutron/dnsmasq-neutron.conf':
+      content => "dhcp-option-force=26,${::openstack::config::neutron_instance_mtu}\n",
+      owner   => 'root',
+      group   => 0,
+      mode    => '0644',
+    }
+    File['/etc/neutron/dnsmasq-neutron.conf'] ~> Service['neutron-dhcp-service']
   }
 
   class { '::neutron::agents::metadata':
