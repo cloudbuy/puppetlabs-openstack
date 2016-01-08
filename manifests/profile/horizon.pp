@@ -23,6 +23,14 @@ class openstack::profile::horizon {
     }
   }
 
+	# Disable TRACE method
+  file { '/etc/apache2/conf.d/disable-trace.conf':
+    content => "TraceEnable off\n",
+    owner   => 'root',
+    group   => 0,
+    mode    => '0644',
+  }~>Service['httpd']
+
   openstack::resources::firewall { 'Apache (Horizon)': port => '80' }
   openstack::resources::firewall { 'Apache SSL (Horizon)': port => '443' }
 
