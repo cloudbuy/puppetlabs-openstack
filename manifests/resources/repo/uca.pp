@@ -1,6 +1,6 @@
 # Ubuntu Cloud Archive repo
 class openstack::resources::repo::uca(
-  $release = 'juno',
+  $release = 'liberty',
   $repo    = 'updates'
 ) {
   if ($::operatingsystem == 'Ubuntu') {
