@@ -14,10 +14,10 @@ class openstack::profile::keystone {
   }
 
   class { 'keystone::endpoint':
-    public_address   => "http://${::openstack::config::controller_address_api}:5000/v2.0",
-    admin_address    => "http://${::openstack::config::controller_address_management}:35357/v2.0",
-    internal_address => "http://${::openstack::config::controller_address_management}:5000/v2.0",
-    region           => $::openstack::config::region,
+    public_url   => "http://${::openstack::config::controller_address_api}:5000/v2.0",
+    admin_url    => "http://${::openstack::config::controller_address_management}:35357/v2.0",
+    internal_url => "http://${::openstack::config::controller_address_management}:5000/v2.0",
+    region       => $::openstack::config::region,
   }
 
   if $::openstack::config::keystone_use_httpd == true {
