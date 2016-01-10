@@ -38,11 +38,11 @@ class openstack::common::neutron {
   }
 
   class { '::neutron::keystone::auth':
-    password         => $::openstack::config::neutron_password,
-    public_address   => $::openstack::config::controller_address_api,
-    admin_address    => $::openstack::config::controller_address_management,
-    internal_address => $::openstack::config::controller_address_management,
-    region           => $::openstack::config::region,
+    password     => $::openstack::config::neutron_password,
+    public_url   => "http://${::openstack::config::controller_address_api}:5000/v2.0",
+    admin_url    => "http://${::openstack::config::controller_address_management}:35357/v2.0",
+    internal_url => "http://${::openstack::config::controller_address_management}:5000/v2.0",
+    region       => $::openstack::config::region,
   }
 
   class { '::neutron::server':
