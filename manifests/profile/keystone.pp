@@ -14,9 +14,9 @@ class openstack::profile::keystone {
   }
 
   class { 'keystone::endpoint':
-    public_url   => "http://${::openstack::config::controller_address_api}:5000/v2.0",
-    admin_url    => "http://${::openstack::config::controller_address_management}:35357/v2.0",
-    internal_url => "http://${::openstack::config::controller_address_management}:5000/v2.0",
+    public_url   => "http://${::openstack::config::controller_address_api}:5000/",
+    admin_url    => "http://${::openstack::config::controller_address_management}:35357/",
+    internal_url => "http://${::openstack::config::controller_address_management}:5000/",
     region       => $::openstack::config::region,
   }
 
