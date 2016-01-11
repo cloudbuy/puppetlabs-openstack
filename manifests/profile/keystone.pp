@@ -18,6 +18,7 @@ class openstack::profile::keystone {
     admin_url    => "http://${::openstack::config::controller_address_management}:35357/",
     internal_url => "http://${::openstack::config::controller_address_management}:5000/",
     region       => $::openstack::config::region,
+    version      => '',
   }
 
   if $::openstack::config::keystone_use_httpd == true {
