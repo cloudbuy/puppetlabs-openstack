@@ -103,11 +103,23 @@ class openstack::profile::haproxy::controller {
     server_addrs => $server_addrs,
   }
 
-  openstack::profile::haproxy::controller::api_service { 'nova-novnc':
-    address      => $management_address,
-    port         => 6080,
-    server_names => $server_names,
-    server_addrs => $server_addrs,
+  haproxy::listen { 'nova-novnc':
+    bind    => {"${management_address}:6080" => []},
+    options => {
+      'option'  => [
+        'tcpka',
+        'tcplog',
+      ],
+      'balance' => 'source',
+    }
+  }
+
+  haproxy::balancermember { 'nova-novnc':
+    listening_service => 'nova-novnc',
+    ports             => 6080,
+    ipaddresses       => $server_addrs,
+    server_names      => $server_names,
+    options           => 'check inter 2000 rise 2 fall 5',
   }
 
   openstack::profile::haproxy::controller::api_service { 'neutron':
