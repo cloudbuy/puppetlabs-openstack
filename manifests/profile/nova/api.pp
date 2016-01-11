@@ -10,12 +10,19 @@ class openstack::profile::nova::api {
   openstack::resources::firewall { 'Nova S3': port => '3333', }
   openstack::resources::firewall { 'Nova novnc': port => '6080', }
 
+  $public_url = "http://${::openstack::config::controller_address_api}:8774"
+  $admin_url = "http://${::openstack::config::controller_address_management}:8774"
+  $internal_url = "http://${::openstack::config::controller_address_management}:8774"
+
   class { '::nova::keystone::auth':
-    password         => $::openstack::config::nova_password,
-    public_address   => $::openstack::config::controller_address_api,
-    admin_address    => $::openstack::config::controller_address_management,
-    internal_address => $::openstack::config::controller_address_management,
-    region           => $::openstack::config::region,
+    password        => $::openstack::config::nova_password,
+    public_url      => "${public_url}/v2/%(tenant_id)s",
+    admin_url       => "${admin_url}/v2/%(tenant_id)s",
+    internal_url    => "${internal_url}/v2/%(tenant_id)s",
+    public_url_v3   => "${public_url}/v3",
+    admin_url_v3    => "${admin_url}/v3",
+    internal_url_v3 => "${internal_url}/v3",
+    region          => $::openstack::config::region,
   }
 
   include ::openstack::common::nova
