@@ -46,15 +46,34 @@ class openstack::profile::haproxy::controller {
   $glance_names = keys($::openstack::config::storage)
   $glance_addrs = $::openstack::config::storage.map |String $name, Hash $addr| { $addr['management'] }
 
-  define api_service($address, $port, $server_names, $server_addrs) {
+  define api_service($address, $port, $server_names, $server_addrs, $mode='http', $check='http') {
+    case $mode {
+      'tcp' {
+        $options = [
+          'tcplog',
+          'tcp-check',
+          'tcpka'
+        ]
+      }
+      default {
+        if $check == 'tcp' {
+          $check_option = 'tcp-check'
+        } else {
+          $check_option = "httpchk HEAD / HTTP/1.1\\r\\nConnection:\\ close\\r\\nHost:\\ ${address}"
+        }
+        $options = [
+          'httplog',
+          $check_option,
+          'tcpka',
+          'forwardfor'
+        ]
+      }
+    }
+
     haproxy::listen { $name:
       bind => {"${address}:${port}" => []},
       options => {
-        'option'  => [
-          "httpchk HEAD / HTTP/1.1\\r\\nConnection:\\ close\\r\\nHost:\\ ${address}",
-          'tcpka',
-          'forwardfor',
-        ],
+        'option'  => $options,
         'balance' => 'source',
       }
     }
@@ -89,13 +108,6 @@ class openstack::profile::haproxy::controller {
     server_addrs => $server_addrs,
   }
 
-  openstack::profile::haproxy::controller::api_service { 'nova-ec2':
-    address      => $management_address,
-    port         => 8773,
-    server_names => $server_names,
-    server_addrs => $server_addrs,
-  }
-
   openstack::profile::haproxy::controller::api_service { 'nova-metadata':
     address      => $management_address,
     port         => 8775,
@@ -103,23 +115,12 @@ class openstack::profile::haproxy::controller {
     server_addrs => $server_addrs,
   }
 
-  haproxy::listen { 'nova-novnc':
-    bind    => {"${management_address}:6080" => []},
-    options => {
-      'option'  => [
-        'tcpka',
-        'tcplog',
-      ],
-      'balance' => 'source',
-    }
-  }
-
-  haproxy::balancermember { 'nova-novnc':
-    listening_service => 'nova-novnc',
-    ports             => 6080,
-    ipaddresses       => $server_addrs,
-    server_names      => $server_names,
-    options           => 'check inter 2000 rise 2 fall 5',
+  openstack::profile::haproxy::controller::api_service { 'nova-nonvc':
+    address      => $management_address,
+    port         => 6080,
+    server_names => $server_names,
+    server_addrs => $server_addrs,
+    check        => 'tcp',
   }
 
   openstack::profile::haproxy::controller::api_service { 'neutron':
@@ -172,6 +173,7 @@ class openstack::profile::haproxy::controller {
     port         => 8777,
     server_names => $server_names,
     server_addrs => $server_addrs,
+    check        => 'tcp',
   }
 
   haproxy::listen { 'mysql':
