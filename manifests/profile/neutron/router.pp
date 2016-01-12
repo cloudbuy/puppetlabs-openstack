@@ -30,7 +30,6 @@ class openstack::profile::neutron::router {
   }
 
   class { '::neutron::agents::vpnaas':
-    debug                   => $::openstack::config::debug,
     external_network_bridge => '',
     enabled                 => true,
   }
