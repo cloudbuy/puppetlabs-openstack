@@ -17,15 +17,22 @@ class openstack::profile::neutron::router {
 
   ### Router service installation
   class { '::neutron::agents::l3':
+    package_ensure          => 'absent',
     debug                   => $::openstack::config::debug,
     external_network_bridge => '',
-    enabled                 => true,
+    manage_service          => false,
   }
 
   class { '::neutron::agents::dhcp':
     debug               => $::openstack::config::debug,
     dnsmasq_config_file => $dnsmasq_config_file,
     enabled             => true,
+  }
+
+  class { '::neutron::agents::vpn':
+    debug                   => $::openstack::config::debug,
+    external_network_bridge => '',
+    enabled                 => true,
   }
 
   if ($dnsmasq_config_file) {
