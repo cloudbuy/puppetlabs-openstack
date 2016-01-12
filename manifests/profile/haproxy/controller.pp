@@ -120,7 +120,7 @@ class openstack::profile::haproxy::controller {
     port         => 6080,
     server_names => $server_names,
     server_addrs => $server_addrs,
-    check        => 'tcp',
+    mode         => 'tcp',
   }
 
   openstack::profile::haproxy::controller::api_service { 'neutron':
