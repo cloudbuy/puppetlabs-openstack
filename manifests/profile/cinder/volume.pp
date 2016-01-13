@@ -14,24 +14,21 @@ class openstack::profile::cinder::volume {
     rbd_pool        => 'cinder-volumes-ssd',
     rbd_user        => 'cinder',
     rbd_secret_uuid => '3619fcb5-e5eb-4435-93ff-d2e4ccfdd95a',
+    backend_host    => "rbd:${::cinder::storage_availability_zone}",
   }
 
   cinder::backend::rbd {'rbd-scsi':
     rbd_pool        => 'cinder-volumes-scsi',
     rbd_user        => 'cinder',
     rbd_secret_uuid => '3619fcb5-e5eb-4435-93ff-d2e4ccfdd95a',
+    backend_host    => "rbd:${::cinder::storage_availability_zone}",
   }
 
   cinder::backend::rbd {'rbd-sata':
     rbd_pool        => 'cinder-volumes-sata',
     rbd_user        => 'cinder',
     rbd_secret_uuid => '3619fcb5-e5eb-4435-93ff-d2e4ccfdd95a',
-  }
-
-  class { '::cinder::volume::rbd':
-    rbd_pool        => 'cinder-volumes-sata',
-    rbd_user        => 'cinder',
-    rbd_secret_uuid => '3619fcb5-e5eb-4435-93ff-d2e4ccfdd95a',
+    backend_host    => "rbd:${::cinder::storage_availability_zone}",
   }
 
   class { '::cinder::backends':

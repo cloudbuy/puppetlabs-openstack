@@ -48,14 +48,14 @@ class openstack::profile::haproxy::controller {
 
   define api_service($address, $port, $server_names, $server_addrs, $mode='http', $check='http') {
     case $mode {
-      'tcp' {
+      'tcp': {
         $options = [
           'tcplog',
           'tcp-check',
           'tcpka'
         ]
       }
-      default {
+      default: {
         if $check == 'tcp' {
           $check_option = 'tcp-check'
         } else {
@@ -120,7 +120,7 @@ class openstack::profile::haproxy::controller {
     port         => 6080,
     server_names => $server_names,
     server_addrs => $server_addrs,
-    check        => 'tcp',
+    mode         => 'tcp',
   }
 
   openstack::profile::haproxy::controller::api_service { 'neutron':
