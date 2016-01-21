@@ -17,7 +17,7 @@ class openstack::profile::horizon {
     neutron_options => {
       enable_firewall       => true,
       enable_ha_router      => true,
-      enable_lb             => true,
+      enable_lb             => false, # Even though we are using lbaas we use lbaasv2
       enable_quotas         => true,
       enable_security_group => true,
       enable_vpn            => true,
