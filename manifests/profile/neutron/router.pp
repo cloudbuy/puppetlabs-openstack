@@ -54,14 +54,24 @@ class openstack::profile::neutron::router {
     enabled       => true,
   }
 
+  # NOTE: The upstream neutron module doesn't currently support lbaasv2 so we're going to use
+  # the ::neutron::agents::lbaas class to perform the configuration then add the package/service
+  # management here.
   class { '::neutron::agents::lbaas':
-    debug   => $::openstack::config::debug,
-    enabled => true,
+    debug         => $::openstack::config::debug,
+    device_driver => 'neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver',
+    enabled       => false,
+  }->
+  package { 'neutron-lbaasv2-agent':
+    ensure => present,
+  }->
+  service { 'neutron-lbaasv2-agent':
+    ensure => running,
+    enable => true,
   }
 
-#  class { '::neutron::agents::vpnaas':
-#    enabled => true,
-#  }
+  Neutron_config<||>             ~> Service['neutron-lbaasv2-agent']
+  Neutron_lbaas_agent_config<||> ~> Service['neutron-lbaasv2-agent']
 
   class { '::neutron::agents::metering':
     enabled => true,
