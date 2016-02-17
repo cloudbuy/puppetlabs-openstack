@@ -32,12 +32,6 @@ class openstack::common::nova {
     debug               => $::openstack::config::debug,
     verbose             => $::openstack::config::verbose,
   }-> 
-  file { "/etc/nova/nova.conf":
-    ensure => present,
-    owner  => 'root',
-    group  => 'nova',
-    mode   => 0640,
-  }->
   file { "/etc/nova/api-paste.ini":
     ensure => present,
     owner  => 'root',
@@ -57,6 +51,13 @@ class openstack::common::nova {
     mode   => 0640,
   }
 
+  File<| title == '/etc/nova/nova.conf' |> {
+    ensure => present,
+    owner  => 'root',
+    group  => 'nova',
+    mode   => 0640,
+  }
+  
   class { '::nova::network::neutron':
     neutron_admin_password => $::openstack::config::neutron_password,
     neutron_region_name    => $::openstack::config::region,
