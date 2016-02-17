@@ -38,4 +38,8 @@ class openstack::common::keystone {
   keystone_config {
     'DEFAULT/max_request_body_size': value => 114688,
   }
+
+  keystone_paste_ini {
+    'filter:admin_token_auth/use': ensure => absent,
+  }
 }
