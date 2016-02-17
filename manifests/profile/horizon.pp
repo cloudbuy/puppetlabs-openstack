@@ -31,6 +31,15 @@ class openstack::profile::horizon {
     group   => 0,
     mode    => '0644',
   }~>Service['httpd']
+  
+  # PCI Hardening
+  Class['horizon']->
+  concat::fragment { 'disable_password_reveal_and_autocomplete':
+    target  => $::horizon::params::config_file,
+    content => 'HORIZON_CONFIG["disable_password_reveal"] = True
+HORIZON_CONFIG["password_autocomplete"] = "off"',
+    order   => '60',
+  }
 
   openstack::resources::firewall { 'Apache (Horizon)': port => '80' }
   openstack::resources::firewall { 'Apache SSL (Horizon)': port => '443' }
