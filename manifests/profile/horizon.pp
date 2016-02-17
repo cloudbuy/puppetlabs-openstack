@@ -33,7 +33,6 @@ class openstack::profile::horizon {
   }~>Service['httpd']
   
   # PCI Hardening
-  Class['horizon']->
   concat::fragment { 'disable_password_reveal_and_autocomplete':
     target  => $::horizon::params::config_file,
     content => 'HORIZON_CONFIG["disable_password_reveal"] = True
