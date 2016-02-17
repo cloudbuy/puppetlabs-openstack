@@ -25,6 +25,30 @@ class openstack::common::nova {
     debug               => $::openstack::config::debug,
     verbose             => $::openstack::config::verbose,
     mysql_module        => '2.2',
+  }-> 
+  file { "/etc/nova/nova.conf":
+    ensure => present,
+    owner  => 'root',
+    group  => 'nova',
+    mode   => 0640,
+  }->
+  file { "/etc/nova/api-paste.ini":
+    ensure => present,
+    owner  => 'root',
+    group  => 'nova',
+    mode   => 0640,
+  }->
+  file { "/etc/nova/policy.json":
+    ensure => present,
+    owner  => 'root',
+    group  => 'nova',
+    mode   => 0640,
+  }->
+  file { "/etc/nova/rootwrap.conf":
+    ensure => present,
+    owner  => 'root',
+    group  => 'nova',
+    mode   => 0640,
   }
 
   nova_config { 'DEFAULT/default_floating_pool': value => 'public' }
