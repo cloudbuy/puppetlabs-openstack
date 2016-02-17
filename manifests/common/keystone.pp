@@ -36,10 +36,13 @@ class openstack::common::keystone {
   }
   
   keystone_config {
-    'DEFAULT/max_request_body_size': value => 114688,
+    'oslo_middleware/max_request_body_size': value => 114688,
   }
 
+  # Remove admin_auth_token from the pipeline
   keystone_paste_ini {
-    'filter:admin_token_auth/use': ensure => absent,
+    'pipeline:public_api/pipeline': value => 'sizelimit url_normalize request_id build_auth_context token_auth json_body ec2_extension user_crud_extension public_service';
+    'pipeline:admin_api/pipeline': value  => 'sizelimit url_normalize request_id build_auth_context token_auth json_body ec2_extension s3_extension crud_extension admin_service';
+    'pipeline:api_v3/pipeline': value     => 'sizelimit url_normalize request_id build_auth_context token_auth json_body ec2_extension_v3 s3_extension simple_cert_extension revoke_extension federation_extension oauth1_extension endpoint_filter_extension service_v3';
   }
 }
