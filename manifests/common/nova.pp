@@ -36,26 +36,26 @@ class openstack::common::nova {
     ensure => present,
     owner  => 'root',
     group  => 'nova',
-    mode   => 0640,
+    mode   => '0640',
   }->
   file { "/etc/nova/policy.json":
     ensure => present,
     owner  => 'root',
     group  => 'nova',
-    mode   => 0640,
+    mode   => '0640',
   }->
   file { "/etc/nova/rootwrap.conf":
     ensure => present,
     owner  => 'root',
     group  => 'nova',
-    mode   => 0640,
+    mode   => '0640',
   }
 
   File<| title == '/etc/nova/nova.conf' |> {
     ensure => present,
     owner  => 'root',
     group  => 'nova',
-    mode   => 0640,
+    mode   => '0640',
   }
   
   class { '::nova::network::neutron':
