@@ -26,25 +26,25 @@ class openstack::common::cinder {
     ensure => present,
     owner  => 'root',
     group  => 'cinder',
-    mode   => 0640,
+    mode   => '0640',
   }->
   file { "/etc/cinder/api-paste.ini":
     ensure => present,
     owner  => 'root',
     group  => 'cinder',
-    mode   => 0640,
+    mode   => '0640',
   }->
   file { "/etc/cinder/policy.json":
     ensure => present,
     owner  => 'root',
     group  => 'cinder',
-    mode   => 0640,
+    mode   => '0640',
   }->
   file { "/etc/cinder/rootwrap.conf":
     ensure => present,
     owner  => 'root',
     group  => 'cinder',
-    mode   => 0640,
+    mode   => '0640',
   }  
 
   $storage_server = $::openstack::config::storage_address_api
