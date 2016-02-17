@@ -21,7 +21,31 @@ class openstack::common::cinder {
     rabbit_password     => $::openstack::config::rabbitmq_password,
     debug               => $::openstack::config::debug,
     verbose             => $::openstack::config::verbose,
-  }
+  }->
+  file { "/etc/cinder/cinder.conf":
+    ensure => present,
+    owner  => 'root',
+    group  => 'cinder',
+    mode   => 0640,
+  }->
+  file { "/etc/cinder/api-paste.ini":
+    ensure => present,
+    owner  => 'root',
+    group  => 'cinder',
+    mode   => 0640,
+  }->
+  file { "/etc/cinder/policy.json":
+    ensure => present,
+    owner  => 'root',
+    group  => 'cinder',
+    mode   => 0640,
+  }->
+  file { "/etc/cinder/rootwrap.conf":
+    ensure => present,
+    owner  => 'root',
+    group  => 'cinder',
+    mode   => 0640,
+  }  
 
   $storage_server = $::openstack::config::storage_address_api
   $glance_api_server = "${storage_server}:9292"

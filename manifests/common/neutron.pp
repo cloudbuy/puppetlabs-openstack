@@ -35,6 +35,30 @@ class openstack::common::neutron {
     debug                 => $::openstack::config::debug,
     verbose               => $::openstack::config::verbose,
     service_plugins       => $::openstack::config::neutron_service_plugins,
+  }->
+  file { "/etc/neutron/neutron.conf":
+    ensure => present,
+    owner  => 'root',
+    group  => 'neutron',
+    mode   => 0640,
+  }->
+  file { "/etc/neutron/api-paste.ini":
+    ensure => present,
+    owner  => 'root',
+    group  => 'neutron',
+    mode   => 0640,
+  }->
+  file { "/etc/neutron/policy.json":
+    ensure => present,
+    owner  => 'root',
+    group  => 'neutron',
+    mode   => 0640,
+  }->
+  file { "/etc/neutron/rootwrap.conf":
+    ensure => present,
+    owner  => 'root',
+    group  => 'neutron',
+    mode   => 0640,
   }
 
   class { '::neutron::keystone::auth':

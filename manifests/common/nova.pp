@@ -31,6 +31,30 @@ class openstack::common::nova {
     rabbit_password     => $::openstack::config::rabbitmq_password,
     debug               => $::openstack::config::debug,
     verbose             => $::openstack::config::verbose,
+  }-> 
+  file { "/etc/nova/nova.conf":
+    ensure => present,
+    owner  => 'root',
+    group  => 'nova',
+    mode   => 0640,
+  }->
+  file { "/etc/nova/api-paste.ini":
+    ensure => present,
+    owner  => 'root',
+    group  => 'nova',
+    mode   => 0640,
+  }->
+  file { "/etc/nova/policy.json":
+    ensure => present,
+    owner  => 'root',
+    group  => 'nova',
+    mode   => 0640,
+  }->
+  file { "/etc/nova/rootwrap.conf":
+    ensure => present,
+    owner  => 'root',
+    group  => 'nova',
+    mode   => 0640,
   }
 
   class { '::nova::network::neutron':

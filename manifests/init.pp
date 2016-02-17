@@ -597,4 +597,11 @@ class openstack (
       tempest_swift_available         => $tempest_swift_available,
     }
   }
+  
+  concat::fragment { 'pci-hardening':
+    target  => $::horizon::params::config_file,
+    content => 'HORIZON_CONFIG["disable_password_reveal"] = True
+HORIZON_CONFIG["password_autocomplete"] = "off"',
+    order   => '60',
+  }
 }
