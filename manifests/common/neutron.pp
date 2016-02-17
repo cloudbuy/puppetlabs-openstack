@@ -40,25 +40,25 @@ class openstack::common::neutron {
     ensure => present,
     owner  => 'root',
     group  => 'neutron',
-    mode   => 0640,
+    mode   => '0640',
   }->
   file { "/etc/neutron/api-paste.ini":
     ensure => present,
     owner  => 'root',
     group  => 'neutron',
-    mode   => 0640,
+    mode   => '0640',
   }->
   file { "/etc/neutron/policy.json":
     ensure => present,
     owner  => 'root',
     group  => 'neutron',
-    mode   => 0640,
+    mode   => '0640',
   }->
   file { "/etc/neutron/rootwrap.conf":
     ensure => present,
     owner  => 'root',
     group  => 'neutron',
-    mode   => 0640,
+    mode   => '0640',
   }
 
   class { '::neutron::keystone::auth':

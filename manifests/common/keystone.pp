@@ -34,5 +34,8 @@ class openstack::common::keystone {
     public_bind_host    => $public_bind_host,
     service_name        => $service_name,
   }
-
+  
+  keystone_config {
+    'DEFAULT/max_request_body_size': value => 114688,
+  }
 }
