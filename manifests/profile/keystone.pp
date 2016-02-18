@@ -31,4 +31,37 @@ class openstack::profile::keystone {
   $users   = $::openstack::config::keystone_users
   create_resources('openstack::resources::tenant', $tenants)
   create_resources('openstack::resources::user', $users)
+  
+  # Limit the request size
+  keystone_config {
+    'oslo_middleware/max_request_body_size': value => 114688,
+  }
+
+  # Remove admin_auth_token from the pipeline
+  # Taken from upstream commit 80ae141
+  Ini_subsetting {
+    require => Class['keystone::roles::admin'],
+  }
+
+  ini_subsetting { 'public_api/admin_token_auth':
+    ensure     => absent,
+    path       => '/etc/keystone/keystone-paste.ini',
+    section    => 'pipeline:public_api',
+    setting    => 'pipeline',
+    subsetting => 'admin_token_auth',
+  }
+  ini_subsetting { 'admin_api/admin_token_auth':
+    ensure     => absent,
+    path       => '/etc/keystone/keystone-paste.ini',
+    section    => 'pipeline:admin_api',
+    setting    => 'pipeline',
+    subsetting => 'admin_token_auth',
+  }
+  ini_subsetting { 'api_v3/admin_token_auth':
+    ensure     => absent,
+    path       => '/etc/keystone/keystone-paste.ini',
+    section    => 'pipeline:api_v3',
+    setting    => 'pipeline',
+    subsetting => 'admin_token_auth',
+  }
 }
