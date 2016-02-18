@@ -46,14 +46,22 @@ class openstack::profile::haproxy::controller {
   $glance_names = keys($::openstack::config::storage)
   $glance_addrs = $::openstack::config::storage.map |String $name, Hash $addr| { $addr['management'] }
 
-  define api_service($address, $port, $server_names, $server_addrs, $mode='http', $check='http') {
+  define api_service($address, $port, $server_names, $server_addrs, $mode='http', $check='http', $options={}) {
     case $mode {
       'tcp': {
-        $options = [
-          'tcplog',
-          'tcp-check',
-          'tcpka'
-        ]
+        $default_options = {
+          'balance' => 'source',
+          'timeout' => [
+            'connect 5000ms',
+            'client 50000ms',
+            'server 50000ms',
+          ],
+          'option' => [
+            'tcplog',
+            'tcp-check',
+            'tcpka'
+          ]
+        }
       }
       default: {
         if $check == 'tcp' {
@@ -61,21 +69,23 @@ class openstack::profile::haproxy::controller {
         } else {
           $check_option = "httpchk HEAD / HTTP/1.1\\r\\nConnection:\\ close\\r\\nHost:\\ ${address}"
         }
-        $options = [
-          'httplog',
-          $check_option,
-          'tcpka',
-          'forwardfor'
-        ]
+        $default_options = {
+          'balance' => 'source',
+          'option'  => [
+            'httplog',
+            $check_option,
+            'tcpka',
+            'forwardfor'
+          ]
+        }
       }
     }
 
+    $_options = merge($default_options, $options)
+
     haproxy::listen { $name:
       bind => {"${address}:${port}" => []},
-      options => {
-        'option'  => $options,
-        'balance' => 'source',
-      }
+      options => $_options,
     }
 
     haproxy::balancermember { $name:
@@ -121,6 +131,13 @@ class openstack::profile::haproxy::controller {
     server_names => $server_names,
     server_addrs => $server_addrs,
     mode         => 'tcp',
+    options      => {
+      'timeout' => [
+        'connect 10000ms',
+        'client 900000ms',
+        'server 900000ms',
+      ]
+    }
   }
 
   openstack::profile::haproxy::controller::api_service { 'neutron':
