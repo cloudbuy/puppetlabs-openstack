@@ -41,15 +41,9 @@ class openstack::common::keystone {
   }
 
   # Remove admin_auth_token from the pipeline
-	# Taken from upstream commit 80ae141
+  # Taken from upstream commit 80ae141
   Ini_subsetting {
     require => Class['keystone::roles::admin'],
-  }
-
-  if $::keystone::manage_service and $::keystone::enabled {
-    Ini_subsetting {
-      notify => Exec['restart_keystone'],
-    }
   }
 
   ini_subsetting { 'public_api/admin_token_auth':
