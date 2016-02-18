@@ -35,14 +35,42 @@ class openstack::common::keystone {
     service_name        => $service_name,
   }
   
+  # Limit the request size
   keystone_config {
     'oslo_middleware/max_request_body_size': value => 114688,
   }
 
   # Remove admin_auth_token from the pipeline
-  keystone_paste_ini {
-    'pipeline:public_api/pipeline': value => 'sizelimit url_normalize request_id build_auth_context token_auth json_body ec2_extension user_crud_extension public_service';
-    'pipeline:admin_api/pipeline': value  => 'sizelimit url_normalize request_id build_auth_context token_auth json_body ec2_extension s3_extension crud_extension admin_service';
-    'pipeline:api_v3/pipeline': value     => 'sizelimit url_normalize request_id build_auth_context token_auth json_body ec2_extension_v3 s3_extension simple_cert_extension revoke_extension federation_extension oauth1_extension endpoint_filter_extension service_v3';
+	# Taken from upstream commit 80ae141
+  Ini_subsetting {
+    require => Class['keystone::roles::admin'],
+  }
+
+  if $::keystone::manage_service and $::keystone::enabled {
+    Ini_subsetting {
+      notify => Exec['restart_keystone'],
+    }
+  }
+
+  ini_subsetting { 'public_api/admin_token_auth':
+    ensure     => absent,
+    path       => '/etc/keystone/keystone-paste.ini',
+    section    => 'pipeline:public_api',
+    setting    => 'pipeline',
+    subsetting => 'admin_token_auth',
+  }
+  ini_subsetting { 'admin_api/admin_token_auth':
+    ensure     => absent,
+    path       => '/etc/keystone/keystone-paste.ini',
+    section    => 'pipeline:admin_api',
+    setting    => 'pipeline',
+    subsetting => 'admin_token_auth',
+  }
+  ini_subsetting { 'api_v3/admin_token_auth':
+    ensure     => absent,
+    path       => '/etc/keystone/keystone-paste.ini',
+    section    => 'pipeline:api_v3',
+    setting    => 'pipeline',
+    subsetting => 'admin_token_auth',
   }
 }
