@@ -34,6 +34,10 @@ class openstack::profile::neutron::router {
     enabled                 => true,
   }
 
+  if (is_array($::dnsclient::nameservers)) {
+    neutron_dhcp_agent_config { 'DEFAULT/dnsmasq_dns_servers': value => join($::dnsclient::nameservers, ',') }
+  }
+
   if ($dnsmasq_config_file) {
     file { '/etc/neutron/dnsmasq-neutron.conf':
       content => "dhcp-option-force=26,${::openstack::config::neutron_instance_mtu}\n",
