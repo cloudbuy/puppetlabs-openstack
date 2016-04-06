@@ -26,9 +26,42 @@ class openstack::profile::rabbitmq {
     provider             => 'rabbitmqctl',
   }->Anchor<| title == 'nova-start' |>
 
-  class { '::rabbitmq':
-    service_ensure    => 'running',
-    port              => 5672,
-    delete_guest_user => true,
+  if $::openstack::config::ssl {
+    class { '::rabbitmq':
+      service_ensure              => 'running',
+      config_management_variables => {},
+      delete_guest_user           => true,
+      port                        => 5672,
+      ssl                         => true,
+      ssl_versions                => ['tlsv1.2', 'tlsv1.1'],
+      ssl_cacert                  => '/etc/ssl/certs/cloudBuy-PLC-Root-CA.pem',
+      ssl_cert                    => '/etc/rabbitmq/ssl/certificate.pem',
+      ssl_key                     => '/etc/rabbitmq/ssl/key.pem',
+      ssl_fail_if_no_peer_cert    => false,
+      ssl_verify                  => 'verify_peer',
+    }
+
+    file { '/etc/rabbitmq/ssl/certificate.pem':
+      source => $::openstack::config::ssl_cert,
+      owner  => 'rabbitmq',
+      group  => 'rabbitmq',
+      mode   => '0644',
+    }
+    file { '/etc/rabbitmq/ssl/key.pem':
+      source => $::openstack::config::ssl_key,
+      owner  => 'rabbitmq',
+      group  => 'rabbitmq',
+      mode   => '0600',
+    }
+
+    Package['rabbitmq-server'] ->
+    File['/etc/rabbitmq/ssl/certificate.pem', '/etc/rabbitmq/ssl/key.pem'] ~> Service['rabbitmq-server']
+  } else {
+    class { '::rabbitmq':
+      service_ensure              => 'running',
+      port                        => 5672,
+      delete_guest_user           => true,
+      config_management_variables => {},
+    }
   }
 }

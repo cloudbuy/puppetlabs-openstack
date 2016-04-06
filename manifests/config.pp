@@ -1,6 +1,10 @@
 # private global parameters class. Do not use directly!
 class openstack::config (
   $use_hiera = undef,
+  $ssl = undef,
+  $ssl_cacert = undef,
+  $ssl_cert = undef,
+  $ssl_key = undef,
   $ha = undef,
   $region = undef,
   $network_api = undef,

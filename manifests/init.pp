@@ -16,6 +16,18 @@
 # class is used, it needs appear first in node parse order to ensure proper variable
 # initialization.
 #
+# [*ssl*]
+#   Enable SSL on RabbitMQ, MySQL, HAProxy and all the OpenStack components
+#
+# [*ssl_cacert*]
+#   Puppet file path to the CA certificate to use within the SSL setup
+#
+# [*ssl_cert*]
+#   Puppet file path to the certificate to use for the services
+#
+# [*ssl_key*]
+#   Puppet file path to the private key to use for the services
+#
 # [*ha*]
 #   Use the new Highly Available set up and configuration params
 #
@@ -316,6 +328,10 @@
 #
 class openstack (
   $use_hiera = true,
+  $ssl = undef,
+  $ssl_cacert = undef,
+  $ssl_cert = undef,
+  $ssl_key = undef,
   $ha = undef,
   $region = undef,
   $network_api = undef,
@@ -410,6 +426,10 @@ class openstack (
 ) {
   if $use_hiera {
     class { '::openstack::config':
+      ssl                             => hiera(openstack::ssl, false),
+      ssl_cacert                      => hiera(openstack::ssl::cacert, undef),
+      ssl_cert                        => hiera(opensatck::ssl::cert, undef),
+      ssl_key                         => hiera(openstack::ssl::key, undef),
       ha                              => hiera(openstack::ha, false),
       region                          => hiera(openstack::region),
       network_api                     => hiera(openstack::network::api),
@@ -504,6 +524,10 @@ class openstack (
     }
   } else {
     class { '::openstack::config':
+      ssl                             => $ssl,
+      ssl_cacert                      => $ssl_cacert,
+      ssl_cert                        => $ssl_cert,
+      ssl_key                         => $ssl_key,
       ha                              => $ha,
       region                          => $region,
       network_api                     => $network_api,
