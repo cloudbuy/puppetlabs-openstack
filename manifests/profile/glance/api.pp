@@ -45,8 +45,10 @@ class openstack::profile::glance::api {
   }
 
   class { '::glance::notify::rabbitmq':
-    rabbit_password => $::openstack::config::rabbitmq_password,
-    rabbit_userid   => $::openstack::config::rabbitmq_user,
-    rabbit_host     => $::openstack::config::controller_address_management,
+    rabbit_password  => $::openstack::config::rabbitmq_password,
+    rabbit_userid    => $::openstack::config::rabbitmq_user,
+    rabbit_host      => $::openstack::config::controller_address_management,
+    rabbit_ha_queues => $::openstack::config::ha,
+    rabbit_use_ssl   => $::openstack::config::ssl,
   }
 }
