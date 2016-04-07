@@ -428,7 +428,7 @@ class openstack (
     class { '::openstack::config':
       ssl                             => hiera(openstack::ssl, false),
       ssl_cacert                      => hiera(openstack::ssl::cacert, undef),
-      ssl_cert                        => hiera(opensatck::ssl::cert, undef),
+      ssl_cert                        => hiera(openstack::ssl::cert, undef),
       ssl_key                         => hiera(openstack::ssl::key, undef),
       ha                              => hiera(openstack::ha, false),
       region                          => hiera(openstack::region),
