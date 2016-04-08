@@ -32,7 +32,6 @@ class openstack::common::neutron {
     rabbit_user           => $::openstack::config::rabbitmq_user,
     rabbit_password       => $::openstack::config::rabbitmq_password,
     rabbit_hosts          => $::openstack::config::rabbitmq_hosts,
-    rabbit_ha_queues      => $::openstack::config::ha,
     rabbit_use_ssl        => $::openstack::config::ssl,
     debug                 => $::openstack::config::debug,
     verbose               => $::openstack::config::verbose,

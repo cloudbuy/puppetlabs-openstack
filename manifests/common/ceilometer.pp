@@ -8,6 +8,7 @@ class openstack::common::ceilometer {
     $ceilometer_host = '0.0.0.0'
   }
 
+# FIXME: re-add rabbit_ha_queues for Mitaka
   class { '::ceilometer':
     metering_secret  => $::openstack::config::ceilometer_meteringsecret,
     debug            => $::openstack::config::debug,
@@ -15,7 +16,6 @@ class openstack::common::ceilometer {
     rabbit_hosts     => $::openstack::config::rabbitmq_hosts,
     rabbit_userid    => $::openstack::config::rabbitmq_user,
     rabbit_password  => $::openstack::config::rabbitmq_password,
-    rabbit_ha_queues => $::openstack::config::ha,
     rabbit_use_ssl   => $::openstack::config::ssl,
   }
 
