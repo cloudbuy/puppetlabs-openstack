@@ -84,4 +84,12 @@ class openstack::common::neutron {
         before => Class['::neutron']
     }
   }
+
+  # Disable the old RabbitMQ configuration in Neutron
+  neutron_config { 'DEFAULT/rabbit_hosts': ensure => absent }
+  neutron_config { 'DEFAULT/rabbit_use_ssl': ensure => absent }
+  neutron_config { 'DEFAULT/rabbit_userid': ensure => absent }
+  neutron_config { 'DEFAULT/rabbit_password': ensure => absent }
+  neutron_config { 'DEFAULT/rabbit_virtual_host': ensure => absent }
+  neutron_config { 'DEFAULT/rabbit_ha_queues': ensure => absent }
 }
