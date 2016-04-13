@@ -19,5 +19,14 @@ class openstack::common::ceilometer {
     rabbit_use_ssl   => $::openstack::config::ssl,
   }
 
+  ceilometer_config { 'DEFAULT/rabbit_password': ensure => absent }
+  ceilometer_config { 'DEFAULT/rabbit_userid': ensure => absent }
+  ceilometer_config { 'DEFAULT/rabbit_virtual_host': ensure => absent }
+  ceilometer_config { 'DEFAULT/rabbit_use_ssl': ensure => absent }
+  ceilometer_config { 'DEFAULT/rabbit_host': ensure => absent }
+  ceilometer_config { 'DEFAULT/rabbit_port': ensure => absent }
+  ceilometer_config { 'DEFAULT/rabbit_hosts': ensure => absent }
+  ceilometer_config { 'DEFAULT/rabbit_ha_queues': ensure => absent }
+
 }
 

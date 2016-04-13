@@ -55,4 +55,13 @@ class openstack::common::cinder {
   class { '::cinder::glance':
     glance_api_servers => [ $glance_api_server ],
   }
+
+  cinder_config { 'DEFAULT/rabbit_password': ensure => absent }
+  cinder_config { 'DEFAULT/rabbit_userid': ensure => absent }
+  cinder_config { 'DEFAULT/rabbit_virtual_host': ensure => absent }
+  cinder_config { 'DEFAULT/rabbit_use_ssl': ensure => absent }
+  cinder_config { 'DEFAULT/rabbit_host': ensure => absent }
+  cinder_config { 'DEFAULT/rabbit_port': ensure => absent }
+  cinder_config { 'DEFAULT/rabbit_hosts': ensure => absent }
+  cinder_config { 'DEFAULT/rabbit_ha_queues': ensure => absent }
 }

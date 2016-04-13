@@ -58,4 +58,14 @@ class openstack::profile::heat::api {
   class { '::heat::engine':
     auth_encryption_key => $::openstack::config::heat_encryption_key,
   }
+
+  heat_config { 'DEFAULT/rabbit_password': ensure => absent }
+  heat_config { 'DEFAULT/rabbit_userid': ensure => absent }
+  heat_config { 'DEFAULT/rabbit_virtual_host': ensure => absent }
+  heat_config { 'DEFAULT/rabbit_use_ssl': ensure => absent }
+  heat_config { 'DEFAULT/rabbit_host': ensure => absent }
+  heat_config { 'DEFAULT/rabbit_port': ensure => absent }
+  heat_config { 'DEFAULT/rabbit_hosts': ensure => absent }
+  heat_config { 'DEFAULT/rabbit_ha_queues': ensure => absent }
+
 }
