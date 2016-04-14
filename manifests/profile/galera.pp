@@ -8,6 +8,54 @@ class openstack::profile::galera {
     $info['management']
   }
 
+  $default_wsrep_provider_options = {
+    'gcache.size'      => '300M',
+    'gcache.page_size' => '1G',
+  }
+
+  if ($::openstack::config::ssl) {
+    file { '/etc/mysql/ssl':
+      ensure => directory,
+      owner  => 'mysql',
+      group  => 'mysql',
+      mode   => '0700',
+    }
+    file { '/etc/mysql/ssl/cert.pem':
+      source => $::openstack::config::ssl_cert,
+      owner  => 'mysql',
+      group  => 'mysql',
+      mode   => '0644',
+    }
+    file { '/etc/mysql/ssl/key.pem':
+      source => $::openstack::config::ssl_key,
+      owner  => 'mysql',
+      group  => 'mysql',
+      mode   => '0600',
+    }
+    file { '/etc/mysql/ssl/ca.pem':
+      source => $::openstack::config::ssl_cacert,
+      owner  => 'mysql',
+      group  => 'mysql',
+      mode   => '0644',
+    }
+
+    Class['mysql::server::install']->
+    File['/etc/mysql/ssl']->
+    File['/etc/mysql/ssl/cert.pem', '/etc/mysql/ssl/key.pem', '/etc/mysql/ssl/ca.pem']~>
+    Class['mysql::server::service']
+
+    $ssl_provider_options = {
+      'socket.ssl_key'   => '/etc/mysql/ssl/key.pem',
+      'socket.ssl_cert'  => '/etc/mysql/ssl/cert.pem',
+      'socket.ssl_ca'    => '/etc/mysql/ssl/ca.pem'
+    }
+  } else {
+    $ssl_provider_options = {}
+  }
+
+  $wsrep_provider_options = deep_merge($default_wsrep_provider_options, $ssl_provider_options)
+  $_wsrep_provider_options = join(join_keys_to_values($wsrep_provider_options, '='), '; ')
+
   class { '::galera::server':
     root_password    => $::openstack::config::mysql_root_password,
     restart          => true,
@@ -22,7 +70,7 @@ class openstack::profile::galera {
         'innodb_buffer_pool_size'        => '122M',
 
         'wsrep_provider'                 => '/usr/lib/libgalera_smm.so',
-        'wsrep_provider_options'         => 'gcache.size=300M; gcache.page_size=1G',
+        'wsrep_provider_options'         => $_wsrep_provider_options,
         'wsrep_cluster_name'             => '',
         'wsrep_cluster_address'          => "gcomm://${join($cluster_addresses, ',')}",
         'wsrep_sst_method'               => 'rsync',
