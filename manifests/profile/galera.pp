@@ -49,32 +49,44 @@ class openstack::profile::galera {
       'socket.ssl_cert'  => '/etc/mysql/ssl/cert.pem',
       'socket.ssl_ca'    => '/etc/mysql/ssl/ca.pem'
     }
+
+    $ssl_mysqld_options = {
+      'ssl-ca'   => '/etc/mysql/ssl/ca.pem',
+      'ssl-cert' => '/etc/mysql/ssl/cert.pem',
+      'ssl-key'  => '/etc/mysql/ssl/key.pem'
+    }
+
   } else {
     $ssl_provider_options = {}
+    $ssl_mysqld_options = {}
   }
 
-  $wsrep_provider_options = deep_merge($default_wsrep_provider_options, $ssl_provider_options)
-  $_wsrep_provider_options = join(join_keys_to_values($wsrep_provider_options, '='), '; ')
+  $_wsrep_provider_options = deep_merge($default_wsrep_provider_options, $ssl_provider_options)
+  $wsrep_provider_options = join(join_keys_to_values($_wsrep_provider_options, '='), '; ')
+
+  $default_mysqld_options = {
+    'bind_address'                   => $management_address,
+    'default-storage-engine'         => 'innodb',
+    'binlog_format'                  => 'ROW',
+    'innodb_autoinc_lock_mode'       => 2,
+    'innodb_flush_log_at_trx_commit' => 0,
+    'innodb_buffer_pool_size'        => '122M',
+
+    'wsrep_provider'                 => '/usr/lib/libgalera_smm.so',
+    'wsrep_provider_options'         => $wsrep_provider_options,
+    'wsrep_cluster_name'             => '',
+    'wsrep_cluster_address'          => "gcomm://${join($cluster_addresses, ',')}",
+    'wsrep_sst_method'               => 'rsync',
+  }
+
+  $mysqld_options = deep_merge($default_mysqld_options, $ssl_mysqld_options)
 
   class { '::galera::server':
     root_password    => $::openstack::config::mysql_root_password,
     restart          => true,
     package_manage   => true,
     override_options => {
-      'mysqld' => {
-        'bind_address'                   => $management_address,
-        'default-storage-engine'         => 'innodb',
-        'binlog_format'                  => 'ROW',
-        'innodb_autoinc_lock_mode'       => 2,
-        'innodb_flush_log_at_trx_commit' => 0,
-        'innodb_buffer_pool_size'        => '122M',
-
-        'wsrep_provider'                 => '/usr/lib/libgalera_smm.so',
-        'wsrep_provider_options'         => $_wsrep_provider_options,
-        'wsrep_cluster_name'             => '',
-        'wsrep_cluster_address'          => "gcomm://${join($cluster_addresses, ',')}",
-        'wsrep_sst_method'               => 'rsync',
-      }
+      'mysqld' => $mysqld_options
     }
   }
 
