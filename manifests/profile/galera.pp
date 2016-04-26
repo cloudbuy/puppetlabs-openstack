@@ -51,6 +51,7 @@ class openstack::profile::galera {
     }
 
     $ssl_mysqld_options = {
+      'ssl'      => 'true',
       'ssl-ca'   => '/etc/mysql/ssl/ca.pem',
       'ssl-cert' => '/etc/mysql/ssl/cert.pem',
       'ssl-key'  => '/etc/mysql/ssl/key.pem'
