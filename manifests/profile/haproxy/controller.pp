@@ -147,7 +147,7 @@ class openstack::profile::haproxy::controller {
 
     haproxy::balancermember { $name:
       listening_service => $name,
-      ports             => $port,
+      ports             => $member_port,
       ipaddresses       => $server_addrs,
       server_names      => $server_names,
       options           => $member_options,
