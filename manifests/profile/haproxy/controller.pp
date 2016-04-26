@@ -38,12 +38,30 @@ class openstack::profile::haproxy::controller {
       'stats'                     => ['socket /var/run/haproxy.sock level admin'],
       'spread-checks'             => 5,
     },
-  }->
-  file { '/etc/haproxy/ssl':
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
+  }
+
+  if ($::openstack::config::ssl) {
+    file { '/etc/haproxy/ssl':
+      ensure => directory,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0600',
+    }->
+    concat { '/etc/haproxy/ssl/cert.pem':
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0600',
+    }
+    concat::fragment { 'haproxy_ssl_certificate':
+      target => '/etc/haproxy/ssl/cert.pem',
+      source => $::openstack::config::ssl_cert,
+    }
+    concat::fragment { 'haproxy_ssl_private_key':
+      target => '/etc/haproxy/ssl/cert.pem',
+      source => $::openstack::config::ssl_key,
+    }
+
+    Concat['/etc/haproxy/ssl/cert.pem'] ~> Service['haproxy']
   }
 
   # Compute the server_names and server_addrs once, they'll be common amongst most of the balancemembers
