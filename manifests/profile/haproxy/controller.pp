@@ -118,6 +118,7 @@ class openstack::profile::haproxy::controller {
     $_options = merge($default_options, $options)
 
     if ($ssl_port) {
+      $member_port = $ssl_port
       if ($ssl_port != $port) {
         $bind = {
           "${address}:${port}"     => [],
@@ -126,8 +127,11 @@ class openstack::profile::haproxy::controller {
       } else {
         $bind = {"${address}:${ssl_port}" => ['ssl crt /etc/haproxy/ssl/cert.pem']}
       }
+      $member_options = 'check inter 2000 rise 2 fall 5 ssl'
     } else {
       $bind = {"${address}:${port}" => []}
+      $member_port = $port
+      $member_options = 'check inter 2000 rise 2 fall 5'
     }
 
     haproxy::listen { $name:
@@ -140,7 +144,7 @@ class openstack::profile::haproxy::controller {
       ports             => $port,
       ipaddresses       => $server_addrs,
       server_names      => $server_names,
-      options           => 'check inter 2000 rise 2 fall 5',
+      options           => $member_options,
     }
   }
 
