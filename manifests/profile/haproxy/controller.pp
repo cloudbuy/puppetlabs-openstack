@@ -37,6 +37,12 @@ class openstack::profile::haproxy::controller {
       'stats'           => ['socket /var/run/haproxy.sock level admin'],
       'spread-checks'   => 5,
     },
+  }->
+  file { '/etc/haproxy/ssl':
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
   }
 
   # Compute the server_names and server_addrs once, they'll be common amongst most of the balancemembers
