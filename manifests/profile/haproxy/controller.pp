@@ -26,16 +26,17 @@ class openstack::profile::haproxy::controller {
       ]
     },
     global_options => {
-      'log'             => '/dev/log local0 info',
-      'tune.bufsize'    => 32768, # 32kb,
-      'tune.maxrewrite' => 16384, # 16kb,
-      'daemon'          => '',
-      'uid'             => 604,
-      'gid'             => 604,
-      'debug'           => '',
-      'pidfile'         => '/var/run/haproxy.pid',
-      'stats'           => ['socket /var/run/haproxy.sock level admin'],
-      'spread-checks'   => 5,
+      'log'                       => '/dev/log local0 info',
+      'tune.bufsize'              => 32768, # 32kb,
+      'tune.maxrewrite'           => 16384, # 16kb,
+      'tune.ssl.default-dh-param' => 2048,
+      'daemon'                    => '',
+      'uid'                       => 604,
+      'gid'                       => 604,
+      'debug'                     => '',
+      'pidfile'                   => '/var/run/haproxy.pid',
+      'stats'                     => ['socket /var/run/haproxy.sock level admin'],
+      'spread-checks'             => 5,
     },
   }->
   file { '/etc/haproxy/ssl':
