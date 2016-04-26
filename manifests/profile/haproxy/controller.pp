@@ -47,6 +47,12 @@ class openstack::profile::haproxy::controller {
       group  => 'root',
       mode   => '0600',
     }->
+    file { '/etc/haproxy/ssl/ca.pem':
+      source => $::openstack::config::ssl_cacert,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+    }->
     concat { '/etc/haproxy/ssl/cert.pem':
       owner  => 'root',
       group  => 'root',
@@ -127,7 +133,7 @@ class openstack::profile::haproxy::controller {
       } else {
         $bind = {"${address}:${ssl_port}" => ['ssl crt /etc/haproxy/ssl/cert.pem']}
       }
-      $member_options = 'check inter 2000 rise 2 fall 5 ssl'
+      $member_options = 'check inter 2000 rise 2 fall 5 ssl ca-file /etc/haproxy/ssl/ca.pem'
     } else {
       $bind = {"${address}:${port}" => []}
       $member_port = $port
