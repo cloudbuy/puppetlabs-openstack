@@ -7,10 +7,49 @@ class openstack::profile::horizon {
     $horizon_bind_address = undef
   }
 
+  if ($::openstack::config::ssl) {
+    $horizon_cert = '/etc/apache2/ssl/horizon.crt.pem'
+    $horizon_key = '/etc/apache2/ssl/horizon.key.pem'
+    $horizon_ca = '/etc/apache2/ssl/horizon.ca.pem'
+
+    file { '/etc/apache2/ssl':
+      ensure => directory,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0755',
+    }->
+    file { '/etc/apache2/ssl/horizon.crt.pem':
+      source => $::openstack::config::ssl_cert,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+    }->
+    file { '/etc/apache2/ssl/horizon.key.pem':
+      source => $::openstack::config::ssl_key,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0600',
+    }->
+    file { '/etc/apache2/ssl/horizon.ca.pem':
+      source => $::openstack::config::ssl_cacert,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+    }
+  } else {
+    $horizon_cert = undef
+    $horizon_key = undef
+    $horizon_ca = undef
+  }
+
   class { '::horizon':
     allowed_hosts   => concat([ '127.0.0.1', $::openstack::config::controller_address_api, $::fqdn ], $::openstack::config::horizon_allowed_hosts),
     server_aliases  => concat([ '127.0.0.1', $::openstack::config::controller_address_api, $::fqdn ], $::openstack::config::horizon_server_aliases),
     ssl_redirect    => $::openstack::config::ssl,
+    listen_ssl      => $::openstack::config::ssl,
+    horizon_cert    => $horizon_cert,
+    horizon_key     => $horizon_key,
+    horizon_ca      => $horizon_ca,
     bind_address    => $horizon_bind_address,
     secret_key      => $::openstack::config::horizon_secret_key,
     cache_server_ip => $::openstack::config::controller_address_management,
