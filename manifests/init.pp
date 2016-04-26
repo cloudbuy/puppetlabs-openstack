@@ -272,6 +272,9 @@
 #   List of names which should be defined as ServerAlias directives
 #   in vhost.conf.
 #
+# [*servername*]
+#   The hostname to use for the Horizon service
+#
 # == Log levels
 # [*verbose*]
 #   Boolean. Determines if verbose is enabled for all OpenStack services.
@@ -406,6 +409,7 @@ class openstack (
   $horizon_secret_key = undef,
   $horizon_allowed_hosts = undef,
   $horizon_server_aliases = undef,
+  $horizon_servername = undef,
   $tempest_configure_images    = undef,
   $tempest_image_name          = undef,
   $tempest_image_name_alt      = undef,
@@ -504,6 +508,7 @@ class openstack (
       horizon_secret_key              => hiera(openstack::horizon::secret_key),
       horizon_allowed_hosts           => hiera(openstack::horizon::allowed_hosts, []),
       horizon_server_aliases          => hiera(openstack::horizon::server_aliases, []),
+      horizon_servername              => hiera(openstack::horizon::servername, undef),
       verbose                         => hiera(openstack::verbose),
       debug                           => hiera(openstack::debug),
       tempest_configure_images        => hiera(openstack::tempest::configure_images),
@@ -602,6 +607,7 @@ class openstack (
       horizon_secret_key              => $horizon_secret_key,
       horizon_allowed_hosts           => [],
       horizon_server_aliases          => [],
+      horizon_servername              => $horizon_servername,
       verbose                         => $verbose,
       debug                           => $debug,
       tempest_configure_images        => $tempest_configure_images,

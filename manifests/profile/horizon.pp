@@ -45,6 +45,7 @@ class openstack::profile::horizon {
   class { '::horizon':
     allowed_hosts   => concat([ '127.0.0.1', $::openstack::config::controller_address_api, $::fqdn ], $::openstack::config::horizon_allowed_hosts),
     server_aliases  => concat([ '127.0.0.1', $::openstack::config::controller_address_api, $::fqdn ], $::openstack::config::horizon_server_aliases),
+    servername      => $::openstack::config::horizon_servername,
     ssl_redirect    => $::openstack::config::ssl,
     listen_ssl      => $::openstack::config::ssl,
     horizon_cert    => $horizon_cert,
