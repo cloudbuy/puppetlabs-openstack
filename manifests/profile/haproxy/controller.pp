@@ -71,7 +71,16 @@ class openstack::profile::haproxy::controller {
   $glance_names = keys($::openstack::config::storage)
   $glance_addrs = $::openstack::config::storage.map |String $name, Hash $addr| { $addr['management'] }
 
-  define api_service($address, $port, $server_names, $server_addrs, $mode='http', $check='http', $options={}) {
+  define api_service(
+    $address,
+    $port,
+    $server_names,
+    $server_addrs,
+    $ssl_port = undef,
+    $mode     = 'http',
+    $check    = 'http',
+    $options  = {}
+  ) {
     case $mode {
       'tcp': {
         $default_options = {
@@ -108,8 +117,21 @@ class openstack::profile::haproxy::controller {
 
     $_options = merge($default_options, $options)
 
+    if ($ssl_port) {
+      if ($ssl_port != $port) {
+        $bind = {
+          "${address}:${port}"     => [],
+          "${address}:${ssl_port}" => ['ssl crt /etc/haproxy/ssl/cert.pem']
+        }
+      } else {
+        $bind = {"${address}:${ssl_port}" => ['ssl crt /etc/haproxy/ssl/cert.pem']}
+      }
+    } else {
+      $bind = {"${address}:${port}" => []}
+    }
+
     haproxy::listen { $name:
-      bind => {"${address}:${port}" => []},
+      bind    => $bind,
       options => $_options,
     }
 
@@ -203,9 +225,14 @@ class openstack::profile::haproxy::controller {
     server_addrs => $server_addrs,
   }
 
+  $horizon_ssl_port = $::openstack::config::ssl ? {
+    true    => 443,
+    default => undef
+  }
   openstack::profile::haproxy::controller::api_service { 'horizon':
     address      => $management_address,
     port         => 80,
+    ssl_port     => $horizon_ssl_port,
     server_names => $server_names,
     server_addrs => $server_addrs,
   }
