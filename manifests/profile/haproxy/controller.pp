@@ -82,6 +82,7 @@ class openstack::profile::haproxy::controller {
     $port,
     $server_names,
     $server_addrs,
+    $ssl      = false,
     $ssl_port = undef,
     $mode     = 'http',
     $check    = 'http',
@@ -123,16 +124,9 @@ class openstack::profile::haproxy::controller {
 
     $_options = merge($default_options, $options)
 
-    if ($ssl_port) {
+    if ($ssl) {
+      $bind = {"${address}:${ssl_port}" => ['ssl crt /etc/haproxy/ssl/cert.pem']}
       $member_port = $ssl_port
-      if ($ssl_port != $port) {
-        $bind = {
-          "${address}:${port}"     => [],
-          "${address}:${ssl_port}" => ['ssl crt /etc/haproxy/ssl/cert.pem']
-        }
-      } else {
-        $bind = {"${address}:${ssl_port}" => ['ssl crt /etc/haproxy/ssl/cert.pem']}
-      }
       $member_options = 'check inter 2000 rise 2 fall 5 ssl ca-file /etc/haproxy/ssl/ca.pem'
     } else {
       $bind = {"${address}:${port}" => []}
@@ -235,14 +229,11 @@ class openstack::profile::haproxy::controller {
     server_addrs => $server_addrs,
   }
 
-  $horizon_ssl_port = $::openstack::config::ssl ? {
-    true    => 443,
-    default => undef
-  }
   openstack::profile::haproxy::controller::api_service { 'horizon':
     address      => $management_address,
     port         => 80,
-    ssl_port     => $horizon_ssl_port,
+    ssl          => $::openstack::config::ssl,
+    ssl_port     => 443,
     server_names => $server_names,
     server_addrs => $server_addrs,
   }
