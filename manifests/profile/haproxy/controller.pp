@@ -5,7 +5,7 @@ class openstack::profile::haproxy::controller {
     fail("HAProxy on the controller is only supported when using high availability")
   }
 
-  $management_address = $::openstack::config::controller_address_management
+  $management_address = $::openstack::config::controller_keepalived_address
 
   sysctl::value { 'net.ipv4.ip_nonlocal_bind': value => 1 }->
   class { '::haproxy':
