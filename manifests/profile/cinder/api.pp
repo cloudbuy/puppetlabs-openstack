@@ -24,8 +24,8 @@ class openstack::profile::cinder::api {
 
   class { '::cinder::api':
     keystone_password => $::openstack::config::cinder_password,
-    auth_uri          => "${scheme}://${::openstack::config::controller_address_management}:5000/",
-    identity_uri      => "${scheme}://${::openstack::config::controller_address_management}:35357/",
+    auth_uri          => $::openstack::profile::base::auth_uri,
+    identity_uri      => $::openstack::profile::base::auth_url,
     enabled           => true,
     bind_host         => $::openstack::common::cinder::cinder_host,
   }
