@@ -49,6 +49,10 @@ class openstack::resources::auth_file(
   $neutron_endpoint_type    = 'publicURL',
 ) {
 
+  $url_scheme = $::openstack::config::ssl ? {
+    true    => 'https',
+    default => 'http'
+  }
   file { '/root/openrc':
     owner   => 'root',
     group   => 'root',
