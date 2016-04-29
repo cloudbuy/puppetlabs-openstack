@@ -63,8 +63,8 @@ class openstack::common::keystone {
     admin_bind_host     => $admin_bind_host,
     public_bind_host    => $public_bind_host,
     service_name        => $service_name,
-    use_ssl             => $::openstack::config::ssl,
-    cert_file           => $cert_file,
-    key_file            => $key_file,
+    enable_ssl          => $::openstack::config::ssl,
+    ssl_certfile        => $cert_file,
+    ssl_keyfile         => $key_file,
   }
 }
