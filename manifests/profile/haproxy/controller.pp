@@ -201,6 +201,8 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'cinder':
     address      => $management_address,
     port         => 8776,
+    ssl          => $::openstack::config::ssl,
+    ssl_port     => 8776,
     server_names => $server_names,
     server_addrs => $server_addrs,
   }
