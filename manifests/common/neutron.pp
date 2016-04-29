@@ -24,6 +24,36 @@ class openstack::common::neutron {
   $pass                = $::openstack::config::mysql_pass_neutron
   $database_connection = "mysql://${user}:${pass}@${controller_management_address}/neutron"
 
+  if ($::openstack::config::ssl) {
+    file { '/etc/neutron/ssl':
+      ensure => directory,
+      owner  => 'root',
+      group  => 'neutron',
+      mode   => '0750',
+    }->
+    file { '/etc/neutron/ssl/ca.pem':
+      source => $::openstack::config::ssl_cacert,
+      owner  => 'root',
+      group  => 'neutron',
+      mode   => '0640',
+    }->
+    file { '/etc/neutron/ssl/cert.pem':
+      source => $::openstack::config::ssl_cert,
+      owner  => 'root',
+      group  => 'neutron',
+      mode   => '0640',
+    }->
+    file { '/etc/neutron/ssl/key.pem':
+      source => $::openstack::config::ssl_key,
+      owner  => 'root',
+      group  => 'neutron',
+      mode   => '0640',
+    }
+
+    $cert_file = '/etc/neutron/ssl/cert.pem'
+    $key_file = '/etc/neutron/ssl/key.pem'
+  }
+
   class { '::neutron':
     rabbit_host           => $controller_management_address,
     core_plugin           => $::openstack::config::neutron_core_plugin,
@@ -36,6 +66,9 @@ class openstack::common::neutron {
     debug                 => $::openstack::config::debug,
     verbose               => $::openstack::config::verbose,
     service_plugins       => $::openstack::config::neutron_service_plugins,
+    use_ssl               => $::openstack::config:ssl,
+    cert_file             => $cert_file,
+    key_file              => $key_file,
   }->
   file { "/etc/neutron/neutron.conf":
     ensure => present,
@@ -64,9 +97,9 @@ class openstack::common::neutron {
 
   class { '::neutron::keystone::auth':
     password     => $::openstack::config::neutron_password,
-    public_url   => "http://${::openstack::config::controller_address_api}:9696",
-    admin_url    => "http://${::openstack::config::controller_address_management}:9696",
-    internal_url => "http://${::openstack::config::controller_address_management}:9696",
+    public_url   => "https://${::openstack::config::controller_address_api}:9696",
+    admin_url    => "https://${::openstack::config::controller_address_management}:9696",
+    internal_url => "https://${::openstack::config::controller_address_management}:9696",
     region       => $::openstack::config::region,
   }
 

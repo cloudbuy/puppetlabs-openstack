@@ -75,7 +75,7 @@ class openstack::common::nova {
     neutron_admin_password => $::openstack::config::neutron_password,
     neutron_region_name    => $::openstack::config::region,
     neutron_admin_auth_url => "http://${controller_management_address}:35357/v2.0",
-    neutron_url            => "http://${controller_management_address}:9696",
+    neutron_url            => "https://${controller_management_address}:9696",
     vif_plugging_is_fatal  => false,
     vif_plugging_timeout   => '0',
   }
