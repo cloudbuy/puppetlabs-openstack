@@ -52,6 +52,11 @@ class openstack::common::neutron {
 
     $cert_file = '/etc/neutron/ssl/cert.pem'
     $key_file = '/etc/neutron/ssl/key.pem'
+    $scheme = 'https'
+  } else {
+    $cert_file = undef
+    $key_file = undef
+    $scheme = 'http'
   }
 
   class { '::neutron':
@@ -97,9 +102,9 @@ class openstack::common::neutron {
 
   class { '::neutron::keystone::auth':
     password     => $::openstack::config::neutron_password,
-    public_url   => "https://${::openstack::config::controller_address_api}:9696",
-    admin_url    => "https://${::openstack::config::controller_address_management}:9696",
-    internal_url => "https://${::openstack::config::controller_address_management}:9696",
+    public_url   => "${scheme}://${::openstack::config::controller_address_api}:9696",
+    admin_url    => "${scheme}://${::openstack::config::controller_address_management}:9696",
+    internal_url => "${scheme}://${::openstack::config::controller_address_management}:9696",
     region       => $::openstack::config::region,
   }
 

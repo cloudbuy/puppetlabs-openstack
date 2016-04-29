@@ -22,6 +22,41 @@ class openstack::common::nova {
   $pass                = $::openstack::config::mysql_pass_nova
   $database_connection = "mysql://${user}:${pass}@${management_address}/nova"
 
+  if ($::openstack::config::ssl) {
+    file { '/etc/nova/ssl':
+      ensure => directory,
+      owner  => 'root',
+      group  => 'nova',
+      mode   => '0750',
+    }->
+    file { '/etc/nova/ssl/ca.pem':
+      source => $::openstack::config::ssl_cacert,
+      owner  => 'root',
+      group  => 'nova',
+      mode   => '0640',
+    }->
+    file { '/etc/nova/ssl/cert.pem':
+      source => $::openstack::config::ssl_cert,
+      owner  => 'root',
+      group  => 'nova',
+      mode   => '0640',
+    }->
+    file { '/etc/nova/ssl/key.pem':
+      source => $::openstack::config::ssl_key,
+      owner  => 'root',
+      group  => 'nova',
+      mode   => '0640',
+    }
+
+    $cert_file = '/etc/nova/ssl/cert.pem'
+    $key_file = '/etc/nova/ssl/key.pem'
+    $scheme = 'https'
+  } else {
+    $cert_file = undef
+    $key_file = undef
+    $scheme = 'http'
+  }
+
   class { '::nova':
     database_connection => $database_connection,
     glance_api_servers  => join($::openstack::config::glance_api_servers, ','),
@@ -31,6 +66,9 @@ class openstack::common::nova {
     rabbit_password     => $::openstack::config::rabbitmq_password,
     rabbit_ha_queues    => $::openstack::config::ha,
     rabbit_use_ssl      => $::openstack::config::ssl,
+    use_ssl             => $::openstack::config::ssl,
+    cert_file           => $cert_file,
+    key_file            => $key_file,
     debug               => $::openstack::config::debug,
     verbose             => $::openstack::config::verbose,
   }-> 
@@ -74,8 +112,8 @@ class openstack::common::nova {
   class { '::nova::network::neutron':
     neutron_admin_password => $::openstack::config::neutron_password,
     neutron_region_name    => $::openstack::config::region,
-    neutron_admin_auth_url => "http://${controller_management_address}:35357/v2.0",
-    neutron_url            => "https://${controller_management_address}:9696",
+    neutron_admin_auth_url => "${scheme}://${controller_management_address}:35357/v2.0",
+    neutron_url            => "${scheme}://${controller_management_address}:9696",
     vif_plugging_is_fatal  => false,
     vif_plugging_timeout   => '0',
   }

@@ -165,6 +165,8 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'nova':
     address      => $management_address,
     port         => 8774,
+    ssl          => $::openstack::config::ssl,
+    ssl_port     => 8774,
     server_names => $server_names,
     server_addrs => $server_addrs,
   }
@@ -172,6 +174,8 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'nova-metadata':
     address      => $management_address,
     port         => 8775,
+    ssl          => $::openstack::config::ssl,
+    ssl_port     => 8775,
     server_names => $server_names,
     server_addrs => $server_addrs,
   }
