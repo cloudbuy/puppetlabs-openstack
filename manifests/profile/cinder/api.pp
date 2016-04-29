@@ -5,11 +5,14 @@ class openstack::profile::cinder::api {
   openstack::resources::firewall { 'Cinder API': port => '8776', }
 
   class { '::cinder::keystone::auth':
-    password         => $::openstack::config::cinder_password,
-    public_address   => $::openstack::config::controller_address_api,
-    admin_address    => $::openstack::config::controller_address_management,
-    internal_address => $::openstack::config::controller_address_management,
-    region           => $::openstack::config::region,
+    password          => $::openstack::config::cinder_password,
+    public_address    => $::openstack::config::controller_address_api,
+    admin_address     => $::openstack::config::controller_address_management,
+    internal_address  => $::openstack::config::controller_address_management,
+    public_protocol   => 'https',
+    admin_protocol    => 'https',
+    internal_protocol => 'https',
+    region            => $::openstack::config::region,
   }
 
   include ::openstack::common::cinder
