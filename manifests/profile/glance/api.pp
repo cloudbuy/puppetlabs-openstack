@@ -15,10 +15,46 @@ class openstack::profile::glance::api {
 
   openstack::resources::firewall { 'Glance API': port      => '9292', }
   openstack::resources::firewall { 'Glance Registry': port => '9191', }
+  
+  if ($::openstack::config::ssl) {
+    file { '/etc/glance/ssl':
+      ensure => directory,
+      owner  => 'root',
+      group  => 'glance',
+      mode   => '0750',
+    }->
+    file { '/etc/glance/ssl/ca.pem':
+      source => $::openstack::config::ssl_cacert,
+      owner  => 'root',
+      group  => 'glance',
+      mode   => '0640',
+    }->
+    file { '/etc/glance/ssl/cert.pem':
+      source => $::openstack::config::ssl_cert,
+      owner  => 'root',
+      group  => 'glance',
+      mode   => '0640',
+    }->
+    file { '/etc/glance/ssl/key.pem':
+      source => $::openstack::config::ssl_key,
+      owner  => 'root',
+      group  => 'glance',
+      mode   => '0640',
+    }
+
+    $cert_file = '/etc/glance/ssl/cert.pem'
+    $key_file = '/etc/glance/ssl/key.pem'
+    $scheme = 'https'
+  } else {
+    $cert_file = undef
+    $key_file = undef
+    $scheme = 'http'
+  }
 
   class { '::glance::api':
     keystone_password   => $::openstack::config::glance_password,
-    auth_host           => $::openstack::config::controller_address_management,
+    auth_uri            => $::openstack::profile::base::auth_uri,
+    identity_uri        => $::openstack::profile::base::auth_url,
     keystone_tenant     => 'services',
     keystone_user       => 'glance',
     database_connection => $database_connection,
@@ -27,6 +63,8 @@ class openstack::profile::glance::api {
     debug               => $::openstack::config::debug,
     enabled             => $::openstack::profile::base::is_storage,
     os_region_name      => $::openstack::config::region,
+    cert_file           => $cert_file,
+    key_file            => $key_file,
   }
 
   class { '::glance::backend::rbd':
@@ -37,11 +75,14 @@ class openstack::profile::glance::api {
   class { '::glance::registry':
     keystone_password   => $::openstack::config::glance_password,
     database_connection => $database_connection,
-    auth_host           => $::openstack::config::controller_address_management,
+    auth_uri            => $::openstack::profile::base::auth_uri,
+    identity_uri        => $::openstack::profile::base::auth_url,
     keystone_tenant     => 'services',
     keystone_user       => 'glance',
     verbose             => $::openstack::config::verbose,
     debug               => $::openstack::config::debug,
+    cert_file           => $cert_file,
+    key_file            => $key_file,
   }
 
   class { '::glance::notify::rabbitmq':

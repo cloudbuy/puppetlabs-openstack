@@ -223,6 +223,8 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'glance':
     address      => $management_address,
     port         => 9292,
+    ssl          => $::openstack::config::ssl,
+    ssl_port     => 9292,
     server_names => $glance_names,
     server_addrs => $glance_addrs,
   }
