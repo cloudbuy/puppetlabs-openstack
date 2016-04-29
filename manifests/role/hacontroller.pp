@@ -5,9 +5,8 @@ class openstack::role::hacontroller inherits ::openstack::role {
   class { '::openstack::profile::galera': } ->
   class { '::openstack::profile::mongodb': }
 
-  class { '::openstack::profile::haproxy::controller': }
-  class { '::openstack::profile::keepalived::controller': }
-
+  class { '::openstack::profile::keepalived::controller': }->
+  class { '::openstack::profile::haproxy::controller': }->
   class { '::openstack::profile::keystone': } ->
   class { '::openstack::profile::ceilometer::api': } ->
   class { '::openstack::profile::glance::auth': } ->
