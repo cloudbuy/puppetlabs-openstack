@@ -109,7 +109,8 @@ class openstack::common::neutron {
   }
 
   class { '::neutron::server':
-    auth_uri            => $::openstack::profile::base::auth_uri,
+    auth_uri            => $::openstack::profile::base::auth_url,
+    identity_uri        => $::openstack::profile::base::auth_uri,
     auth_password       => $::openstack::config::neutron_password,
     database_connection => $database_connection,
     enabled             => $is_controller,
