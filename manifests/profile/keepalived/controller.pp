@@ -18,7 +18,7 @@ class openstack::profile::keepalived::controller {
     priority          => $priority,
     auth_type         => 'PASS',
     auth_pass         => $::openstack::config::controller_keepalived_pass,
-    virtual_ipaddress => [$::openstack::config::controller_address_api],
+    virtual_ipaddress => [$::openstack::config::controller_address_management],
     track_interface   => [$api_device], 
     track_script      => 'check_haproxy',
   }
