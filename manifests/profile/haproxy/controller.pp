@@ -151,6 +151,8 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'keystone-admin':
     address      => $management_address,
     port         => 35357,
+    ssl          => $::openstack::config::ssl,
+    ssl_port     => 35357,
     server_names => $server_names,
     server_addrs => $server_addrs,
   }
@@ -158,6 +160,8 @@ class openstack::profile::haproxy::controller {
   openstack::profile::haproxy::controller::api_service { 'keystone-public':
     address      => $management_address,
     port         => 5000,
+    ssl          => $::openstack::config::ssl,
+    ssl_port     => 5000,
     server_names => $server_names,
     server_addrs => $server_addrs,
   }
