@@ -4,6 +4,15 @@ class openstack::profile::neutron::router {
     value     => '1',
   }
 
+  # Ensure the required modules for IPsec VPNs are loaded
+  kmod::load { 'esp4': }
+  kmod::load { 'esp6': }
+  kmod::load { 'ah4': }
+  kmod::load { 'ah6': }
+  kmod::load { 'af_key': }
+  kmod::load { 'xfrm_user': }
+  kmod::load { 'xfrm_ipcomp': }
+
   $controller_management_address = $::openstack::config::controller_address_management
 
   $dnsmasq_config_file = $::openstack::config::neutron_instance_mtu ? {
