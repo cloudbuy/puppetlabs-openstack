@@ -24,6 +24,36 @@ class openstack::common::keystone {
   $pass                = $::openstack::config::mysql_pass_keystone
   $database_connection = "mysql://${user}:${pass}@${management_address}/keystone"
 
+  if ($::openstack::config::ssl) {
+    file { '/etc/keystone/ssl':
+      ensure => directory,
+      owner  => 'root',
+      group  => 'keystone',
+      mode   => '0750',
+    }->
+    file { '/etc/keystone/ssl/ca.pem':
+      source => $::openstack::config::ssl_cacert,
+      owner  => 'root',
+      group  => 'keystone',
+      mode   => '0640',
+    }->
+    file { '/etc/keystone/ssl/cert.pem':
+      source => $::openstack::config::ssl_cert,
+      owner  => 'root',
+      group  => 'keystone',
+      mode   => '0640',
+    }->
+    file { '/etc/keystone/ssl/key.pem':
+      source => $::openstack::config::ssl_key,
+      owner  => 'root',
+      group  => 'keystone',
+      mode   => '0640',
+    }
+
+    $cert_file = '/etc/keystone/ssl/cert.pem'
+    $key_file = '/etc/keystone/ssl/key.pem'
+  }
+
   class { '::keystone':
     admin_token         => $::openstack::config::keystone_admin_token,
     database_connection => $database_connection,
@@ -33,5 +63,8 @@ class openstack::common::keystone {
     admin_bind_host     => $admin_bind_host,
     public_bind_host    => $public_bind_host,
     service_name        => $service_name,
+    enable_ssl          => $::openstack::config::ssl,
+    ssl_certfile        => $cert_file,
+    ssl_keyfile         => $key_file,
   }
 }

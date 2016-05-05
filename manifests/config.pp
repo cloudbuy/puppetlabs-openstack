@@ -24,6 +24,7 @@ class openstack::config (
   $controller_address_management = undef,
   $controller_keepalived_router_id = undef,
   $controller_keepalived_pass = undef,
+  $controller_keepalived_address = undef,
   $storage_address_api = undef,
   $storage_address_management = undef,
   $mysql_root_password = undef,

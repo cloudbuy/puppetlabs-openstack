@@ -12,6 +12,12 @@ class openstack::profile::base {
   # database anchor
   anchor { 'database-service': }
 
+  $url_scheme = $::openstack::config::ssl ? {
+    true    => 'https',
+    default => 'http'
+  }
+
+
   $management_network = $::openstack::config::network_management
   $management_address = ip_for_network($management_network)
   $controller_management_address = $::openstack::config::controller_address_management
@@ -21,6 +27,9 @@ class openstack::profile::base {
   $api_address = ip_for_network($api_network)
   $controller_api_address = $::openstack::config::controller_address_api
   $storage_api_address    = $::openstack::config::storage_address_api
+
+  $auth_uri = "${url_scheme}://${controller_api_address}:5000/"
+  $auth_url = "${url_scheme}://${controller_api_address}:35357/"
 
   if ($::openstack::config::ha) {
     $controller_management_addresses = $::openstack::config::controllers.map|String $name, Hash $addr| { $addr['management'] }

@@ -7,6 +7,11 @@ class openstack::profile::keystone {
 
   include ::openstack::common::keystone
 
+  $scheme = $::openstack::config::ssl ? {
+    true    => 'https',
+    default => 'http'
+  }
+
   class { '::keystone::roles::admin':
     email        => $::openstack::config::keystone_admin_email,
     password     => $::openstack::config::keystone_admin_password,
@@ -14,9 +19,9 @@ class openstack::profile::keystone {
   }
 
   class { 'keystone::endpoint':
-    public_url   => "http://${::openstack::config::controller_address_api}:5000/",
-    admin_url    => "http://${::openstack::config::controller_address_management}:35357/",
-    internal_url => "http://${::openstack::config::controller_address_management}:5000/",
+    public_url   => "${scheme}://${::openstack::config::controller_address_api}:5000/",
+    admin_url    => "${scheme}://${::openstack::config::controller_address_management}:35357/",
+    internal_url => "${scheme}://${::openstack::config::controller_address_management}:5000/",
     region       => $::openstack::config::region,
     version      => '',
   }

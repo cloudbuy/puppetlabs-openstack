@@ -10,9 +10,14 @@ class openstack::profile::nova::api {
   openstack::resources::firewall { 'Nova S3': port => '3333', }
   openstack::resources::firewall { 'Nova novnc': port => '6080', }
 
-  $public_url = "http://${::openstack::config::controller_address_api}:8774"
-  $admin_url = "http://${::openstack::config::controller_address_management}:8774"
-  $internal_url = "http://${::openstack::config::controller_address_management}:8774"
+  $scheme = $::openstack::config::ssl ? {
+    true    => 'https',
+    default => 'http'
+  }
+
+  $public_url = "${scheme}://${::openstack::config::controller_address_api}:8774"
+  $admin_url = "${scheme}://${::openstack::config::controller_address_management}:8774"
+  $internal_url = "${scheme}://${::openstack::config::controller_address_management}:8774"
 
   class { '::nova::keystone::auth':
     password        => $::openstack::config::nova_password,
@@ -29,6 +34,7 @@ class openstack::profile::nova::api {
 
   class { '::nova::api':
     admin_password                       => $::openstack::config::nova_password,
+    auth_protocol                        => $scheme,
     auth_host                            => $controller_management_address,
     neutron_metadata_proxy_shared_secret => $::openstack::config::neutron_shared_secret,
     enabled                              => true,

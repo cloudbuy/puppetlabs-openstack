@@ -14,6 +14,37 @@ class openstack::common::cinder {
   $pass                = $::openstack::config::mysql_pass_cinder
   $database_connection = "mysql://${user}:${pass}@${management_address}/cinder"
 
+
+  if ($::openstack::config::ssl) {
+    file { '/etc/cinder/ssl':
+      ensure => directory,
+      owner  => 'root',
+      group  => 'cinder',
+      mode   => '0750',
+    }->
+    file { '/etc/cinder/ssl/ca.pem':
+      source => $::openstack::config::ssl_cacert,
+      owner  => 'root',
+      group  => 'cinder',
+      mode   => '0640',
+    }->
+    file { '/etc/cinder/ssl/cert.pem':
+      source => $::openstack::config::ssl_cert,
+      owner  => 'root',
+      group  => 'cinder',
+      mode   => '0640',
+    }->
+    file { '/etc/cinder/ssl/key.pem':
+      source => $::openstack::config::ssl_key,
+      owner  => 'root',
+      group  => 'cinder',
+      mode   => '0640',
+    }
+
+    $cert_file = '/etc/cinder/ssl/cert.pem'
+    $key_file = '/etc/cinder/ssl/key.pem'
+  }
+
   class { '::cinder':
     database_connection => $database_connection,
     rabbit_hosts        => $::openstack::config::rabbitmq_hosts,
@@ -23,6 +54,9 @@ class openstack::common::cinder {
     rabbit_use_ssl      => $::openstack::config::ssl,
     debug               => $::openstack::config::debug,
     verbose             => $::openstack::config::verbose,
+    use_ssl             => $::openstack::config::ssl,
+    cert_file           => $cert_file,
+    key_file            => $key_file
   }->
   file { "/etc/cinder/cinder.conf":
     ensure => present,
