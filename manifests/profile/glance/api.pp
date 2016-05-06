@@ -52,19 +52,20 @@ class openstack::profile::glance::api {
   }
 
   class { '::glance::api':
-    keystone_password   => $::openstack::config::glance_password,
-    auth_uri            => $::openstack::profile::base::auth_uri,
-    identity_uri        => $::openstack::profile::base::auth_url,
-    keystone_tenant     => 'services',
-    keystone_user       => 'glance',
-    database_connection => $database_connection,
-    registry_host       => $::management_address,
-    verbose             => $::openstack::config::verbose,
-    debug               => $::openstack::config::debug,
-    enabled             => $::openstack::profile::base::is_storage,
-    os_region_name      => $::openstack::config::region,
-    cert_file           => $cert_file,
-    key_file            => $key_file,
+    keystone_password        => $::openstack::config::glance_password,
+    auth_uri                 => $::openstack::profile::base::auth_uri,
+    identity_uri             => $::openstack::profile::base::auth_url,
+    keystone_tenant          => 'services',
+    keystone_user            => 'glance',
+    database_connection      => $database_connection,
+    registry_host            => $::management_address,
+    registry_client_protocol => $scheme,
+    verbose                  => $::openstack::config::verbose,
+    debug                    => $::openstack::config::debug,
+    enabled                  => $::openstack::profile::base::is_storage,
+    os_region_name           => $::openstack::config::region,
+    cert_file                => $cert_file,
+    key_file                 => $key_file,
   }
 
   class { '::glance::backend::rbd':
