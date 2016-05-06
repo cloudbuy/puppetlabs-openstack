@@ -64,13 +64,14 @@ class openstack::profile::neutron::router {
   }
 
   class { '::neutron::agents::metadata':
-    auth_password => $::openstack::config::neutron_password,
-    shared_secret => $::openstack::config::neutron_shared_secret,
-    auth_url      => "${scheme}://${controller_management_address}:35357/v2.0",
-    debug         => $::openstack::config::debug,
-    auth_region   => $::openstack::config::region,
-    metadata_ip   => $controller_management_address,
-    enabled       => true,
+    auth_password     => $::openstack::config::neutron_password,
+    shared_secret     => $::openstack::config::neutron_shared_secret,
+    auth_url          => "${scheme}://${controller_management_address}:35357/v2.0",
+    debug             => $::openstack::config::debug,
+    auth_region       => $::openstack::config::region,
+    metadata_ip       => $controller_management_address,
+    metadata_protocol => $scheme,
+    enabled           => true,
   }
 
   # NOTE: The upstream neutron module doesn't currently support lbaasv2 so we're going to use
