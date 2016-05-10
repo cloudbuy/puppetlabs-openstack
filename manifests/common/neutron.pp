@@ -59,10 +59,16 @@ class openstack::common::neutron {
     $scheme = 'http'
   }
 
+  $advertise_mtu = $::openstack::config::neutron_instance_mtu ? {
+    undef   => false,
+    default => true,
+  }
+
   class { '::neutron':
     rabbit_host           => $controller_management_address,
     core_plugin           => $::openstack::config::neutron_core_plugin,
     allow_overlapping_ips => true,
+    advertise_mtu         => $advertise_mtu,
     bind_host             => $neutron_bind_api,
     rabbit_user           => $::openstack::config::rabbitmq_user,
     rabbit_password       => $::openstack::config::rabbitmq_password,
