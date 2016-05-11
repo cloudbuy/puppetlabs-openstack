@@ -74,6 +74,10 @@ class openstack::profile::neutron::router {
     enabled           => true,
   }
 
+  if $::openstack::config::ssl { 
+    neutron_metadata_agent_config { 'DEFAULT/use_ssl': value => false; }
+  }
+
   # NOTE: The upstream neutron module doesn't currently support lbaasv2 so we're going to use
   # the ::neutron::agents::lbaas class to perform the configuration then add the package/service
   # management here.
