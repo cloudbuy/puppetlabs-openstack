@@ -70,6 +70,7 @@ class openstack::common::neutron {
     allow_overlapping_ips => true,
     advertise_mtu         => $advertise_mtu,
     network_device_mtu    => $::openstack::config::neutron_instance_mtu,
+    veth_mtu              => $::openstack::config::neutron_instance_mtu,
     bind_host             => $neutron_bind_api,
     rabbit_user           => $::openstack::config::rabbitmq_user,
     rabbit_password       => $::openstack::config::rabbitmq_password,
