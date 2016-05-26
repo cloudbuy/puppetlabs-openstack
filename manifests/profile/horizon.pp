@@ -79,7 +79,10 @@ class openstack::profile::horizon {
   concat::fragment { 'disable_password_reveal_and_autocomplete':
     target  => $::horizon::params::config_file,
     content => 'HORIZON_CONFIG["disable_password_reveal"] = True
-HORIZON_CONFIG["password_autocomplete"] = "off"',
+HORIZON_CONFIG["password_autocomplete"] = "off"
+SECURE_PROXY_SSL_HEADER = (\'HTTP_X_FORWARDED_PROTOCOL\', \'https\')
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True',
     order   => '60',
   }
 
