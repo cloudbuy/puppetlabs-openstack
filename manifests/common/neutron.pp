@@ -69,6 +69,7 @@ class openstack::common::neutron {
     core_plugin           => $::openstack::config::neutron_core_plugin,
     allow_overlapping_ips => true,
     advertise_mtu         => $advertise_mtu,
+    network_device_mtu    => $::openstack::config::neutron_instance_mtu,
     bind_host             => $neutron_bind_api,
     rabbit_user           => $::openstack::config::rabbitmq_user,
     rabbit_password       => $::openstack::config::rabbitmq_password,
@@ -105,6 +106,7 @@ class openstack::common::neutron {
     group  => 'neutron',
     mode   => '0640',
   }
+  neutron_config { 'DEFAULT/veth_mtu': value => $::openstack::config::neutron_instance_mtu }
 
   class { '::neutron::keystone::auth':
     password     => $::openstack::config::neutron_password,
@@ -115,12 +117,13 @@ class openstack::common::neutron {
   }
 
   class { '::neutron::server':
-    auth_uri            => $::openstack::profile::base::auth_uri,
-    identity_uri        => $::openstack::profile::base::auth_url,
-    auth_password       => $::openstack::config::neutron_password,
-    database_connection => $database_connection,
-    enabled             => $is_controller,
-    sync_db             => $is_controller,
+    auth_uri                         => $::openstack::profile::base::auth_uri,
+    identity_uri                     => $::openstack::profile::base::auth_url,
+    auth_password                    => $::openstack::config::neutron_password,
+    database_connection              => $database_connection,
+    enabled                          => $is_controller,
+    sync_db                          => $is_controller,
+    allow_automatic_l3agent_failover => true
   }
 
   if $::osfamily == 'redhat' {

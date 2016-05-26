@@ -15,4 +15,5 @@ class openstack::common::ml2::ovs {
     enabled          => true,
     tunnel_types     => $tunnel_types,
   }
+  neutron_agent_ovs { 'agent/veth_mtu': value => $::openstack::config::neutron_instance_mtu }
 }
