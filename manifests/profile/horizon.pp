@@ -82,6 +82,7 @@ class openstack::profile::horizon {
 HORIZON_CONFIG["password_autocomplete"] = "off"
 SECURE_PROXY_SSL_HEADER = (\'HTTP_X_FORWARDED_PROTOCOL\', \'https\')
 CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = True',
     order   => '60',
   }
