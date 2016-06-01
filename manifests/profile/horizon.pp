@@ -80,11 +80,18 @@ class openstack::profile::horizon {
     target  => $::horizon::params::config_file,
     content => 'HORIZON_CONFIG["disable_password_reveal"] = True
 HORIZON_CONFIG["password_autocomplete"] = "off"
-SECURE_PROXY_SSL_HEADER = (\'HTTP_X_FORWARDED_PROTOCOL\', \'https\')
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = True',
+SESSION_COOKIE_HTTPONLY = True',
     order   => '60',
+  }
+
+  if ($::openstack::config::ssl) {
+    concat::fragment { 'horizon_ssl_hardening':
+      target  => $::horizon::params::config_file,
+      content => 'SECURE_PROXY_SSL_HEADER = (\'HTTP_X_FORWARDED_PROTOCOL\', \'https\')
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True',
+      order   => 60,
+    }
   }
 
   openstack::resources::firewall { 'Apache (Horizon)': port => '80' }
