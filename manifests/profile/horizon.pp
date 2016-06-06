@@ -45,19 +45,24 @@ class openstack::profile::horizon {
   }
 
   class { '::horizon':
-    allowed_hosts   => concat([ '127.0.0.1', $::openstack::config::controller_address_api, $::fqdn ], $::openstack::config::horizon_allowed_hosts),
-    server_aliases  => concat([ '127.0.0.1', $::openstack::config::controller_address_api, $::fqdn ], $::openstack::config::horizon_server_aliases),
-    servername      => $::openstack::config::horizon_servername,
-    ssl_redirect    => $::openstack::config::ssl,
-    listen_ssl      => $::openstack::config::ssl,
-    horizon_cert    => $horizon_cert,
-    horizon_key     => $horizon_key,
-    horizon_ca      => $horizon_ca,
-    bind_address    => $horizon_bind_address,
-    secret_key      => $::openstack::config::horizon_secret_key,
-    cache_server_ip => $::openstack::config::controller_address_management,
-    keystone_url    => "${scheme}://${::openstack::config::controller_address_api}:5000/v2.0",
-    neutron_options => {
+    allowed_hosts      => concat([ '127.0.0.1', $::openstack::config::controller_address_api, $::fqdn ], $::openstack::config::horizon_allowed_hosts),
+    server_aliases     => concat([ '127.0.0.1', $::openstack::config::controller_address_api, $::fqdn ], $::openstack::config::horizon_server_aliases),
+    servername         => $::openstack::config::horizon_servername,
+    ssl_redirect       => $::openstack::config::ssl,
+    listen_ssl         => $::openstack::config::ssl,
+    horizon_cert       => $horizon_cert,
+    horizon_key        => $horizon_key,
+    horizon_ca         => $horizon_ca,
+    vhost_extra_params => {
+      ssl_protocol         => 'all -SSLv3 -SSLv2',
+      ssl_cipher           => 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS',
+      ssl_honorcipherorder => true
+    },
+    bind_address       => $horizon_bind_address,
+    secret_key         => $::openstack::config::horizon_secret_key,
+    cache_server_ip    => $::openstack::config::controller_address_management,
+    keystone_url       => "${scheme}://${::openstack::config::controller_address_api}:5000/v2.0",
+    neutron_options    => {
       enable_firewall       => true,
       enable_ha_router      => true,
       enable_lb             => false, # Even though we are using lbaas we use lbaasv2
