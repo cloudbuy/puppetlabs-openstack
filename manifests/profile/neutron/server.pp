@@ -11,12 +11,14 @@ class openstack::profile::neutron::server {
   $mechanism_drivers             = $::openstack::config::neutron_mechanism_drivers # ['openvswitch']
   $tunnel_id_ranges              = $::openstack::config::neutron_tunnel_id_ranges # ['1:1000']
   $controller_management_address = $::openstack::config::controller_address_management
+  $path_mtu                      = $::openstack::config::neutron_path_mtu # 1500
 
   class  { '::neutron::plugins::ml2':
     type_drivers         => $type_drivers,
     tenant_network_types => $tenant_network_type,
     mechanism_drivers    => $mechanism_drivers,
-    tunnel_id_ranges     => $tunnel_id_ranges
+    tunnel_id_ranges     => $tunnel_id_ranges,
+    path_mtu             => $path_mtu
   }
 
   $scheme = $::openstack::config::ssl ? {
