@@ -125,7 +125,7 @@ class openstack::profile::haproxy::controller {
     $_options = merge($default_options, $options)
 
     if ($ssl) {
-      $bind = {"${address}:${ssl_port}" => ['ssl crt /etc/haproxy/ssl/cert.pem']}
+      $bind = {"${address}:${ssl_port}" => ['ssl crt /etc/haproxy/ssl/cert.pem ciphers AES128+EECDH:AES128+EDH no-sslv3']}
       $member_port = $ssl_port
       $member_options = 'check inter 2000 rise 2 fall 5 ssl ca-file /etc/haproxy/ssl/ca.pem'
     } else {
