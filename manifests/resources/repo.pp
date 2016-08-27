@@ -12,7 +12,9 @@ class openstack::resources::repo(
         class {'openstack::resources::repo::erlang': }
         class {'openstack::resources::repo::yum_refresh': }
       } elsif $::osfamily == 'Debian' {
-        class {'openstack::resources::repo::uca': release => $release }
+        unless ($release == 'mitaka') and (versioncmp($::lsbdistrelease, '16.04') >= 0) {
+          class {'openstack::resources::repo::uca': release => $release }
+        }
       }
     }
     default: {
