@@ -49,7 +49,6 @@ class openstack::profile::ceilometer::api {
   }
 
   class { '::ceilometer::expirer':
-    time_to_live => '2592000'
   }
 
   # For the time being no upstart script are provided
