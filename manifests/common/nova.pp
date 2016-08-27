@@ -101,14 +101,6 @@ class openstack::common::nova {
   # Play better with Windows instances when doing a guest shutdown
   nova_config { 'DEFAULT/shutdown_timeout': value => '300'; }
 
-  # Disable the old RabbitMQ configuration in Neutron
-  nova_config { 'DEFAULT/rabbit_hosts': ensure => absent }
-  nova_config { 'DEFAULT/rabbit_use_ssl': ensure => absent }
-  nova_config { 'DEFAULT/rabbit_userid': ensure => absent }
-  nova_config { 'DEFAULT/rabbit_password': ensure => absent }
-  nova_config { 'DEFAULT/rabbit_virtual_host': ensure => absent }
-  nova_config { 'DEFAULT/rabbit_ha_queues': ensure => absent }
-  
   class { '::nova::network::neutron':
     neutron_admin_password => $::openstack::config::neutron_password,
     neutron_region_name    => $::openstack::config::region,
