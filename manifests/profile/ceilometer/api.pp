@@ -19,6 +19,11 @@ class openstack::profile::ceilometer::api {
     port => '8777',
   }
 
+  $scheme = $::openstack::config::ssl ? {
+    true    => 'https',
+    default => 'http'
+  }
+
   include ::openstack::common::ceilometer
 
   class { '::ceilometer::keystone::auth':
@@ -30,7 +35,8 @@ class openstack::profile::ceilometer::api {
   }
 
   class { '::ceilometer::api':
-    keystone_host     => $controller_management_address,
+    auth_uri          => "${scheme}://${controller_management_address}:5000/",
+    identity_uri      => "${scheme}://${controller_management_address}:35357/", 
     keystone_password => $::openstack::config::ceilometer_password,
     host              => $::openstack::common::ceilometer::ceilometer_host,
   }
