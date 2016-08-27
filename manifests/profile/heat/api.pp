@@ -43,8 +43,6 @@ class openstack::profile::heat::api {
     rabbit_use_ssl      => $::openstack::config::ssl,
     debug               => $::openstack::config::debug,
     verbose             => $::openstack::config::verbose,
-    keystone_host       => $::openstack::config::controller_address_management,
-    keystone_password   => $::openstack::config::heat_password,
   }
 
   class { '::heat::api':
