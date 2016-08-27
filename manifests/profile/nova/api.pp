@@ -1,4 +1,4 @@
-# The profile to set up the Nova controller (several services)
+#: The profile to set up the Nova controller (several services)
 class openstack::profile::nova::api {
 
   $controller_management_address = $::openstack::config::controller_address_management
@@ -48,11 +48,6 @@ class openstack::profile::nova::api {
     host              => $::openstack::common::nova::nova_api_host,
     vncproxy_protocol => $scheme,
     enabled           => true,
-  }
-
-  class { '::nova::objectstore':
-    bind_address => $::openstack::common::nova::nova_api_host,
-    enabled      => true,
   }
 
   class { [
