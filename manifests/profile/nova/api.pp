@@ -34,8 +34,8 @@ class openstack::profile::nova::api {
 
   class { '::nova::api':
     admin_password                       => $::openstack::config::nova_password,
-    auth_protocol                        => $scheme,
-    auth_host                            => $controller_management_address,
+    auth_uri                             => "${scheme}://${::openstack::config::controller_address_management}:5000/",
+    identity_uri                         => "${scheme}://${::openstack::config::controller_address_management}:35357/",
     neutron_metadata_proxy_shared_secret => $::openstack::config::neutron_shared_secret,
     enabled                              => true,
     api_bind_address                     => $::openstack::common::nova::nova_api_host,
