@@ -32,19 +32,22 @@ class openstack::profile::neutron::router {
     manage_service          => false,
   }
 
+  if (is_array($::dnsclient::nameservers)) {
+    $dnsmasq_dns_servers = $::dnsclient::nameservers
+  } else {
+    $dnsmasq_dns_servers = undef
+  }
+
   class { '::neutron::agents::dhcp':
     debug               => $::openstack::config::debug,
     dnsmasq_config_file => $dnsmasq_config_file,
+    dnsmasq_dns_servers => $dnsmasq_dns_servers,
     enabled             => true,
   }
 
   class { '::neutron::agents::vpnaas':
     external_network_bridge => '',
     enabled                 => true,
-  }
-
-  if (is_array($::dnsclient::nameservers)) {
-    neutron_dhcp_agent_config { 'DEFAULT/dnsmasq_dns_servers': value => join($::dnsclient::nameservers, ',') }
   }
 
   if ($dnsmasq_config_file) {
@@ -78,24 +81,12 @@ class openstack::profile::neutron::router {
     neutron_metadata_agent_config { 'DEFAULT/use_ssl': value => false; }
   }
 
-  # NOTE: The upstream neutron module doesn't currently support lbaasv2 so we're going to use
-  # the ::neutron::agents::lbaas class to perform the configuration then add the package/service
-  # management here.
   class { '::neutron::agents::lbaas':
     debug         => $::openstack::config::debug,
     device_driver => 'neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver',
-    enabled       => false,
-  }->
-  package { 'neutron-lbaasv2-agent':
-    ensure => present,
-  }->
-  service { 'neutron-lbaasv2-agent':
-    ensure => running,
-    enable => true,
+    enable_v1     => false,
+    enable_v2     => true,
   }
-
-  Neutron_config<||>             ~> Service['neutron-lbaasv2-agent']
-  Neutron_lbaas_agent_config<||> ~> Service['neutron-lbaasv2-agent']
 
   class { '::neutron::agents::metering':
     enabled => true,
