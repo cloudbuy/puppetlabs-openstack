@@ -33,7 +33,7 @@ class openstack::profile::neutron::router {
   }
 
   if (is_array($::dnsclient::nameservers)) {
-    $dnsmasq_dns_servers => $::dnsclient::nameservers
+    $dnsmasq_dns_servers = $::dnsclient::nameservers
   } else {
     $dnsmasq_dns_servers = undef
   }
