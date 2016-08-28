@@ -75,7 +75,7 @@ class openstack::profile::galera {
 
     'wsrep_provider'                 => '/usr/lib/libgalera_smm.so',
     'wsrep_provider_options'         => $wsrep_provider_options,
-    'wsrep_cluster_name'             => '',
+    'wsrep_cluster_name'             => 'openstack',
     'wsrep_cluster_address'          => "gcomm://${join($cluster_addresses, ',')}",
     'wsrep_sst_method'               => 'rsync',
   }
