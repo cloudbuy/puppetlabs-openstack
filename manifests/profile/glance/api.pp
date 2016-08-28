@@ -87,10 +87,11 @@ class openstack::profile::glance::api {
   }
 
   class { '::glance::notify::rabbitmq':
-    rabbit_password  => $::openstack::config::rabbitmq_password,
-    rabbit_userid    => $::openstack::config::rabbitmq_user,
-    rabbit_hosts     => $::openstack::config::rabbitmq_hosts,
-#    rabbit_ha_queues => $::openstack::config::ha, # FIXME: re-enable on Mitaka
-    rabbit_use_ssl   => $::openstack::config::ssl,
+    rabbit_password   => $::openstack::config::rabbitmq_password,
+    rabbit_userid     => $::openstack::config::rabbitmq_user,
+    rabbit_hosts      => $::openstack::config::rabbitmq_hosts,
+#    rabbit_ha_queues  => $::openstack::config::ha, # FIXME: re-enable on Mitaka
+    rabbit_use_ssl    => $::openstack::config::ssl,
+    kombu_ssl_version => 'TLSv1_2',
   }
 }
