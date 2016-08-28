@@ -91,6 +91,10 @@ class openstack::profile::galera {
     }
   }
 
+  class { '::mysql::client':
+    package_name => 'mariadb-client-10.0',
+  }
+
   class { '::mysql::bindings':
     python_enable => true,
   }
