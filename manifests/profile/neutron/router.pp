@@ -32,19 +32,22 @@ class openstack::profile::neutron::router {
     manage_service          => false,
   }
 
+  if (is_array($::dnsclient::nameservers)) {
+    $dnsmasq_dns_servers => $::dnsclient::nameservers
+  } else {
+    $dnsmasq_dns_servers = undef
+  }
+
   class { '::neutron::agents::dhcp':
     debug               => $::openstack::config::debug,
     dnsmasq_config_file => $dnsmasq_config_file,
+    dnsmasq_dns_servers => $dnsmasq_dns_servers,
     enabled             => true,
   }
 
   class { '::neutron::agents::vpnaas':
     external_network_bridge => '',
     enabled                 => true,
-  }
-
-  if (is_array($::dnsclient::nameservers)) {
-    neutron_dhcp_agent_config { 'DEFAULT/dnsmasq_dns_servers': value => join($::dnsclient::nameservers, ',') }
   }
 
   if ($dnsmasq_config_file) {
