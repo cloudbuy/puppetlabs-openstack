@@ -10,6 +10,7 @@ class openstack::profile::mysql {
       'mysqld' => {
                     'bind_address'           => $::openstack::config::controller_address_management,
                     'default-storage-engine' => 'innodb',
+                    'max_connections'        => '1024',
                   }
     }
   }
