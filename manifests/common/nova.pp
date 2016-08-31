@@ -21,7 +21,9 @@ class openstack::common::nova {
   $user                = $::openstack::config::mysql_user_nova
   $pass                = $::openstack::config::mysql_pass_nova
   $database_connection = "mysql://${user}:${pass}@${management_address}/nova"
-  $api_database_connection = "mysql://${user}:${pass}@${management_address}/nova_api"
+  $user_api                = $::openstack::config::mysql_user_nova_api
+  $pass_api                = $::openstack::config::mysql_pass_nova_api
+  $api_database_connection = "mysql://${user_api}:${pass_api}@${management_address}/nova_api"
 
   if ($::openstack::config::ssl) {
     file { '/etc/nova/ssl':
