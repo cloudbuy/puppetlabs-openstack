@@ -72,10 +72,11 @@ class openstack::profile::galera {
     'innodb_autoinc_lock_mode'       => 2,
     'innodb_flush_log_at_trx_commit' => 0,
     'innodb_buffer_pool_size'        => '122M',
+    'max_connections'                => '2048',
 
     'wsrep_provider'                 => '/usr/lib/libgalera_smm.so',
     'wsrep_provider_options'         => $wsrep_provider_options,
-    'wsrep_cluster_name'             => '',
+    'wsrep_cluster_name'             => 'openstack',
     'wsrep_cluster_address'          => "gcomm://${join($cluster_addresses, ',')}",
     'wsrep_sst_method'               => 'rsync',
   }
@@ -89,6 +90,10 @@ class openstack::profile::galera {
     override_options => {
       'mysqld' => $mysqld_options
     }
+  }
+
+  class { '::mysql::client':
+    package_name => 'mariadb-client-10.0',
   }
 
   class { '::mysql::bindings':

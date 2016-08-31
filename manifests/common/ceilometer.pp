@@ -10,13 +10,14 @@ class openstack::common::ceilometer {
 
 # FIXME: re-add rabbit_ha_queues for Mitaka
   class { '::ceilometer':
-    metering_secret  => $::openstack::config::ceilometer_meteringsecret,
-    debug            => $::openstack::config::debug,
-    verbose          => $::openstack::config::verbose,
-    rabbit_hosts     => $::openstack::config::rabbitmq_hosts,
-    rabbit_userid    => $::openstack::config::rabbitmq_user,
-    rabbit_password  => $::openstack::config::rabbitmq_password,
-    rabbit_use_ssl   => $::openstack::config::ssl,
+    metering_secret   => $::openstack::config::ceilometer_meteringsecret,
+    debug             => $::openstack::config::debug,
+    verbose           => $::openstack::config::verbose,
+    rabbit_hosts      => $::openstack::config::rabbitmq_hosts,
+    rabbit_userid     => $::openstack::config::rabbitmq_user,
+    rabbit_password   => $::openstack::config::rabbitmq_password,
+    rabbit_use_ssl    => $::openstack::config::ssl,
+    kombu_ssl_version => 'TLSv1_2',
   }
 
   ceilometer_config { 'DEFAULT/rabbit_password': ensure => absent }

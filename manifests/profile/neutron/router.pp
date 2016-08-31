@@ -93,6 +93,7 @@ class openstack::profile::neutron::router {
   }
 
   class { '::neutron::services::fwaas':
-    enabled              => true,
+    enabled => true,
+    driver  => 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
   }
 }
