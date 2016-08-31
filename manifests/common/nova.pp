@@ -21,6 +21,7 @@ class openstack::common::nova {
   $user                = $::openstack::config::mysql_user_nova
   $pass                = $::openstack::config::mysql_pass_nova
   $database_connection = "mysql://${user}:${pass}@${management_address}/nova"
+  $api_database_connection = "mysql://${user}:${pass}@${management_address}/nova_api"
 
   if ($::openstack::config::ssl) {
     file { '/etc/nova/ssl':
@@ -58,20 +59,21 @@ class openstack::common::nova {
   }
 
   class { '::nova':
-    database_connection => $database_connection,
-    glance_api_servers  => join($::openstack::config::glance_api_servers, ','),
-    memcached_servers   => $memcached_servers,
-    rabbit_hosts        => $::openstack::config::rabbitmq_hosts,
-    rabbit_userid       => $::openstack::config::rabbitmq_user,
-    rabbit_password     => $::openstack::config::rabbitmq_password,
-    rabbit_ha_queues    => $::openstack::config::ha,
-    rabbit_use_ssl      => $::openstack::config::ssl,
-    kombu_ssl_version   => 'TLSv1_2',
-    use_ssl             => $::openstack::config::ssl,
-    cert_file           => $cert_file,
-    key_file            => $key_file,
-    debug               => $::openstack::config::debug,
-    verbose             => $::openstack::config::verbose,
+    database_connection     => $database_connection,
+    api_database_connection => $api_database_connection,
+    glance_api_servers      => join($::openstack::config::glance_api_servers, ','),
+    memcached_servers       => $memcached_servers,
+    rabbit_hosts            => $::openstack::config::rabbitmq_hosts,
+    rabbit_userid           => $::openstack::config::rabbitmq_user,
+    rabbit_password         => $::openstack::config::rabbitmq_password,
+    rabbit_ha_queues        => $::openstack::config::ha,
+    rabbit_use_ssl          => $::openstack::config::ssl,
+    kombu_ssl_version       => 'TLSv1_2',
+    use_ssl                 => $::openstack::config::ssl,
+    cert_file               => $cert_file,
+    key_file                => $key_file,
+    debug                   => $::openstack::config::debug,
+    verbose                 => $::openstack::config::verbose,
   }-> 
   file { "/etc/nova/api-paste.ini":
     ensure => present,
