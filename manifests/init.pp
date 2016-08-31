@@ -116,6 +116,12 @@
 # [*mysql_pass_nova*]
 #   The database password for nova service.
 #
+# [*mysql_user_nova_api*]
+#   The database username for nova api service.
+#
+# [*mysql_pass_nova_api*]
+#   The database password for nova api service.
+#
 # [*mysql_user_neutron*]
 #   The database username for neutron service.
 #
@@ -368,6 +374,8 @@ class openstack (
   $mysql_pass_glance = undef,
   $mysql_user_nova = undef,
   $mysql_pass_nova = undef,
+  $mysql_user_nova_api = undef,
+  $mysql_pass_nova_api = undef,
   $mysql_user_neutron = undef,
   $mysql_pass_neutron = undef,
   $mysql_user_heat = undef,
@@ -468,6 +476,8 @@ class openstack (
       mysql_pass_glance               => pick(hiera(openstack::mysql::glance::pass, undef), hiera(openstack::mysql::service_password)),
       mysql_user_nova                 => pick(hiera(openstack::mysql::nova::user, undef), 'nova'),
       mysql_pass_nova                 => pick(hiera(openstack::mysql::nova::pass, undef), hiera(openstack::mysql::service_password)),
+      mysql_user_nova_api             => pick(hiera(openstack::mysql::nova_api::user, undef), 'nova_api'),
+      mysql_pass_nova_api             => pick(hiera(openstack::mysql::nova_api::pass, undef), hiera(openstack::mysql::service_password)),
       mysql_user_neutron              => pick(hiera(openstack::mysql::neutron::user, undef), 'neutron'),
       mysql_pass_neutron              => pick(hiera(openstack::mysql::neutron::pass, undef), hiera(openstack::mysql::service_password)),
       mysql_user_heat                 => pick(hiera(openstack::mysql::heat::user, undef), 'heat'),
@@ -568,6 +578,8 @@ class openstack (
       mysql_pass_glance               => pick($mysql_pass_glance, $mysql_service_password),
       mysql_user_nova                 => pick($mysql_user_nova, 'nova'),
       mysql_pass_nova                 => pick($mysql_pass_nova, $mysql_service_password),
+      mysql_user_nova_api             => pick($mysql_user_nova_api, 'nova_api'),
+      mysql_pass_nova_api             => pick($mysql_pass_nova_api, $mysql_service_password),
       mysql_user_neutron              => pick($mysql_user_neutron, 'neutron'),
       mysql_pass_neutron              => pick($mysql_pass_neutron, $mysql_service_password),
       mysql_user_heat                 => pick($mysql_user_heat, 'heat'),

@@ -5,8 +5,8 @@ class openstack::profile::nova::api {
 
   openstack::resources::database { 'nova': }
   class { "::nova::db::mysql_api":
-    user          => $::openstack::config::mysql_user_nova,
-    password      => $::openstack::config::mysql_pass_nova,
+    user          => $::openstack::config::mysql_user_nova_api,
+    password      => $::openstack::config::mysql_pass_nova_api,
     dbname        => 'nova_api',
     allowed_hosts => $::openstack::config::mysql_allowed_hosts,
     require       => Anchor['database-service'],

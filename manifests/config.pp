@@ -38,6 +38,8 @@ class openstack::config (
   $mysql_pass_glance = undef,
   $mysql_user_nova = undef,
   $mysql_pass_nova = undef,
+  $mysql_user_nova_api = undef,
+  $mysql_pass_nova_api = undef,
   $mysql_user_neutron = undef,
   $mysql_pass_neutron = undef,
   $mysql_user_heat = undef,
