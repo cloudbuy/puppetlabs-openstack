@@ -23,6 +23,7 @@ class openstack::common::nova {
   $database_connection = "mysql://${user}:${pass}@${management_address}/nova"
 
   if ($::openstack::config::ssl) {
+    File['/etc/nova']->
     file { '/etc/nova/ssl':
       ensure => directory,
       owner  => 'root',
