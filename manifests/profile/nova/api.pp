@@ -4,6 +4,13 @@ class openstack::profile::nova::api {
   $controller_management_address = $::openstack::config::controller_address_management
 
   openstack::resources::database { 'nova': }
+  class { "::nova::db::mysql_api":
+    user          => $::openstack::config::mysql_user_nova_api,
+    password      => $::openstack::config::mysql_pass_nova_api,
+    dbname        => 'nova_api',
+    allowed_hosts => $::openstack::config::mysql_allowed_hosts,
+    require       => Anchor['database-service'],
+  }
   openstack::resources::firewall { 'Nova API': port => '8774', }
   openstack::resources::firewall { 'Nova Metadata': port => '8775', }
   openstack::resources::firewall { 'Nova EC2': port => '8773', }

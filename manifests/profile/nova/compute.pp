@@ -21,6 +21,23 @@ class openstack::profile::nova::compute {
   class { 'nova::migration::libvirt':
   }
 
+  file { '/etc/systemd/system/libvirt-bin.service.d':
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  }->
+  file { '/etc/systemd/system/libvirt-bin.service.d/override.conf':
+    content => "[Service]\nType=forking",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+  }~>
+  exec { 'libvirt_reload_systemd':
+    command     => '/bin/systemctl daemon-reload',
+    refreshonly => true,
+  }
+
   file { '/etc/libvirt/qemu.conf':
     ensure => present,
     source => 'puppet:///modules/openstack/qemu.conf',
