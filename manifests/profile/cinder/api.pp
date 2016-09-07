@@ -79,8 +79,8 @@ class openstack::profile::cinder::api {
     workers             => 1,
     wsgi_daemon_process => 'cinder-api',
     wsgi_process_group  => 'cinder-api',
-    wsgi_script_dir     => $::cinder::params::cinder_wsgi_script_path,
+    wsgi_script_dir     => '/usr/lib/cgi-bin/cinder',
     wsgi_script_file    => 'cinder-api',
-    wsgi_script_source  => $::cinder::params::cinder_wsgi_script_source,
+    wsgi_script_source  => '/usr/bin/cinder-wsgi'
   }
 }
