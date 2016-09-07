@@ -64,7 +64,7 @@ class openstack::common::keystone {
     debug               => $::openstack::config::debug,
     enabled             => $::openstack::profile::base::is_controller,
     admin_bind_host     => $admin_bind_host,
-    admin_endpoint      => $::openstack::profile::base:auth_url,
+    admin_endpoint      => $::openstack::profile::base::auth_url,
     public_bind_host    => $public_bind_host,
     service_name        => $service_name,
     enable_ssl          => $::openstack::config::ssl,
