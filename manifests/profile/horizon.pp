@@ -78,7 +78,7 @@ class openstack::profile::horizon {
     owner   => 'root',
     group   => 0,
     mode    => '0644',
-  }~>Service['httpd']
+  }
   
   # PCI Hardening
   concat::fragment { 'disable_password_reveal_and_autocomplete':
