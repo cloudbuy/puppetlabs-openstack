@@ -56,10 +56,31 @@ class openstack::profile::cinder::api {
     $ssl_key_file = undef
   }
 
-  class { '::cinder::wsgi::apache':
-    servername => $::openstack::config::controller_address_api,
-    bind_host  => $::openstack::profile::base::management_address,
-    ssl_cert   => $ssl_cert_file,
-    ssl_key    => $ssl_key_file,
+# FIXME: uncomment and use this on switch to Newton instead of the ::openstacklib::wsgi::apache block
+#  class { '::cinder::wsgi::apache':
+#    servername => $::openstack::config::controller_address_api,
+#    bind_host  => $::openstack::profile::base::management_address,
+#    ssl_cert   => $ssl_cert_file,
+#    ssl_key    => $ssl_key_file,
+#  }
+
+  ::openstacklib::wsgi::apache { 'cinder_wsgi':
+    bind_host           => $::openstack::profile::base::management_address,
+    bind_port           => 8776,
+    group               => 'cinder',
+    path                => '/',
+    priority            => '10',
+    servername          => $::openstack::config::controller_address_api,
+    ssl                 => true,
+    ssl_cert            => $ssl_cert_file,
+    ssl_key             => $ssl_key_file,
+    threads             => $::processorcount,
+    user                => 'cinder',
+    workers             => 1,
+    wsgi_daemon_process => 'cinder-api',
+    wsgi_process_group  => 'cinder-api',
+    wsgi_script_dir     => $::cinder::params::cinder_wsgi_script_path,
+    wsgi_script_file    => 'cinder-api',
+    wsgi_script_source  => $::cinder::params::cinder_wsgi_script_source,
   }
 }
