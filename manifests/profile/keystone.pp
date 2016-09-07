@@ -28,7 +28,14 @@ class openstack::profile::keystone {
 
   if $::openstack::config::keystone_use_httpd == true {
     class { '::keystone::wsgi::apache':
-      ssl => false,
+      servername => $::openstack::config::controller_address_api,
+      ssl        => $::openstack::config::ssl,
+      ssl_cert   => '/etc/keystone/ssl/cert.pem',
+      ssl_key    => '/etc/keystone/ssl/key.pem'
+    }
+
+    File<| title == '/usr/lib/cgi-bin/keystone' |> {
+      mode => '0755',
     }
   }
 
