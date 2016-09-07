@@ -48,7 +48,7 @@ class openstack::profile::cinder::api {
 
   if ($::openstack::config::ssl) {
     File['/etc/cinder/ssl/key.pem']->
-    Class['::cinder::wsgi::apache']
+    ::Openstacklib::Wsgi::Apache['cinder-wsgi']
     $ssl_cert_file = '/etc/cinder/ssl/cert.pem'
     $ssl_key_file = '/etc/cinder/ssl/key.pem'
   } else {
@@ -71,7 +71,7 @@ class openstack::profile::cinder::api {
     path                => '/',
     priority            => '10',
     servername          => $::openstack::config::controller_address_api,
-    ssl                 => true,
+    ssl                 => $::openstack::config::ssl,
     ssl_cert            => $ssl_cert_file,
     ssl_key             => $ssl_key_file,
     threads             => $::processorcount,
