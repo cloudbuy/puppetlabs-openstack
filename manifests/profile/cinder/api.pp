@@ -33,6 +33,8 @@ class openstack::profile::cinder::api {
   include ::openstack::common::cinder
 
   class { '::cinder::api':
+    enabled           => false,
+    manage_service    => true,
     keystone_password => $::openstack::config::cinder_password,
     auth_uri          => $::openstack::profile::base::auth_uri,
     identity_uri      => $::openstack::profile::base::auth_url,
@@ -43,5 +45,22 @@ class openstack::profile::cinder::api {
   class { '::cinder::scheduler':
     scheduler_driver => 'cinder.scheduler.filter_scheduler.FilterScheduler',
     enabled          => true,
+  }
+
+  if ($::openstack::config::ssl) {
+    File['/etc/cinder/ssl/key.pem']->
+    Class['::cinder::wsgi::apache']
+    $ssl_cert_file = '/etc/cinder/ssl/cert.pem'
+    $ssl_key_file = '/etc/cinder/ssl/key.pem'
+  } else {
+    $ssl_cert_file = undef
+    $ssl_key_file = undef
+  }
+
+  class { '::cinder::wsgi::apache':
+    servername => $::openstack::config::controller_address_api,
+    bind_host  => $::openstack::profile::base::management_address,
+    ssl_cert   => $ssl_cert_file,
+    ssl_key    => $ssl_key_file,
   }
 }
