@@ -52,8 +52,11 @@ class openstack::common::keystone {
 
     $cert_file = '/etc/keystone/ssl/cert.pem'
     $key_file = '/etc/keystone/ssl/key.pem'
+  } else {
+    $cert_file = undef
+    $key_file = undef
   }
-
+  
   class { '::keystone':
     admin_token         => $::openstack::config::keystone_admin_token,
     database_connection => $database_connection,
@@ -61,6 +64,7 @@ class openstack::common::keystone {
     debug               => $::openstack::config::debug,
     enabled             => $::openstack::profile::base::is_controller,
     admin_bind_host     => $admin_bind_host,
+    admin_endpoint      => $::openstack::profile::base:auth_url,
     public_bind_host    => $public_bind_host,
     service_name        => $service_name,
     enable_ssl          => $::openstack::config::ssl,
