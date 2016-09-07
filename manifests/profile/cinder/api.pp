@@ -48,7 +48,7 @@ class openstack::profile::cinder::api {
 
   if ($::openstack::config::ssl) {
     File['/etc/cinder/ssl/key.pem']->
-    ::Openstacklib::Wsgi::Apache['cinder-wsgi']
+    ::Openstacklib::Wsgi::Apache['cinder_wsgi']
     $ssl_cert_file = '/etc/cinder/ssl/cert.pem'
     $ssl_key_file = '/etc/cinder/ssl/key.pem'
   } else {
