@@ -64,6 +64,13 @@ class openstack::profile::cinder::api {
 #    ssl_key    => $ssl_key_file,
 #  }
 
+  file { '/usr/lib/cgi-bin/cinder':
+    ensure  => directory,
+    owner   => 'cinder',
+    group   => 'cinder',
+    mode    => '0755',
+    require => Package['httpd'],
+  }->
   ::openstacklib::wsgi::apache { 'cinder_wsgi':
     bind_host           => $::openstack::profile::base::management_address,
     bind_port           => 8776,
