@@ -38,7 +38,6 @@ class openstack::profile::cinder::api {
     keystone_password => $::openstack::config::cinder_password,
     auth_uri          => $::openstack::profile::base::auth_uri,
     identity_uri      => $::openstack::profile::base::auth_url,
-    enabled           => true,
     bind_host         => $::openstack::common::cinder::cinder_host,
   }
 
