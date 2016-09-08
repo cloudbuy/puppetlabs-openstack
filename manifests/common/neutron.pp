@@ -122,7 +122,7 @@ class openstack::common::neutron {
     identity_uri                     => $::openstack::profile::base::auth_url,
     auth_password                    => $::openstack::config::neutron_password,
     database_connection              => $database_connection,
-    enabled                          => $is_controller,
+    enabled                          => false,
     sync_db                          => $is_controller,
     allow_automatic_l3agent_failover => true
   }

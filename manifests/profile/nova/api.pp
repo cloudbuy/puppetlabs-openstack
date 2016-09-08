@@ -44,9 +44,26 @@ class openstack::profile::nova::api {
     auth_uri                             => "${scheme}://${::openstack::config::controller_address_management}:5000/",
     identity_uri                         => "${scheme}://${::openstack::config::controller_address_management}:35357/",
     neutron_metadata_proxy_shared_secret => $::openstack::config::neutron_shared_secret,
-    enabled                              => true,
+    enabled                              => false,
     api_bind_address                     => $::openstack::common::nova::nova_api_host,
     metadata_listen                      => $::openstack::common::nova::nova_api_host,
+  }
+
+  if ($::openstack::config::ssl) {
+    File['/etc/nova/ssl/key.pem']->
+    Class['::nova::wsgi::apache']
+    $ssl_cert_file = '/etc/nova/ssl/cert.pem'
+    $ssl_key_file = '/etc/nova/ssl/key.pem'
+  } else {
+    $ssl_cert_file = undef
+    $ssl_key_file = undef
+  }
+
+  class { '::nova::wsgi::apache':
+    servername => $::openstack::config::controller_address_api,
+    bind_host  => $::openstack::profile::base::management_address,
+    ssl_cert   => $ssl_cert_file,
+    ssl_key    => $ssl_key_file,
   }
 
   class { '::nova::compute::neutron': }
