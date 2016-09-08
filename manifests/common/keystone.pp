@@ -62,7 +62,7 @@ class openstack::common::keystone {
     database_connection => $database_connection,
     verbose             => $::openstack::config::verbose,
     debug               => $::openstack::config::debug,
-    enabled             => $::openstack::profile::base::is_controller,
+    enabled             => ($::openstack::profile::base::is_controller and $::openstack::config::keystone_use_httpd),
     admin_bind_host     => $admin_bind_host,
     admin_endpoint      => $::openstack::profile::base::auth_url,
     public_bind_host    => $public_bind_host,
