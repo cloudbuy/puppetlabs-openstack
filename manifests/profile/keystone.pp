@@ -29,6 +29,7 @@ class openstack::profile::keystone {
   if $::openstack::config::keystone_use_httpd == true {
     class { '::keystone::wsgi::apache':
       servername => $::openstack::config::controller_address_api,
+      bind_host  => $::openstack::profile::base::api_address,
       ssl        => $::openstack::config::ssl,
       ssl_cert   => '/etc/keystone/ssl/cert.pem',
       ssl_key    => '/etc/keystone/ssl/key.pem'
