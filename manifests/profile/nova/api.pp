@@ -66,6 +66,10 @@ class openstack::profile::nova::api {
     ssl_key    => $ssl_key_file,
   }
 
+  File<| title == '/usr/lib/cgi-bin/nova' |> {
+    mode => '0755',
+  }
+
   class { '::nova::compute::neutron': }
 
   class { '::nova::vncproxy':
