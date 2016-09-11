@@ -41,7 +41,7 @@ class openstack::profile::nova::api {
 
   class { '::nova::api':
     admin_password                       => $::openstack::config::nova_password,
-    auth_uri                             => "${scheme}://${::openstack::config::controller_address_management}:5000/",
+    auth_uri                             => "${scheme}://${::openstack::config::controller_address_api}:5000/",
     identity_uri                         => "${scheme}://${::openstack::config::controller_address_management}:35357/",
     neutron_metadata_proxy_shared_secret => $::openstack::config::neutron_shared_secret,
     enabled                              => false,
@@ -62,7 +62,7 @@ class openstack::profile::nova::api {
   # This class in Mitaka only configures the API service, not the metadata service
   class { '::nova::wsgi::apache':
     servername => $::openstack::config::controller_address_api,
-    bind_host  => $::openstack::profile::base::management_address,
+    bind_host  => $::openstack::profile::base::api_address,
     ssl_cert   => $ssl_cert_file,
     ssl_key    => $ssl_key_file,
   }
@@ -72,7 +72,7 @@ class openstack::profile::nova::api {
 
   # As a result we have to manually define the nova-metadata issue
   ::openstacklib::wsgi::apache { 'nova-metadata':
-    bind_host           => $::openstack::profile::base::management_address,
+    bind_host           => $::openstack::profile::base::api_address,
     bind_port           => 8775,
     group               => 'nova',
     path                => '/',

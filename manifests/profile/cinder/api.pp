@@ -72,7 +72,7 @@ class openstack::profile::cinder::api {
     require => Package['httpd'],
   }->
   ::openstacklib::wsgi::apache { 'cinder_wsgi':
-    bind_host           => $::openstack::profile::base::management_address,
+    bind_host           => $::openstack::profile::base::api_address,
     bind_port           => 8776,
     group               => 'cinder',
     path                => '/',
