@@ -31,7 +31,7 @@ class openstack::profile::keystone {
       servername       => $::openstack::config::controller_address_api,
       servername_admin => $::openstack::config::controller_address_management,
       bind_host        => $::openstack::profile::base::api_address,
-      bind_host        => $::openstack::profile::base::management_address,
+      admin_bind_host  => $::openstack::profile::base::management_address,
       ssl              => $::openstack::config::ssl,
       ssl_cert         => '/etc/keystone/ssl/cert.pem',
       ssl_key          => '/etc/keystone/ssl/key.pem'
