@@ -63,6 +63,7 @@ class openstack::profile::nova::api {
   class { '::nova::wsgi::apache':
     servername => $::openstack::config::controller_address_api,
     bind_host  => $::openstack::profile::base::api_address,
+    ssl        => $::openstack::config::ssl,
     ssl_cert   => $ssl_cert_file,
     ssl_key    => $ssl_key_file,
   }
