@@ -27,7 +27,7 @@ class openstack::profile::neutron::server {
   anchor { 'neutron_common_first': } ->
   class { '::neutron::server::notifications':
     auth_url    => "${scheme}://${controller_management_address}:35357/",
-    nova_url    => "${scheme}://${controller_management_address}:8774/v2/",
+    nova_url    => "${scheme}://${controller_api_address}:8774/v2/",
     password    => $::openstack::config::nova_password,
     region_name => $::openstack::config::region,
   } ->
