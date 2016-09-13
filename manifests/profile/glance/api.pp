@@ -60,6 +60,8 @@ class openstack::profile::glance::api {
     database_connection      => $database_connection,
     registry_host            => $::management_address,
     registry_client_protocol => $scheme,
+    show_image_direct_url    => true,
+    show_multiple_locations  => true,
     verbose                  => $::openstack::config::verbose,
     debug                    => $::openstack::config::debug,
     enabled                  => $::openstack::profile::base::is_storage,

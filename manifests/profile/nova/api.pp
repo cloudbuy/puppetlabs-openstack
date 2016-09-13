@@ -41,7 +41,7 @@ class openstack::profile::nova::api {
 
   class { '::nova::api':
     admin_password                       => $::openstack::config::nova_password,
-    auth_uri                             => "${scheme}://${::openstack::config::controller_address_management}:5000/",
+    auth_uri                             => "${scheme}://${::openstack::config::controller_address_api}:5000/",
     identity_uri                         => "${scheme}://${::openstack::config::controller_address_management}:35357/",
     neutron_metadata_proxy_shared_secret => $::openstack::config::neutron_shared_secret,
     enabled                              => false,
@@ -59,11 +59,37 @@ class openstack::profile::nova::api {
     $ssl_key_file = undef
   }
 
+  # This class in Mitaka only configures the API service, not the metadata service
   class { '::nova::wsgi::apache':
     servername => $::openstack::config::controller_address_api,
-    bind_host  => $::openstack::profile::base::management_address,
+    bind_host  => $::openstack::profile::base::api_address,
+    ssl        => $::openstack::config::ssl,
     ssl_cert   => $ssl_cert_file,
     ssl_key    => $ssl_key_file,
+  }
+  File<| title == '/usr/lib/cgi-bin/nova' |> {
+    mode => '0755',
+  }
+
+  # As a result we have to manually define the nova-metadata issue
+  ::openstacklib::wsgi::apache { 'nova-metadata':
+    bind_host           => $::openstack::profile::base::api_address,
+    bind_port           => 8775,
+    group               => 'nova',
+    path                => '/',
+    priority            => '10',
+    servername          => $::openstack::config::controller_address_api,
+    ssl                 => $::openstack::config::ssl,
+    ssl_cert            => $ssl_cert_file,
+    ssl_key             => $ssl_key_file,
+    threads             => $::processorcount,
+    user                => 'nova',
+    workers             => 1,
+    wsgi_daemon_process => 'nova-metadata',
+    wsgi_process_group  => 'nova-metadata',
+    wsgi_script_dir     => '/usr/lib/cgi-bin/nova',
+    wsgi_script_file    => 'nova-metadata',
+    wsgi_script_source  => '/usr/lib/python2.7/dist-packages/nova/wsgi/nova-metadata.py'
   }
 
   class { '::nova::compute::neutron': }

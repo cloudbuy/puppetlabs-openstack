@@ -72,7 +72,7 @@ class openstack::profile::neutron::router {
     auth_url          => "${scheme}://${controller_management_address}:35357/v2.0",
     debug             => $::openstack::config::debug,
     auth_region       => $::openstack::config::region,
-    metadata_ip       => $controller_management_address,
+    metadata_ip       => $controller_api_address,
     metadata_protocol => $scheme,
     enabled           => true,
   }
