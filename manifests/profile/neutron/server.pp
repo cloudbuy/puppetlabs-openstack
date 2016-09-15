@@ -10,6 +10,7 @@ class openstack::profile::neutron::server {
   $type_drivers                  = $::openstack::config::neutron_type_drivers # ['gre']
   $mechanism_drivers             = $::openstack::config::neutron_mechanism_drivers # ['openvswitch']
   $tunnel_id_ranges              = $::openstack::config::neutron_tunnel_id_ranges # ['1:1000']
+  $controller_api_address        = $::openstack::config::controller_address_api
   $controller_management_address = $::openstack::config::controller_address_management
 
   class  { '::neutron::plugins::ml2':
