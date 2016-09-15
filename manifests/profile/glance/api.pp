@@ -8,6 +8,7 @@ class openstack::profile::glance::api {
   $management_network = $::openstack::config::network_management
   $management_address = ip_for_network($management_network)
 
+  $memcached_servers   = $::openstack::profile::base::memcached_servers
   $controller_address  = $::openstack::config::controller_address_management
   $user                = $::openstack::config::mysql_user_glance
   $pass                = $::openstack::config::mysql_pass_glance
@@ -68,6 +69,7 @@ class openstack::profile::glance::api {
     os_region_name           => $::openstack::config::region,
     cert_file                => $cert_file,
     key_file                 => $key_file,
+    memcached_servers        => $memcached_servers,
   }
 
   class { '::glance::backend::rbd':
@@ -86,6 +88,7 @@ class openstack::profile::glance::api {
     debug               => $::openstack::config::debug,
     cert_file           => $cert_file,
     key_file            => $key_file,
+    memcached_servers   => $memcached_servers,
   }
 
   class { '::glance::notify::rabbitmq':

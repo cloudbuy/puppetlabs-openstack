@@ -44,12 +44,14 @@ class openstack::profile::base {
     $storage_management_matches = member($storage_management_addresses, $management_address)
     $storage_api_matches = member($storage_api_addresses, $api_address)
 
+    $memcached_servers  = $::openstack::profile::base::controller_management_addresses.map |$x| { "${x}:11211" }
   } else {
     $management_matches = ($management_address == $controller_management_address)
     $api_matches = ($api_address == $controller_api_address)
 
     $storage_management_matches = ($management_address == $storage_management_address)
     $storage_api_matches = ($api_address == $storage_api_address)
+    $memcached_servers  = ["${controller_management_address}:11211"]
   }
     
   $is_controller = ($management_matches and $api_matches)

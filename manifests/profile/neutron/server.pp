@@ -13,6 +13,8 @@ class openstack::profile::neutron::server {
   $controller_api_address        = $::openstack::config::controller_address_api
   $controller_management_address = $::openstack::config::controller_address_management
 
+  neutron_config { 'keystone_authtoken/memcached_servers': value => $::openstack::profile::base::memcached_servers }
+
   class  { '::neutron::plugins::ml2':
     type_drivers         => $type_drivers,
     tenant_network_types => $tenant_network_type,

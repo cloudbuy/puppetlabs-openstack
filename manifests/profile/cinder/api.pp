@@ -41,6 +41,8 @@ class openstack::profile::cinder::api {
     bind_host         => $::openstack::common::cinder::cinder_host,
   }
 
+  cinder_config { 'keystone_authtoken/memcached_servers': value => $::openstack::profile::base::memcached_servers }
+
   class { '::cinder::scheduler':
     scheduler_driver => 'cinder.scheduler.filter_scheduler.FilterScheduler',
     enabled          => true,
