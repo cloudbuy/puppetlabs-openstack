@@ -14,6 +14,7 @@ class openstack::profile::neutron::router {
   kmod::load { 'xfrm_ipcomp': }
 
   $controller_management_address = $::openstack::config::controller_address_management
+  $controller_api_address = $::openstack::config::controller_address_api
 
   $dnsmasq_config_file = $::openstack::config::neutron_instance_mtu ? {
     undef   => undef,
