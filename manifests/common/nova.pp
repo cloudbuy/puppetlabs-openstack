@@ -7,15 +7,14 @@ class openstack::common::nova {
 
   $storage_management_address = $::openstack::config::storage_address_management
   $controller_management_address = $::openstack::config::controller_address_management
+  $memcached_servers = $::openstack::profile::base::memcached_servers
 
   if ($::openstack::config::ha) {
     $nova_api_host      = $::openstack::profile::base::management_address
     $management_address = $::openstack::profile::base::management_address
-    $memcached_servers  = $::openstack::profile::base::controller_management_addresses.map |$x| { "${x}:11211" }
   } else {
     $nova_api_host      = '0.0.0.0'
     $management_address = $::openstack::config::controller_address_management
-    $memcached_servers  = ["${controller_management_address}:11211"]
   }
 
   $user                = $::openstack::config::mysql_user_nova
