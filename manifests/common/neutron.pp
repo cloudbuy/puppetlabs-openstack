@@ -124,7 +124,11 @@ class openstack::common::neutron {
     database_connection              => $database_connection,
     enabled                          => $is_controller,
     sync_db                          => $is_controller,
-    allow_automatic_l3agent_failover => true
+    allow_automatic_l3agent_failover => true,
+    service_providers                => [
+      'LOADBALANCERV2:Haproxy:neutron_lbaas.drivers.haproxy.plugin_driver.HaproxyOnHostPluginDriver:default',
+      'VPN:openswan:neutron_vpnaas.services.vpn.service_drivers.ipsec.IPsecVPNDriver:default',
+    ]
   }
 
   if $::osfamily == 'redhat' {
