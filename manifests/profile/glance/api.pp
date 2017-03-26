@@ -52,6 +52,12 @@ class openstack::profile::glance::api {
     $scheme = 'http'
   }
 
+  if ($::facts['processors']['count'] > 4) {
+    $workers = 4
+  } else {
+    $workers = $::facts['processors']['count']
+  }
+
   class { '::glance::api':
     keystone_password        => $::openstack::config::glance_password,
     auth_uri                 => $::openstack::profile::base::auth_uri,
@@ -70,6 +76,7 @@ class openstack::profile::glance::api {
     cert_file                => $cert_file,
     key_file                 => $key_file,
     memcached_servers        => $memcached_servers,
+    workers                  => $workers,
   }
 
   class { '::glance::backend::rbd':
@@ -89,6 +96,7 @@ class openstack::profile::glance::api {
     cert_file           => $cert_file,
     key_file            => $key_file,
     memcached_servers   => $memcached_servers,
+    workers             => $workers,
   }
 
   class { '::glance::notify::rabbitmq':
