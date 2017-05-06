@@ -27,11 +27,11 @@ class openstack::profile::ceilometer::api {
   include ::openstack::common::ceilometer
 
   class { '::ceilometer::keystone::auth':
-    password         => $::openstack::config::ceilometer_password,
-    public_address   => "http://${::openstack::config::controller_address_api}:8777",
-    admin_address    => "http://${::openstack::config::controller_address_management}:8777",
-    internal_address => "http://${::openstack::config::controller_address_management}:8777",
-    region           => $::openstack::config::region,
+    password     => $::openstack::config::ceilometer_password,
+    public_url   => "http://${::openstack::config::controller_address_api}:8777",
+    admin_url    => "http://${::openstack::config::controller_address_management}:8777",
+    internal_url => "http://${::openstack::config::controller_address_management}:8777",
+    region       => $::openstack::config::region,
   }
 
   class { '::ceilometer::api':
