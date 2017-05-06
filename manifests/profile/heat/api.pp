@@ -18,20 +18,31 @@ class openstack::profile::heat::api {
   $pass                          = $::openstack::config::mysql_pass_heat
   $database_connection           = "mysql://${user}:${pass}@${management_address}/heat"
 
+  $scheme = $::openstack::config::ssl ? {
+    true    => 'https',
+    default => 'http'
+  }
+
   class { '::heat::keystone::auth':
-    password         => $::openstack::config::heat_password,
-    public_address   => $::openstack::config::controller_address_api,
-    admin_address    => $::openstack::config::controller_address_management,
-    internal_address => $::openstack::config::controller_address_management,
-    region           => $::openstack::config::region,
+    password     => $::openstack::config::heat_password,
+    public_url   => "${scheme}://${::openstack::config::controller_address_api}:8004/v1/%(tenant_id)s",
+    admin_url    => "${scheme}://${::openstack::config::controller_address_management}:8004/v1/%(tenant_id)s",
+    internal_url => "${scheme}://${::openstack::config::controller_address_management}:8004/v1/%(tenant_id)s",
+    region       => $::openstack::config::region,
   }
 
   class { '::heat::keystone::auth_cfn':
-    password         => $::openstack::config::heat_password,
-    public_address   => $::openstack::config::controller_address_api,
-    admin_address    => $::openstack::config::controller_address_management,
-    internal_address => $::openstack::config::controller_address_management,
-    region           => $::openstack::config::region,
+    password     => $::openstack::config::heat_password,
+    public_url   => "${scheme}://${::openstack::config::controller_address_api}:8000/v1",
+    admin_url    => "${scheme}://${::openstack::config::controller_address_management}:8000/v1",
+    internal_url => "${scheme}://${::openstack::config::controller_address_management}:8000/v1",
+    region       => $::openstack::config::region,
+  }
+
+  class { '::heat::keystone::authtoken':
+		password => $::openstack::config::heat_password,
+    auth_uri => $::openstack::profile::base::auth_uri,
+    auth_url => $::openstack::profile::base::auth_url,
   }
 
   class { '::heat':
