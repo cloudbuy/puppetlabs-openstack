@@ -42,7 +42,6 @@ class openstack::profile::ceilometer::api {
     auth_uri => "${scheme}://${controller_management_address}:5000/",
     auth_url => "${scheme}://${controller_management_address}:35357/", 
     password => $::openstack::config::ceilometer_password,
-
   }
 
   class { '::ceilometer::db':
