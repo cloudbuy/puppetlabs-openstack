@@ -69,7 +69,6 @@ class openstack::profile::glance::api {
     registry_client_protocol => $scheme,
     show_image_direct_url    => true,
     show_multiple_locations  => true,
-    verbose                  => $::openstack::config::verbose,
     debug                    => $::openstack::config::debug,
     enabled                  => $::openstack::profile::base::is_storage,
     os_region_name           => $::openstack::config::region,

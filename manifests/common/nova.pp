@@ -75,7 +75,6 @@ class openstack::common::nova {
     cert_file               => $cert_file,
     key_file                => $key_file,
     debug                   => $::openstack::config::debug,
-    verbose                 => $::openstack::config::verbose,
   }-> 
   file { "/etc/nova/api-paste.ini":
     ensure => present,

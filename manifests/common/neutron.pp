@@ -77,7 +77,6 @@ class openstack::common::neutron {
     rabbit_use_ssl        => $::openstack::config::ssl,
     kombu_ssl_version     => 'TLSv1_2',
     debug                 => $::openstack::config::debug,
-    verbose               => $::openstack::config::verbose,
     service_plugins       => $::openstack::config::neutron_service_plugins,
     use_ssl               => $::openstack::config::ssl,
     cert_file             => $cert_file,
