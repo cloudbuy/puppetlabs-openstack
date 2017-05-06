@@ -7,7 +7,6 @@ class openstack::common::nova {
 
   $storage_management_address = $::openstack::config::storage_address_management
   $controller_management_address = $::openstack::config::controller_address_management
-  $memcached_servers = $::openstack::profile::base::memcached_servers
 
   if ($::openstack::config::ha) {
     $nova_api_host      = $::openstack::profile::base::management_address
@@ -64,7 +63,6 @@ class openstack::common::nova {
     database_connection     => $database_connection,
     api_database_connection => $api_database_connection,
     glance_api_servers      => join($::openstack::config::glance_api_servers, ','),
-    memcached_servers       => $memcached_servers,
     rabbit_hosts            => $::openstack::config::rabbitmq_hosts,
     rabbit_userid           => $::openstack::config::rabbitmq_user,
     rabbit_password         => $::openstack::config::rabbitmq_password,

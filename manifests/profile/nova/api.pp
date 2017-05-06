@@ -25,6 +25,7 @@ class openstack::profile::nova::api {
   $public_url = "${scheme}://${::openstack::config::controller_address_api}:8774"
   $admin_url = "${scheme}://${::openstack::config::controller_address_management}:8774"
   $internal_url = "${scheme}://${::openstack::config::controller_address_management}:8774"
+  $memcached_servers = $::openstack::profile::base::memcached_servers
 
   class { '::nova::keystone::auth':
     password        => $::openstack::config::nova_password,
@@ -39,10 +40,14 @@ class openstack::profile::nova::api {
 
   include ::openstack::common::nova
 
+  class { '::nova::keystone::authtoken':
+    password          => $::openstack::config::nova_password,
+    auth_uri          => "${scheme}://${::openstack::config::controller_address_api}:5000/",
+    auth_url          => "${scheme}://${::openstack::config::controller_address_management}:35357/",
+    memcached_servers => $memcached_servers,
+  }
+
   class { '::nova::api':
-    admin_password                       => $::openstack::config::nova_password,
-    auth_uri                             => "${scheme}://${::openstack::config::controller_address_api}:5000/",
-    identity_uri                         => "${scheme}://${::openstack::config::controller_address_management}:35357/",
     neutron_metadata_proxy_shared_secret => $::openstack::config::neutron_shared_secret,
     enabled                              => false,
     api_bind_address                     => $::openstack::common::nova::nova_api_host,
