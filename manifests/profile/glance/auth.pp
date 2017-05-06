@@ -10,14 +10,11 @@ class openstack::profile::glance::auth {
   }
 
   class  { '::glance::keystone::auth':
-    password          => $::openstack::config::glance_password,
-    public_address    => $::openstack::config::storage_address_api,
-    admin_address     => $::openstack::config::storage_address_management,
-    internal_address  => $::openstack::config::storage_address_management,
-    public_protocol   => $scheme,
-    admin_protocol    => $scheme,
-    internal_protocol => $scheme,
-    region            => $::openstack::config::region,
+    password     => $::openstack::config::glance_password,
+    public_url   => "${scheme}://${::openstack::config::storage_address_api}:9292",
+    admin_url    => "${scheme}://${::openstack::config::storage_address_management}:9292",
+    internal_url => "${scheme}://${::openstack::config::storage_address_management}:9292",
+    region       => $::openstack::config::region,
   }
 
 }
