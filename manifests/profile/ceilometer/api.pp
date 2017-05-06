@@ -35,10 +35,14 @@ class openstack::profile::ceilometer::api {
   }
 
   class { '::ceilometer::api':
-    auth_uri          => "${scheme}://${controller_management_address}:5000/",
-    identity_uri      => "${scheme}://${controller_management_address}:35357/", 
-    keystone_password => $::openstack::config::ceilometer_password,
-    host              => $::openstack::common::ceilometer::ceilometer_host,
+    host => $::openstack::common::ceilometer::ceilometer_host,
+  }
+
+  class { '::ceilometer::keystone::authtoken':
+    auth_uri => "${scheme}://${controller_management_address}:5000/",
+    auth_url => "${scheme}://${controller_management_address}:35357/", 
+    password => $::openstack::config::ceilometer_password,
+
   }
 
   class { '::ceilometer::db':
