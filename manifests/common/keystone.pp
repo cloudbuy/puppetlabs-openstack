@@ -60,7 +60,6 @@ class openstack::common::keystone {
   class { '::keystone':
     admin_token         => $::openstack::config::keystone_admin_token,
     database_connection => $database_connection,
-    verbose             => $::openstack::config::verbose,
     debug               => $::openstack::config::debug,
     enabled             => ($::openstack::profile::base::is_controller and $::openstack::config::keystone_use_httpd),
     admin_bind_host     => $admin_bind_host,
