@@ -34,14 +34,14 @@ class openstack::profile::ceilometer::api {
     region       => $::openstack::config::region,
   }
 
-  class { '::ceilometer::api':
-    host => $::openstack::common::ceilometer::ceilometer_host,
-  }
-
   class { '::ceilometer::keystone::authtoken':
     auth_uri => "${scheme}://${controller_management_address}:5000/",
     auth_url => "${scheme}://${controller_management_address}:35357/", 
     password => $::openstack::config::ceilometer_password,
+  }
+
+  class { '::ceilometer::api':
+    host => $::openstack::common::ceilometer::ceilometer_host,
   }
 
   class { '::ceilometer::db':
