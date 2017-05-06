@@ -46,11 +46,6 @@ class openstack::profile::keystone {
   create_resources('openstack::resources::tenant', $tenants)
   create_resources('openstack::resources::user', $users)
   
-  # Limit the request size
-  keystone_config {
-    'oslo_middleware/max_request_body_size': value => 114688,
-  }
-
   # Remove admin_auth_token from the pipeline
   # Taken from upstream commit 80ae141
   Ini_subsetting {
