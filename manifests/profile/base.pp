@@ -17,7 +17,6 @@ class openstack::profile::base {
     default => 'http'
   }
 
-
   $management_network = $::openstack::config::network_management
   $management_address = ip_for_network($management_network)
   $controller_management_address = $::openstack::config::controller_address_management

@@ -3,10 +3,10 @@
 # on RHEL-alikes and Ubuntu
 #
 class openstack::resources::repo(
-  $release = 'mitaka'
+  $release = 'ocata'
 ) {
   case $release {
-    'mitaka', 'liberty', 'kilo', 'juno', 'icehouse', 'havana', 'grizzly': {
+    'ocata', 'newton', 'mitaka', 'liberty', 'kilo', 'juno', 'icehouse', 'havana', 'grizzly': {
       if $::osfamily == 'RedHat' {
         class {'openstack::resources::repo::rdo': release => $release }
         class {'openstack::resources::repo::erlang': }
