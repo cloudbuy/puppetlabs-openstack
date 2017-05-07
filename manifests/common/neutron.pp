@@ -113,9 +113,10 @@ class openstack::common::neutron {
   }
 
   class { '::neutron::keystone::authtoken':
-    auth_uri => $::openstack::profile::base::auth_uri,
-    auth_url => $::openstack::profile::base::auth_url,
-    password => $::openstack::config::neutron_password,
+    auth_uri          => $::openstack::profile::base::auth_uri,
+    auth_url          => $::openstack::profile::base::auth_url,
+    password          => $::openstack::config::neutron_password,
+    memcached_servers => $::openstack::profile::base::memcached_servers
   }
 
   class { '::neutron::server':
