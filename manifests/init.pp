@@ -98,6 +98,12 @@
 # [*mysql_pass_keystone*]
 #   The database password for keystone service.
 #
+# [*mysql_user_ceilometer*]
+#   The database username for ceilometer service.
+#
+# [*mysql_pass_ceilometer*]
+#   The database password for ceilometer service.
+#
 # [*mysql_user_cinder*]
 #   The database username for cinder service.
 #
@@ -244,12 +250,6 @@
 # [*ceilometer_address_management*]
 #   The management IP address of the ceilometer node. Must be in the network_management CIDR.
 #
-# [*ceilometer_mongo_username*]
-#   The username for the MongoDB Ceilometer user.
-#
-# [*ceilometer_mongo_password*]
-#   The password for the MongoDB Ceilometer user.
-#
 # [*ceilometer_password*]
 #   The password for the ceilometer user in Keystone.
 #
@@ -368,6 +368,8 @@ class openstack (
   $mysql_allowed_hosts = undef,
   $mysql_user_keystone = undef,
   $mysql_pass_keystone = undef,
+  $mysql_user_ceilometer = undef,
+  $mysql_pass_ceilometer = undef,
   $mysql_user_cinder = undef,
   $mysql_pass_cinder = undef,
   $mysql_user_glance = undef,
@@ -409,8 +411,6 @@ class openstack (
   $neutron_tunnel_id_ranges = ['1:1000'],
   $neutron_instance_mtu = undef,
   $ceilometer_address_management = undef,
-  $ceilometer_mongo_username = undef,
-  $ceilometer_mongo_password = undef,
   $ceilometer_password = undef,
   $ceilometer_meteringsecret = undef,
   $heat_password = undef,
@@ -470,6 +470,8 @@ class openstack (
       mysql_allowed_hosts             => lookup(openstack::mysql::allowed_hosts),
       mysql_user_keystone             => pick(lookup(openstack::mysql::keystone::user, Optional[String], 'first', undef), 'keystone'),
       mysql_pass_keystone             => pick(lookup(openstack::mysql::keystone::pass, Optional[String], 'first', undef), lookup(openstack::mysql::service_password)),
+      mysql_user_ceilometer           => pick(lookup(openstack::mysql::ceilometer::user, Optional[String], 'first', undef), 'cinder'),
+      mysql_pass_ceilometer           => pick(lookup(openstack::mysql::ceilometer::pass, Optional[String], 'first', undef), lookup(openstack::mysql::service_password)),
       mysql_user_cinder               => pick(lookup(openstack::mysql::cinder::user, Optional[String], 'first', undef), 'cinder'),
       mysql_pass_cinder               => pick(lookup(openstack::mysql::cinder::pass, Optional[String], 'first', undef), lookup(openstack::mysql::service_password)),
       mysql_user_glance               => pick(lookup(openstack::mysql::glance::user, Optional[String], 'first', undef), 'glance'),
@@ -511,8 +513,6 @@ class openstack (
       neutron_tunnel_id_ranges        => lookup(openstack::neutron::neutron_tunnel_id_ranges, Array, 'first', $neutron_tunnel_id_ranges),
       neutron_instance_mtu            => lookup(openstack::neutron::neutron_instance_mtu, Optional[Integer], 'first', $neutron_instance_mtu),
       ceilometer_address_management   => lookup(openstack::ceilometer::address::management),
-      ceilometer_mongo_username       => lookup(openstack::ceilometer::mongo::username),
-      ceilometer_mongo_password       => lookup(openstack::ceilometer::mongo::password),
       ceilometer_password             => lookup(openstack::ceilometer::password),
       ceilometer_meteringsecret       => lookup(openstack::ceilometer::meteringsecret),
       heat_password                   => lookup(openstack::heat::password),
@@ -613,8 +613,6 @@ class openstack (
       neutron_tunnel_id_ranges        => $neutron_tunnel_id_ranges,
       neutron_instance_mtu            => $neutron_instance_mtu,
       ceilometer_address_management   => $ceilometer_address_management,
-      ceilometer_mongo_username       => $ceilometer_mongo_username,
-      ceilometer_mongo_password       => $ceilometer_mongo_password,
       ceilometer_password             => $ceilometer_password,
       ceilometer_meteringsecret       => $ceilometer_meteringsecret,
       heat_password                   => $heat_password,
