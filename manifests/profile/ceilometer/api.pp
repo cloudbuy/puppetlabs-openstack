@@ -8,13 +8,7 @@ class openstack::profile::ceilometer::api {
   $ceilometer_management_address = $::openstack::config::ceilometer_address_management
   $controller_management_address = $::openstack::config::controller_address_management
 
-
-  if ! $mongo_username or ! $mongo_password {
-    $mongo_connection = "mongodb://${ceilometer_management_address}:27017/ceilometer"
-  } else {
-    $mongo_connection = "mongodb://${mongo_username}:${mongo_password}@${ceilometer_management_address}:27017/ceilometer"
-  }
-
+  openstack::resources::database { 'ceilometer': }
   openstack::resources::firewall { 'Ceilometer API':
     port => '8777',
   }
@@ -67,24 +61,4 @@ class openstack::profile::ceilometer::api {
   }
 
   class { '::ceilometer::collector': }
-
-  mongodb_database { 'ceilometer':
-    ensure  => present,
-    tries   => 20,
-    require => Class['mongodb::server'],
-  }
-
-  if $mongo_username and $mongo_password {
-    mongodb_user { $mongo_username:
-      ensure        => present,
-      password_hash => mongodb_password($mongo_username, $mongo_password),
-      database      => 'ceilometer',
-      roles         => ['readWrite', 'dbAdmin'],
-      tries         => 10,
-      require       => [Class['mongodb::server'], Class['mongodb::client']],
-      before        => Exec['ceilometer-dbsync'],
-    }
-  }
-
-  Class['::mongodb::server'] -> Class['::mongodb::client'] -> Exec['ceilometer-dbsync']
 }
