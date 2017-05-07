@@ -33,9 +33,10 @@ class openstack::profile::cinder::api {
   include ::openstack::common::cinder
 
   class { '::cinder::keystone::authtoken':
-    password => $::openstack::config::cinder_password,
-    auth_uri => $::openstack::profile::base::auth_uri,
-    auth_url => $::openstack::profile::base::auth_url,
+    password          => $::openstack::config::cinder_password,
+    auth_uri          => $::openstack::profile::base::auth_uri,
+    auth_url          => $::openstack::profile::base::auth_url,
+    memcached_servers => $::openstack::profile::base::memcached_servers,
   }
 
   class { '::cinder::api':
@@ -43,8 +44,6 @@ class openstack::profile::cinder::api {
     manage_service    => true,
     bind_host         => $::openstack::common::cinder::cinder_host,
   }
-
-  cinder_config { 'keystone_authtoken/memcached_servers': value => $::openstack::profile::base::memcached_servers }
 
   class { '::cinder::scheduler':
     scheduler_driver => 'cinder.scheduler.filter_scheduler.FilterScheduler',
