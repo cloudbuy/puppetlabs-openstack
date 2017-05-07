@@ -50,9 +50,12 @@ class openstack::common::cinder {
     rabbit_hosts        => $::openstack::config::rabbitmq_hosts,
     rabbit_userid       => $::openstack::config::rabbitmq_user,
     rabbit_password     => $::openstack::config::rabbitmq_password,
-#    rabbit_ha_queues    => $::openstack::config::ha, # FIXME: Mitaka adds the parameter
+    rabbit_ha_queues    => $::openstack::config::ha,
     rabbit_use_ssl      => $::openstack::config::ssl,
-    kombu_ssl_version   => 'TLSv1_2',
+    kombu_ssl_version   => $::openstack::config::ssl ? {
+      true    => 'TLSv1_2',
+      default => undef,
+    },
     debug               => $::openstack::config::debug,
     use_ssl             => $::openstack::config::ssl,
     cert_file           => $cert_file,
