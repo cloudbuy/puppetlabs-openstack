@@ -102,8 +102,11 @@ class openstack::profile::glance::api {
     rabbit_password   => $::openstack::config::rabbitmq_password,
     rabbit_userid     => $::openstack::config::rabbitmq_user,
     rabbit_hosts      => $::openstack::config::rabbitmq_hosts,
-#    rabbit_ha_queues  => $::openstack::config::ha, # FIXME: re-enable on Mitaka
+    rabbit_ha_queues  => $::openstack::config::ha,
     rabbit_use_ssl    => $::openstack::config::ssl,
-    kombu_ssl_version => 'TLSv1_2',
+    kombu_ssl_version => $::openstack::config::ssl ? {
+      true    => 'TLSv1_2',
+      default => undef,
+    },
   }
 }

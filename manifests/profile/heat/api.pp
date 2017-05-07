@@ -52,7 +52,10 @@ class openstack::profile::heat::api {
     rabbit_password     => $::openstack::config::rabbitmq_password,
     rabbit_ha_queues    => $::openstack::config::ha,
     rabbit_use_ssl      => $::openstack::config::ssl,
-    kombu_ssl_version   => 'TLSv1_2',
+    kombu_ssl_version   => $::openstack::config::ssl ? {
+      true    => 'TLSv1_2',
+      default => undef,
+    },
     debug               => $::openstack::config::debug,
   }
 
