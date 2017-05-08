@@ -22,6 +22,18 @@ class openstack::profile::nova::compute {
   class { 'nova::migration::libvirt':
   }
 
+  $scheme = $::openstack::config::ssl ? {
+    true    => 'https',
+    default => 'http'
+  }
+
+  class { '::nova::placement':
+    password          => $::openstack::config::placement_password,
+    auth_uri          => "${scheme}://${::openstack::config::controller_address_api}:5000/",
+    auth_url          => "${scheme}://${::openstack::config::controller_address_management}:35357/",
+    memcached_servers => $memcached_servers,
+  }
+
   if $::operatingsystem == 'Ubuntu' and versioncmp($::operatingsystemmajrelease, '16') >= 0 {
 		# If systemd is being used then libvirtd is already being launched correctly and
       # adding -d causes a second consecutive start to fail which causes puppet to fail.

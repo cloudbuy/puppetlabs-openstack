@@ -11,9 +11,18 @@ class openstack::profile::nova::api {
     allowed_hosts => $::openstack::config::mysql_allowed_hosts,
     require       => Anchor['database-service'],
   }
+
+  class { '::nova::db::mysql_placement':
+    user          => $::openstack::config::mysql_user_nova_placement,
+    password      => $::openstack::config::mysql_pass_nova_placement,
+    dbname        => 'nova_placement',
+    allowed_hosts => $::openstack::config::mysql_allowed_hosts,
+    require       => Anchor['database-service'],
+  }
+
   openstack::resources::firewall { 'Nova API': port => '8774', }
   openstack::resources::firewall { 'Nova Metadata': port => '8775', }
-  openstack::resources::firewall { 'Nova EC2': port => '8773', }
+  openstack::resources::firewall { 'Nova Placement': port => '8778', }
   openstack::resources::firewall { 'Nova S3': port => '3333', }
   openstack::resources::firewall { 'Nova novnc': port => '6080', }
 
@@ -38,6 +47,14 @@ class openstack::profile::nova::api {
     region          => $::openstack::config::region,
   }
 
+  class { '::nova::keystone::auth_placement':
+    password     => $::openstack::config::placement_password,
+    public_url   => "${scheme}://${::openstack::config::controller_address_api}:8778",
+    internal_url => "${scheme}://${::openstack::config::controller_address_management}:8778",
+    admin_url    => "${scheme}://${::openstack::config::controller_address_management}:8778",
+    region       => $::openstack::config::region,
+  }
+
   include ::openstack::common::nova
 
   class { '::nova::keystone::authtoken':
@@ -53,6 +70,8 @@ class openstack::profile::nova::api {
     api_bind_address                     => $::openstack::common::nova::nova_api_host,
     metadata_listen                      => $::openstack::common::nova::nova_api_host,
   }
+
+  include ::nova::cell_v2::simple_setup
 
   if ($::openstack::config::ssl) {
     File['/etc/nova/ssl/key.pem']->
