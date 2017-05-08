@@ -29,7 +29,6 @@ class openstack::profile::neutron::router {
   class { '::neutron::agents::l3':
     package_ensure          => 'absent',
     debug                   => $::openstack::config::debug,
-    external_network_bridge => '',
     manage_service          => false,
   }
 
