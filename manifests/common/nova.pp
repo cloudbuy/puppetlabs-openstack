@@ -63,7 +63,7 @@ class openstack::common::nova {
 
   class { '::nova':
     database_connection     => $database_connection,
-    default_transport_url   => 'none:///',
+    default_transport_url   => 'rabbit:///',
     api_database_connection => $api_database_connection,
     glance_api_servers      => join($::openstack::config::glance_api_servers, ','),
     rabbit_hosts            => $::openstack::config::rabbitmq_hosts,
