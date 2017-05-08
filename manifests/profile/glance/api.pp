@@ -58,12 +58,14 @@ class openstack::profile::glance::api {
     $workers = $::facts['processors']['count']
   }
 
+  class { '::glance::api::authtoken':
+    password          => $::openstack::config::glance_password,
+    auth_uri          => $::openstack::profile::base::auth_uri,
+    auth_url          => $::openstack::profile::base::auth_url,
+    memcached_servers => $memcached_servers,
+  }
+
   class { '::glance::api':
-    keystone_password        => $::openstack::config::glance_password,
-    auth_uri                 => $::openstack::profile::base::auth_uri,
-    identity_uri             => $::openstack::profile::base::auth_url,
-    keystone_tenant          => 'services',
-    keystone_user            => 'glance',
     database_connection      => $database_connection,
     registry_host            => $::management_address,
     registry_client_protocol => $scheme,
@@ -74,7 +76,6 @@ class openstack::profile::glance::api {
     os_region_name           => $::openstack::config::region,
     cert_file                => $cert_file,
     key_file                 => $key_file,
-    memcached_servers        => $memcached_servers,
     workers                  => $workers,
   }
 
@@ -83,18 +84,19 @@ class openstack::profile::glance::api {
     rbd_store_pool => 'glance-images',
   }
 
+  class { '::glance::registry::authtoken':
+    password          => $::openstack::config::glance_password,
+    auth_uri          => $::openstack::profile::base::auth_uri,
+    auth_url          => $::openstack::profile::base::auth_url,
+    memcached_servers => $memcached_servers,
+  }
+
   class { '::glance::registry':
-    keystone_password   => $::openstack::config::glance_password,
     database_connection => $database_connection,
-    auth_uri            => $::openstack::profile::base::auth_uri,
-    identity_uri        => $::openstack::profile::base::auth_url,
-    keystone_tenant     => 'services',
-    keystone_user       => 'glance',
     verbose             => $::openstack::config::verbose,
     debug               => $::openstack::config::debug,
     cert_file           => $cert_file,
     key_file            => $key_file,
-    memcached_servers   => $memcached_servers,
     workers             => $workers,
   }
 
