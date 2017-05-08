@@ -61,7 +61,6 @@ class openstack::profile::neutron::router {
   class { '::neutron::agents::metadata':
     shared_secret     => $::openstack::config::neutron_shared_secret,
     debug             => $::openstack::config::debug,
-    auth_region       => $::openstack::config::region,
     metadata_ip       => $controller_api_address,
     metadata_protocol => $scheme,
     enabled           => true,
