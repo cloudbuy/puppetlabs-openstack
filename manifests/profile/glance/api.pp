@@ -93,7 +93,6 @@ class openstack::profile::glance::api {
 
   class { '::glance::registry':
     database_connection => $database_connection,
-    verbose             => $::openstack::config::verbose,
     debug               => $::openstack::config::debug,
     cert_file           => $cert_file,
     key_file            => $key_file,
