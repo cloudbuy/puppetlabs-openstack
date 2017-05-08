@@ -24,6 +24,11 @@ class openstack::profile::neutron::router {
   include ::openstack::common::neutron
   include ::openstack::common::ml2::ovs
 
+  class { '::neutron::keystone::authtoken':
+    password => $::openstack::config::neutron_password,
+    auth_url => $::openstack::profile::base::auth_url,
+    auth_uri => $::openstack::profile::base::auth_uri,
+  }
 
   ### Router service installation
   class { '::neutron::agents::l3':
@@ -59,16 +64,8 @@ class openstack::profile::neutron::router {
     File['/etc/neutron/dnsmasq-neutron.conf'] ~> Service['neutron-dhcp-service']
   }
 
-
-  $scheme = $::openstack::config::ssl ? {
-    true    => 'https',
-    default => 'http'
-  }
-
   class { '::neutron::agents::metadata':
-    auth_password     => $::openstack::config::neutron_password,
     shared_secret     => $::openstack::config::neutron_shared_secret,
-    auth_url          => "${scheme}://${controller_management_address}:35357/v2.0",
     debug             => $::openstack::config::debug,
     auth_region       => $::openstack::config::region,
     metadata_ip       => $controller_api_address,
