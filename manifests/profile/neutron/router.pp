@@ -27,9 +27,9 @@ class openstack::profile::neutron::router {
 
   ### Router service installation
   class { '::neutron::agents::l3':
-    package_ensure          => 'absent',
-    debug                   => $::openstack::config::debug,
-    manage_service          => false,
+    package_ensure => 'absent',
+    debug          => $::openstack::config::debug,
+    manage_service => false,
   }
 
   if (is_array($::dnsclient::nameservers)) {
@@ -46,8 +46,7 @@ class openstack::profile::neutron::router {
   }
 
   class { '::neutron::agents::vpnaas':
-    external_network_bridge => '',
-    enabled                 => true,
+    enabled => true,
   }
 
   if ($dnsmasq_config_file) {
