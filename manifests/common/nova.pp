@@ -53,14 +53,17 @@ class openstack::common::nova {
     $cert_file = '/etc/nova/ssl/cert.pem'
     $key_file = '/etc/nova/ssl/key.pem'
     $scheme = 'https'
+    $transport_url = "rabbit://${::openstack::config::rabbitmq_hosts}:5671"
   } else {
     $cert_file = undef
     $key_file = undef
     $scheme = 'http'
+    $transport_url = "rabbit://${::openstack::config::rabbitmq_hosts}:5672"
   }
 
   class { '::nova':
     database_connection     => $database_connection,
+    default_transport_url   => 'none:///',
     api_database_connection => $api_database_connection,
     glance_api_servers      => join($::openstack::config::glance_api_servers, ','),
     rabbit_hosts            => $::openstack::config::rabbitmq_hosts,
