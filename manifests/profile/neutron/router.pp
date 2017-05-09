@@ -73,8 +73,6 @@ class openstack::profile::neutron::router {
   class { '::neutron::agents::lbaas':
     debug         => $::openstack::config::debug,
     device_driver => 'neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver',
-    enable_v1     => false,
-    enable_v2     => true,
   }
 
   class { '::neutron::agents::metering':
