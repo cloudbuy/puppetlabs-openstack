@@ -33,5 +33,9 @@ class openstack::profile::neutron::server {
   } ->
   anchor { 'neutron_common_last': }
 
+  package { 'python-neutron-taas':
+    ensure => installed,
+  }
+
   Class['::neutron::db::mysql'] -> Exec['neutron-db-sync']
 }

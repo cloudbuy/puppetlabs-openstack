@@ -88,5 +88,9 @@ class openstack::profile::neutron::router {
   # FIXME: implement it ourselves in this module.
   package { 'neutron-taas-openvswitch-agent':
     ensure => installed,
+  }->
+  service { 'neutron-taas-openvswitch-agent':
+    ensure => running,
+    enable => true,
   }
 }
