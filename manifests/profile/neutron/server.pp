@@ -17,14 +17,14 @@ class openstack::profile::neutron::server {
     type_drivers         => $type_drivers,
     tenant_network_types => $tenant_network_type,
     mechanism_drivers    => $mechanism_drivers,
-    tunnel_id_ranges     => $tunnel_id_ranges
+    tunnel_id_ranges     => $tunnel_id_ranges,
+    extension_drivers    => 'port_security',
   }
 
   $scheme = $::openstack::config::ssl ? {
     true    => 'https',
     default => 'http'
   }
-
 
   anchor { 'neutron_common_first': } ->
   class { '::neutron::server::notifications':
