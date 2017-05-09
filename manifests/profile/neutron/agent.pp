@@ -2,4 +2,5 @@
 class openstack::profile::neutron::agent {
   include ::openstack::common::neutron
   include ::openstack::common::ml2::ovs
+  include ::openstack::common::neutron_taas
 }

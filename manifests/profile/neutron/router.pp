@@ -22,6 +22,7 @@ class openstack::profile::neutron::router {
   }
 
   include ::openstack::common::neutron
+  include ::openstack::common::neutron_taas
   include ::openstack::common::ml2::ovs
 
   ### Router service installation
@@ -82,15 +83,5 @@ class openstack::profile::neutron::router {
   class { '::neutron::services::fwaas':
     enabled => true,
     driver  => 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
-  }
-
-  # FIXME: as and when a neutron-taas is added to the neutron module, use that. For now we
-  # FIXME: implement it ourselves in this module.
-  package { 'neutron-taas-openvswitch-agent':
-    ensure => installed,
-  }->
-  service { 'neutron-taas-openvswitch-agent':
-    ensure => running,
-    enable => true,
   }
 }
