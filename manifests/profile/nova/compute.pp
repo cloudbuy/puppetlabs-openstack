@@ -34,36 +34,6 @@ class openstack::profile::nova::compute {
     memcached_servers => $memcached_servers,
   }
 
-  if $::operatingsystem == 'Ubuntu' and versioncmp($::operatingsystemmajrelease, '16') >= 0 {
-		# If systemd is being used then libvirtd is already being launched correctly and
-      # adding -d causes a second consecutive start to fail which causes puppet to fail.
-      $libvirtd_opts = 'libvirtd_opts="-l"'
-    } else {
-      $libvirtd_opts = 'libvirtd_opts="-d -l"'
-  }
-
-  File_line <|$name =="/etc/default/${::nova::compute::libvirt::libvirt_service_name} libvirtd opts" |> {
-		line  => $libvirtd_opts
-  }
-
-  file { '/etc/systemd/system/libvirt-bin.service.d/override.conf':
-		ensure  => absent,
-    content => "[Service]\nType=forking",
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-  }~>
-  file { '/etc/systemd/system/libvirt-bin.service.d':
-    ensure => absent,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
-  }~>
-  exec { 'libvirt_reload_systemd':
-    command     => '/bin/systemctl daemon-reload',
-    refreshonly => true,
-  }
-
   file { '/etc/libvirt/qemu.conf':
     ensure => present,
     source => 'puppet:///modules/openstack/qemu.conf',
