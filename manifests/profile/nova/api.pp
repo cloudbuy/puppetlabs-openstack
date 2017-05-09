@@ -71,7 +71,7 @@ class openstack::profile::nova::api {
     metadata_listen                      => $::openstack::common::nova::nova_api_host,
   }
 
-  include ::nova::cell_v2::simple_setup
+  #include ::nova::cell_v2::simple_setup
 
   if ($::openstack::config::ssl) {
     File['/etc/nova/ssl/key.pem']->
@@ -93,6 +93,16 @@ class openstack::profile::nova::api {
   }
   File<| title == '/usr/lib/cgi-bin/nova' |> {
     mode => '0755',
+  }
+
+  class { '::nova::wsgi::apache_placement':
+    servername => $::openstack::config::controller_address_api,
+    bind_host  => $::openstack::profile::base::api_address,
+    api_port   => 8778,
+    path       => '/',
+    ssl        => $::openstack::config::ssl,
+    ssl_cert   => $ssl_cert_file,
+    ssl_key    => $ssl_key_file,
   }
 
   # As a result we have to manually define the nova-metadata issue
