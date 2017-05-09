@@ -83,4 +83,10 @@ class openstack::profile::neutron::router {
     enabled => true,
     driver  => 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
   }
+
+  # FIXME: as and when a neutron-taas is added to the neutron module, use that. For now we
+  # FIXME: implement it ourselves in this module.
+  package { 'neutron-taas-openvswitch-agent':
+    ensure => installed,
+  }
 }
