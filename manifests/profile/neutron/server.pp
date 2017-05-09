@@ -25,6 +25,7 @@ class openstack::profile::neutron::server {
     default => 'http'
   }
 
+
   anchor { 'neutron_common_first': } ->
   class { '::neutron::server::notifications':
     auth_url    => "${scheme}://${controller_management_address}:35357/",
@@ -32,6 +33,12 @@ class openstack::profile::neutron::server {
     region_name => $::openstack::config::region,
   } ->
   anchor { 'neutron_common_last': }
+
+  class { '::neutron::services::fwaas':
+    enabled       => true,
+    driver        => 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
+    agent_version => 'v2'
+  }
 
   package { 'python-neutron-taas':
     ensure => installed,
