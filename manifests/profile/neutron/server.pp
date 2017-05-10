@@ -26,6 +26,8 @@ class openstack::profile::neutron::server {
     default => 'http'
   }
 
+neutron_config { 'DEFAULT/allow_automatic_lbaas_agent_failover': value => true; }
+
   anchor { 'neutron_common_first': } ->
   class { '::neutron::server::notifications':
     auth_url    => "${scheme}://${controller_management_address}:35357/",
