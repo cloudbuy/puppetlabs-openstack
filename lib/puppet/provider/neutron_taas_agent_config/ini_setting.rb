@@ -2,7 +2,7 @@
 begin
   require File.join(File.dirname(__FILE__), '..','..','..', '..', '..',
                     'neutron/lib/puppet/provider/neutron')
-rescue
+rescue LoadError
   require File.join(File.dirname(__FILE__), '..','..','..',
                     'puppet/provider/neutron')
 end
