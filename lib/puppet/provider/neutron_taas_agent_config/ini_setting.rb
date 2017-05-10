@@ -1,5 +1,11 @@
-require File.join(File.dirname(__FILE__), '..','..','..',
-                  'puppet/provider/neutron')
+# hack to support running on the server and the client
+begin
+  require File.join(File.dirname(__FILE__), '..','..','..', '..', '..',
+                    'neutron/lib/puppet/provider/neutron')
+rescue
+  require File.join(File.dirname(__FILE__), '..','..','..',
+                    'puppet/provider/neutron')
+end
 
 Puppet::Type.type(:neutron_taas_agent_config).provide(
   :ini_setting,
