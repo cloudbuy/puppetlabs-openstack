@@ -3,7 +3,7 @@
 
 import sys
 
-from neutron_lbaas.cmd.lbaasv2_agent import main
+from neutron_taas.services.taas.agents.ovs.agent import main
 
 
 if __name__ == "__main__":
