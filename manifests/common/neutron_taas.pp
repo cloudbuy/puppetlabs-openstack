@@ -14,7 +14,7 @@ class openstack::common::neutron_taas {
   # FIXME: implement it ourselves in this module. 
   package { 'neutron-taas-openvswitch-agent':
     ensure => present,
-    'tag'  => ['openstack', 'neutron-package'],
+    tag    => ['openstack', 'neutron-package'],
   }->
   file { '/usr/bin/neutron-taas-openvswitch-agent':
     source => 'puppet:///modules/openstack/neutron-taas-openvswitch-agent',
