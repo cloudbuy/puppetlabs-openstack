@@ -74,6 +74,7 @@ class openstack::profile::galera {
     'innodb_buffer_pool_size'        => '122M',
     'max_connections'                => '2048',
 
+    'wsrep_on'                       => 'ON',
     'wsrep_provider'                 => '/usr/lib/libgalera_smm.so',
     'wsrep_provider_options'         => $wsrep_provider_options,
     'wsrep_cluster_name'             => 'openstack',
@@ -93,7 +94,7 @@ class openstack::profile::galera {
   }
 
   class { '::mysql::client':
-    package_name => 'mariadb-client-10.0',
+    package_name => 'mariadb-client-10.1',
   }
 
   class { '::mysql::bindings':
