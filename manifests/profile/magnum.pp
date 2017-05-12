@@ -28,14 +28,12 @@ class openstack::profile::magnum {
     memcached_servers => $::openstack::profile::base::memcached_servers,
   }
 
-  class { '::magnum': }
-
   class { '::magnum::api':
     host        => $::openstack::config::controller_address_api,
     enabled_ssl => $::openstack::config::ssl,
   }
 
-	class { '::magnum::db':
+	class { '::magnum':
     default_transport_url => $::openstack::profile::base::transport_url,
     rabbit_ha_queues      => $::openstack::config::ha,
     rabbit_use_ssl        => $::openstacl::config::ssl,
