@@ -35,7 +35,6 @@ class openstack::profile::magnum {
 
 	class { '::magnum':
     default_transport_url => $::openstack::profile::base::transport_url,
-    rabbit_ha_queues      => $::openstack::config::ha,
     rabbit_use_ssl        => $::openstacl::config::ssl,
     kombu_ssl_version     => $::openstack::profile::base::ssl_version,
     purge_config          => $::openstack::config::purge_config,
