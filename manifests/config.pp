@@ -114,6 +114,6 @@ class openstack::config (
 ) {
 
   $services.each |$service| {
-    include ::openstack::config::$service
+    include "::openstack::config::$service"
   }
 }
