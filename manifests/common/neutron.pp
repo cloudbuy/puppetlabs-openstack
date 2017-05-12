@@ -68,10 +68,7 @@ class openstack::common::neutron {
     rabbit_password       => $::openstack::config::rabbitmq_password,
     rabbit_hosts          => $::openstack::config::rabbitmq_hosts,
     rabbit_use_ssl        => $::openstack::config::ssl,
-    kombu_ssl_version     => $::openstack::config::ssl ? {
-      true    => 'TLSv1_2',
-      default => undef,
-    },
+    kombu_ssl_version     => $::openstack::profile::base::ssl_version,
     debug                 => $::openstack::config::debug,
     service_plugins       => $::openstack::config::neutron_service_plugins,
     use_ssl               => $::openstack::config::ssl,

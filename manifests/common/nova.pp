@@ -71,11 +71,7 @@ class openstack::common::nova {
     rabbit_password         => $::openstack::config::rabbitmq_password,
     rabbit_ha_queues        => $::openstack::config::ha,
     rabbit_use_ssl          => $::openstack::config::ssl,
-    kombu_ssl_version       => $::openstack::config::ssl ? {
-      true    => 'TLSv1_2',
-      default => undef,
-    },
-    use_ssl                 => $::openstack::config::ssl,
+    kombu_ssl_version       => $::openstack::profile::base::ssl_version,
     cert_file               => $cert_file,
     key_file                => $key_file,
     debug                   => $::openstack::config::debug,

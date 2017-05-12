@@ -3,10 +3,8 @@
 class openstack::common::cinder {
 
   if ($::openstack::config::ha and $::openstack::profile::base::is_controller) {
-    $cinder_host        = $::openstack::profile::base::management_address
     $management_address = $::openstack::profile::base::management_address
   } else {
-    $cinder_host = '0.0.0.0'
     $management_address  = $::openstack::config::controller_address_management
   }
 
@@ -52,10 +50,7 @@ class openstack::common::cinder {
     rabbit_password     => $::openstack::config::rabbitmq_password,
     rabbit_ha_queues    => $::openstack::config::ha,
     rabbit_use_ssl      => $::openstack::config::ssl,
-    kombu_ssl_version   => $::openstack::config::ssl ? {
-      true    => 'TLSv1_2',
-      default => undef,
-    },
+    kombu_ssl_version   => $::openstack::profile::base::ssl_version,
     debug               => $::openstack::config::debug,
     use_ssl             => $::openstack::config::ssl,
     cert_file           => $cert_file,

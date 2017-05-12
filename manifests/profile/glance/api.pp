@@ -107,9 +107,6 @@ class openstack::profile::glance::api {
     rabbit_hosts      => $::openstack::config::rabbitmq_hosts,
     rabbit_ha_queues  => $::openstack::config::ha,
     rabbit_use_ssl    => $::openstack::config::ssl,
-    kombu_ssl_version => $::openstack::config::ssl ? {
-      true    => 'TLSv1_2',
-      default => undef,
-    },
+    kombu_ssl_version => $::openstack::profile::base::ssl_version,
   }
 }
