@@ -531,7 +531,7 @@ class openstack (
       horizon_allowed_hosts           => lookup(openstack::horizon::allowed_hosts, Array, 'first', []),
       horizon_server_aliases          => lookup(openstack::horizon::server_aliases, Array, 'first', []),
       horizon_servername              => lookup(openstack::horizon::servername, Optional[String], 'first', undef),
-      purge_config                    => lookup(openstack::purge_config, $purge_config),
+      purge_config                    => lookup(openstack::purge_config, Boolean, 'first', $purge_config),
       verbose                         => lookup(openstack::verbose),
       debug                           => lookup(openstack::debug),
       tempest_configure_images        => lookup(openstack::tempest::configure_images),
