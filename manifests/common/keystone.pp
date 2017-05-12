@@ -69,5 +69,6 @@ class openstack::common::keystone {
     enable_ssl          => $::openstack::config::ssl,
     ssl_certfile        => $cert_file,
     ssl_keyfile         => $key_file,
+    purge_config        => $::openstack::config::purge_config,
   }
 }
