@@ -29,6 +29,7 @@ class openstack::profile::neutron::router {
     package_ensure => 'absent',
     debug          => $::openstack::config::debug,
     manage_service => false,
+    purge_config   => $::openstack::config::purge_config,
   }
 
   if (is_array($::dnsclient::nameservers)) {
@@ -42,10 +43,12 @@ class openstack::profile::neutron::router {
     dnsmasq_config_file => $dnsmasq_config_file,
     dnsmasq_dns_servers => $dnsmasq_dns_servers,
     enabled             => true,
+    purge_config        => $::openstack::config::purge_config,
   }
 
   class { '::neutron::agents::vpnaas':
-    enabled => true,
+    enabled      => true,
+    purge_config => $::openstack::config::purge_config,
   }
 
   if ($dnsmasq_config_file) {
@@ -64,6 +67,7 @@ class openstack::profile::neutron::router {
     metadata_ip       => $controller_api_address,
     metadata_protocol => $scheme,
     enabled           => true,
+    purge_config      => $::openstack::config::purge_config,
   }
 
   if $::openstack::config::ssl { 
@@ -73,14 +77,17 @@ class openstack::profile::neutron::router {
   class { '::neutron::agents::lbaas':
     debug         => $::openstack::config::debug,
     device_driver => 'neutron_lbaas.drivers.haproxy.namespace_driver.HaproxyNSDriver',
+    purge_config  => $::openstack::config::purge_config,
   }
 
   class { '::neutron::agents::metering':
-    enabled => true,
+    enabled      => true,
+    purge_config => $::openstack::config::purge_config,
   }
 
   class { '::neutron::services::fwaas':
-    enabled => true,
-    driver  => 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
+    enabled      => true,
+    driver       => 'neutron.services.firewall.drivers.linux.iptables_fwaas.IptablesFwaasDriver',
+    purge_config => $::openstack::config::purge_config,
   }
 }

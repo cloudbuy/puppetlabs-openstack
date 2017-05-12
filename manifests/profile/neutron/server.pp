@@ -19,6 +19,7 @@ class openstack::profile::neutron::server {
     mechanism_drivers    => $mechanism_drivers,
     tunnel_id_ranges     => $tunnel_id_ranges,
     extension_drivers    => 'port_security',
+    purge_config         => $::openstack::config::purge_config,
   }
 
   $scheme = $::openstack::config::ssl ? {

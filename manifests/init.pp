@@ -281,6 +281,9 @@
 # [*servername*]
 #   The hostname to use for the Horizon service
 #
+# [*purge_config*]
+#   Whether to remove un-managed options from configuration files
+#
 # == Log levels
 # [*verbose*]
 #   Boolean. Determines if verbose is enabled for all OpenStack services.
@@ -437,6 +440,7 @@ class openstack (
   $tempest_neutron_available   = undef,
   $tempest_heat_available      = undef,
   $tempest_swift_available     = undef,
+  $purge_config = false,
   $verbose = undef,
   $debug = undef,
 ) {
@@ -527,6 +531,7 @@ class openstack (
       horizon_allowed_hosts           => lookup(openstack::horizon::allowed_hosts, Array, 'first', []),
       horizon_server_aliases          => lookup(openstack::horizon::server_aliases, Array, 'first', []),
       horizon_servername              => lookup(openstack::horizon::servername, Optional[String], 'first', undef),
+      purge_config                    => lookup(openstack::purge_config, $purge_config),
       verbose                         => lookup(openstack::verbose),
       debug                           => lookup(openstack::debug),
       tempest_configure_images        => lookup(openstack::tempest::configure_images),
@@ -630,6 +635,7 @@ class openstack (
       horizon_allowed_hosts           => [],
       horizon_server_aliases          => [],
       horizon_servername              => $horizon_servername,
+      purge_config                    => $purge_config,
       verbose                         => $verbose,
       debug                           => $debug,
       tempest_configure_images        => $tempest_configure_images,

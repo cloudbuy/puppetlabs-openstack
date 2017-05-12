@@ -77,6 +77,7 @@ class openstack::common::neutron {
     use_ssl               => $::openstack::config::ssl,
     cert_file             => $cert_file,
     key_file              => $key_file,
+    purge_config          => $::openstack::config::purge_config,
   }->
   file { "/etc/neutron/neutron.conf":
     ensure => present,

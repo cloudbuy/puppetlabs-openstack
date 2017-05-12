@@ -15,6 +15,7 @@ class openstack::common::ml2::ovs {
     local_ip         => $data_address,
     enabled          => true,
     tunnel_types     => $tunnel_types,
+    purge_config     => $::openstack::config::purge_config,
   }
   neutron_agent_ovs { 'agent/veth_mtu': value => $::openstack::config::neutron_instance_mtu }
 }

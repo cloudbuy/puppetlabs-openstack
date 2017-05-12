@@ -77,6 +77,7 @@ class openstack::profile::glance::api {
     cert_file                => $cert_file,
     key_file                 => $key_file,
     workers                  => $workers,
+    purge_config             => $::openstack::config::purge_config,
   }
 
   class { '::glance::backend::rbd':
@@ -97,6 +98,7 @@ class openstack::profile::glance::api {
     cert_file           => $cert_file,
     key_file            => $key_file,
     workers             => $workers,
+    purge_config        => $::openstack::config::purge_config,
   }
 
   class { '::glance::notify::rabbitmq':

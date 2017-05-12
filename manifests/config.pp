@@ -107,6 +107,7 @@ class openstack::config (
   $tempest_neutron_available   = undef,
   $tempest_heat_available      = undef,
   $tempest_swift_available     = undef,
+  $purge_config = undef,
   $verbose = undef,
   $debug = undef,
 ) {

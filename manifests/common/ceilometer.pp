@@ -22,6 +22,7 @@ class openstack::common::ceilometer {
     rabbit_password   => $::openstack::config::rabbitmq_password,
     rabbit_use_ssl    => $::openstack::config::ssl,
     kombu_ssl_version => $kombu_ssl_version,
+    purge_config      => $::openstack::config::purge_config,
   }
 
   ceilometer_config { 'DEFAULT/rabbit_password': ensure => absent }

@@ -57,6 +57,7 @@ class openstack::profile::heat::api {
       default => undef,
     },
     debug               => $::openstack::config::debug,
+    purge_config        => $::openstack::config::purge_config,
   }
 
   class { '::heat::api':
