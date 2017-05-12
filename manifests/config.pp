@@ -111,4 +111,5 @@ class openstack::config (
   $verbose = undef,
   $debug = undef,
 ) {
+  include ::openstack::config::designate
 }

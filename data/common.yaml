@@ -1,0 +1,2 @@
+---
+openstack::config::designate::mysql_user: 'designate'

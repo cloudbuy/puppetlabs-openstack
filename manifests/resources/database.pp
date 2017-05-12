@@ -1,6 +1,6 @@
 define openstack::resources::database (
-  $user = getvar("::openstack::config::mysql_user_${title}"),
-  $password = getvar("::openstack::config::mysql_pass_${title}"),
+  $user = pick(getvar("::openstack::config::mysql_user_${title}"),getvar("::openstack::config::${title}::mysql_user")
+  $password = pick(getvar("::openstack::config::mysql_pass_${title}"),getvar("::openstack::config::${title}::mysql_pass"))
 ) {
   class { "::${title}::db::mysql":
     user          => $user,

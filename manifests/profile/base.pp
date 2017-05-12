@@ -1,6 +1,6 @@
 # The base profile for OpenStack. Installs the repository and ntp
 class openstack::profile::base {
-  # make sure the parameters are initialized
+ # make sure the parameters are initialized
   include ::openstack
 
   # everyone also needs to be on the same clock
@@ -21,6 +21,11 @@ class openstack::profile::base {
     true    => 'TLSv1_2',
     default => undef,
   }
+
+  $_rabbitmq_hosts = join($::openstack::config::rabbitmq_hosts.map |$host| {
+    "${::openstack::config::rabbitmq_user}:${::openstack::config::rabbitmq_password}@${host}"
+  }, ",")
+  $transport_url = "rabbit://${_rabbitmq_hosts}/"
 
   $management_network = $::openstack::config::network_management
   $management_address = ip_for_network($management_network)
