@@ -1,4 +1,14 @@
 ---
-openstack::config::designate::mysql_user: 'designate'
+openstack::config::services:
+  - 'keystone'
+  - 'nova'
+  - 'neutron'
+  - 'cinder'
+  - 'glance'
+  - 'horizon'
+  - 'heat'
+  - 'ceilometer'
+  - 'magnum'
 
+openstack::config::designate::mysql_user: 'designate'
 openstack::config::magnum::mysql_user: 'magnum'

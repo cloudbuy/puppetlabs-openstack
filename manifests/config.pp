@@ -1,5 +1,6 @@
 # private global parameters class. Do not use directly!
 class openstack::config (
+  $services,
   $use_hiera = undef,
   $ssl = undef,
   $ssl_cacert = undef,
@@ -111,5 +112,8 @@ class openstack::config (
   $verbose = undef,
   $debug = undef,
 ) {
-  include ::openstack::config::designate
+
+  $services.each |$service| {
+    include ::openstack::config::$service
+  }
 }
