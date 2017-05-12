@@ -1,0 +1,14 @@
+image: ruby:2.2
+
+stages:
+  - test
+
+testing:
+  cache:
+    key: ${CI_BUILD_REF_NAME}
+    paths:
+      - modules/
+  stage: test
+  script:
+    - bundle install
+    - bundle exec rake test
