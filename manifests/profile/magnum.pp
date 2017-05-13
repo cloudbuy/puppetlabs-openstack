@@ -33,6 +33,10 @@ class openstack::profile::magnum {
     enabled_ssl => $::openstack::config::ssl,
   }
 
+  class { '::magnum::db':
+    database_connection => $database_connection,
+  }
+
   class { '::magnum::logging':
     debug => $::openstack::config::debug,
   }
