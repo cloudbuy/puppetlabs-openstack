@@ -33,6 +33,10 @@ class openstack::profile::magnum {
     enabled_ssl => $::openstack::config::ssl,
   }
 
+  class { '::magnum::logging':
+    debug => $::openstack::config::debug,
+  }
+
 	class { '::magnum':
     default_transport_url => $::openstack::profile::base::transport_url,
     rabbit_use_ssl        => $::openstacl::config::ssl,
@@ -42,7 +46,4 @@ class openstack::profile::magnum {
 
   class { '::magnum::conductor': }
 
-  class { '::magnum::logging':
-    debug => $::openstack::config::debug,
-  }
 }
