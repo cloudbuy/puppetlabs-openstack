@@ -4,8 +4,8 @@ class openstack::profile::magnum {
   } else {
     $management_address = $::openstack::config::controller_address_management
   }
-	$user = $::openstack::config::designate::mysql_user
-	$pass = $::openstack::config::designate::mysql_pass
+	$user = $::openstack::config::magnum::mysql_user
+	$pass = $::openstack::config::magnum::mysql_pass
 	$database_connection = "mysql://${user}:${pass}@${management_address}/designate"
   $scheme = $::openstack::profile::base::url_scheme
 	
