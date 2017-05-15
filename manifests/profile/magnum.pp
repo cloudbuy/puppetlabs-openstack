@@ -21,6 +21,10 @@ class openstack::profile::magnum {
     region       => $::openstack::config::region,
   }
 
+  class { '::magnum::keystone::domain':
+    domain_password => $::openstack::config::magnum::domain_password,
+  }
+
   class { '::magnum::keystone::authtoken':
     password          => $::openstack::config::magnum::password,
     auth_uri          => "${scheme}://${::openstack::config::controller_address_api}:5000/",
