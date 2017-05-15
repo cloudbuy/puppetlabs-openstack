@@ -28,10 +28,9 @@ class openstack::profile::nova::compute {
   }
 
   class { '::nova::placement':
-    password          => $::openstack::config::placement_password,
-    auth_uri          => "${scheme}://${::openstack::config::controller_address_api}:5000/",
-    auth_url          => "${scheme}://${::openstack::config::controller_address_management}:35357/",
-    memcached_servers => $memcached_servers,
+    password       => $::openstack::config::placement_password,
+    auth_url       => "${scheme}://${::openstack::config::controller_address_management}:35357/",
+    os_region_name => $::openstack::config::region,
   }
 
   file { '/etc/libvirt/qemu.conf':
