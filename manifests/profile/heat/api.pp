@@ -5,7 +5,6 @@ class openstack::profile::heat::api {
   openstack::resources::firewall { 'Heat API': port     => '8004', }
   openstack::resources::firewall { 'Heat CFN API': port => '8000', }
 
-
   if ($::openstack::config::ha) {
     $heat_api_host      = $::openstack::profile::base::management_address
     $management_address = $::openstack::profile::base::management_address
@@ -40,9 +39,10 @@ class openstack::profile::heat::api {
   }
 
   class { '::heat::keystone::authtoken':
-		password => $::openstack::config::heat_password,
-    auth_uri => $::openstack::profile::base::auth_uri,
-    auth_url => $::openstack::profile::base::auth_url,
+		password          => $::openstack::config::heat_password,
+    auth_uri          => $::openstack::profile::base::auth_uri,
+    auth_url          => $::openstack::profile::base::auth_url,
+    memcached_servers => $::openstack::profile::base::memcached_servers,
   }
 
   class { '::heat':
