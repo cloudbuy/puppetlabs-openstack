@@ -7,6 +7,7 @@ openstack::config::services:
   - 'glance'
   - 'horizon'
   - 'heat'
+  - 'barbican'
   - 'ceilometer'
   - 'magnum'
 
