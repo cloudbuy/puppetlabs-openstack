@@ -37,8 +37,8 @@ class openstack::profile::base {
   $controller_api_address = $::openstack::config::controller_address_api
   $storage_api_address    = $::openstack::config::storage_address_api
 
-  $auth_uri = "${url_scheme}://${controller_api_address}:5000/v3"
-  $auth_url = "${url_scheme}://${controller_management_address}:35357/v3"
+  $auth_uri = "${url_scheme}://${controller_api_address}:5000/"
+  $auth_url = "${url_scheme}://${controller_management_address}:35357/"
 
   if ($::openstack::config::ha) {
     $controller_management_addresses = $::openstack::config::controllers.map|String $name, Hash $addr| { $addr['management'] }
