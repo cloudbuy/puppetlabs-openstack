@@ -57,7 +57,7 @@ class openstack::profile::heat::api {
     purge_config        => $::openstack::config::purge_config,
   }
 
-  class { '::heat::domain':
+  class { '::heat::keystone::domain':
     domain_password => $::openstack::config::heat::domain_password,
   }
 
