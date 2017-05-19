@@ -29,8 +29,8 @@ class openstack::profile::ceilometer::api {
   }
 
   class { '::ceilometer::keystone::authtoken':
-    auth_uri => "${scheme}://${controller_management_address}:5000/",
-    auth_url => "${scheme}://${controller_management_address}:35357/", 
+    auth_uri => $::openstack::profile::base::auth_uri,
+    auth_url => $::openstack::profile::base::auth_url,
     password => $::openstack::config::ceilometer_password,
   }
 

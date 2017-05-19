@@ -61,7 +61,7 @@ class openstack::profile::horizon {
     bind_address       => $horizon_bind_address,
     secret_key         => $::openstack::config::horizon_secret_key,
     cache_server_ip    => $::openstack::config::controller_address_management,
-    keystone_url       => "${scheme}://${::openstack::config::controller_address_api}:5000/v2.0",
+    keystone_url       => $::openstack::profile::base::auth_uri,
     neutron_options    => {
       enable_firewall       => true,
       enable_ha_router      => true,

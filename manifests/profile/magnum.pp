@@ -27,8 +27,8 @@ class openstack::profile::magnum {
 
   class { '::magnum::keystone::authtoken':
     password          => $::openstack::config::magnum::password,
-    auth_uri          => "${scheme}://${::openstack::config::controller_address_api}:5000/",
-    auth_url          => "${scheme}://${::openstack::config::controller_address_management}:35357/",
+    auth_uri          => $::openstack::profile::base::auth_uri,
+    auth_url          => $::openstack::profile::base::auth_url,
     memcached_servers => $::openstack::profile::base::memcached_servers,
   }
 

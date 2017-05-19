@@ -19,8 +19,8 @@ class openstack::common::designate {
 
   class { '::designate::keystone::authtoken':
     password          => $::openstack::config::designate::password,
-    auth_uri          => "${scheme}://${::openstack::config::controller_address_api}:5000/",
-    auth_url          => "${scheme}://${::openstack::config::controller_address_management}:35357/",
+    auth_uri          => "${scheme}://${::openstack::config::controller_address_api}:5000/v3",
+    auth_url          => "${scheme}://${::openstack::config::controller_address_management}:35357/v3",
     memcached_servers => $::openstack::profile::base::memcached_servers,
   }
 
