@@ -57,6 +57,10 @@ class openstack::profile::heat::api {
     purge_config        => $::openstack::config::purge_config,
   }
 
+  class { '::heat::domain':
+    domain_password => $::openstack::config::heat::domain_password,
+  }
+
   class { '::heat::api':
     bind_host => $heat_api_host,
   }
