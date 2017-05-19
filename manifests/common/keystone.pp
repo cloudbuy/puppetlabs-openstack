@@ -65,7 +65,6 @@ class openstack::common::keystone {
     enabled             => ($::openstack::profile::base::is_controller and $::openstack::config::keystone_use_httpd),
     enable_bootstrap    => $::openstack::profile::base::is_controller,
     admin_bind_host     => $admin_bind_host,
-    admin_endpoint      => $::openstack::profile::base::auth_url,
     public_bind_host    => $public_bind_host,
     service_name        => $service_name,
     enable_ssl          => $::openstack::config::ssl,
