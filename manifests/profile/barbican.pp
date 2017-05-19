@@ -30,6 +30,10 @@ class openstack::profile::barbican {
     memcached_servers => $::openstack::profile::base::memcached_servers,
   }
 
+  class { '::barbican::db':
+    database_connection => $database_connection,
+  }
+
   if ($::openstack::config::ssl) {
     Package['barbican-common']->
     file { '/etc/barbican/ssl':
