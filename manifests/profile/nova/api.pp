@@ -71,7 +71,7 @@ class openstack::profile::nova::api {
     metadata_listen                      => $::openstack::common::nova::nova_api_host,
   }
 
-  #include ::nova::cell_v2::simple_setup
+  include ::nova::cell_v2::simple_setup
 
   if ($::openstack::config::ssl) {
     File['/etc/nova/ssl/key.pem']->
