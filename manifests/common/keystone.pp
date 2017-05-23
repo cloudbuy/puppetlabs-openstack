@@ -71,5 +71,6 @@ class openstack::common::keystone {
     ssl_certfile        => $cert_file,
     ssl_keyfile         => $key_file,
     purge_config        => $::openstack::config::purge_config,
+    memcache_servers    => $::openstack::profile::base::memcache_servers,
   }
 }
