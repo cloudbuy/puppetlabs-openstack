@@ -71,6 +71,11 @@ class openstack::common::keystone {
     ssl_certfile        => $cert_file,
     ssl_keyfile         => $key_file,
     purge_config        => $::openstack::config::purge_config,
+
+    cache_backend       => 'oslo_cache.memcache_pool',
+    cache_enabled       => true,
+    debug_cache_backend => true,
+    token_caching       => true,
     memcache_servers    => $::openstack::profile::base::memcached_servers,
   }
 }
