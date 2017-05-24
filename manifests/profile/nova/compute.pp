@@ -29,7 +29,7 @@ class openstack::profile::nova::compute {
 
   class { '::nova::placement':
     password       => $::openstack::config::placement_password,
-    auth_url       => $::openstack::profile::base::auth_url,
+    auth_url       => "${::openstack::profile::base::auth_url}v3",
     os_region_name => $::openstack::config::region,
   }
 
