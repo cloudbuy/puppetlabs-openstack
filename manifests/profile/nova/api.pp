@@ -58,11 +58,12 @@ class openstack::profile::nova::api {
   include ::openstack::common::nova
 
   class { '::nova::keystone::authtoken':
-    password          => $::openstack::config::nova_password,
-    auth_version      => 3,
-    auth_uri          => "${scheme}://${::openstack::config::controller_address_api}:5000/",
-    auth_url          => "${scheme}://${::openstack::config::controller_address_management}:35357/",
-    memcached_servers => $memcached_servers,
+    password            => $::openstack::config::nova_password,
+    user_domain_name    => 'default',
+    project_domain_name => 'default',
+    auth_uri            => "${scheme}://${::openstack::config::controller_address_api}:5000/",
+    auth_url            => "${scheme}://${::openstack::config::controller_address_management}:35357/",
+    memcached_servers   => $memcached_servers,
   }
 
   class { '::nova::api':
