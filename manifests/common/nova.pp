@@ -106,6 +106,14 @@ class openstack::common::nova {
   # Play better with Windows instances when doing a guest shutdown
   nova_config { 'DEFAULT/shutdown_timeout': value => '300'; }
 
+  class { '::nova::placement':
+    password            => $::openstack::config::placement_password,
+    auth_url            => "${::openstack::profile::base::auth_url}v3",
+    os_region_name      => $::openstack::config::region,
+    project_domain_name => 'default',
+    user_domain_name    => 'default',
+  }
+
   class { '::nova::network::neutron':
     neutron_admin_password => $::openstack::config::neutron_password,
     neutron_region_name    => $::openstack::config::region,

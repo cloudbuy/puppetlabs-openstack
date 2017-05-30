@@ -27,14 +27,6 @@ class openstack::profile::nova::compute {
     default => 'http'
   }
 
-  class { '::nova::placement':
-    password            => $::openstack::config::placement_password,
-    auth_url            => "${::openstack::profile::base::auth_url}v3",
-    os_region_name      => $::openstack::config::region,
-    project_domain_name => 'default',
-    user_domain_name    => 'default',
-  }
-
   file { '/etc/libvirt/qemu.conf':
     ensure => present,
     source => 'puppet:///modules/openstack/qemu.conf',
