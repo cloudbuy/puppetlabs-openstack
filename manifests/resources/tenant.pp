@@ -7,7 +7,6 @@ define openstack::resources::tenant (
     ensure      => present,
     description => $description,
     enabled     => $enabled,
-    domain      => 'default',
   }
 
 }
