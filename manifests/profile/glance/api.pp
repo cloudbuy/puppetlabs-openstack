@@ -59,10 +59,12 @@ class openstack::profile::glance::api {
   }
 
   class { '::glance::api::authtoken':
-    password          => $::openstack::config::glance_password,
-    auth_uri          => $::openstack::profile::base::auth_uri,
-    auth_url          => $::openstack::profile::base::auth_url,
-    memcached_servers => $memcached_servers,
+    password            => $::openstack::config::glance_password,
+    auth_uri            => $::openstack::profile::base::auth_uri,
+    auth_url            => $::openstack::profile::base::auth_url,
+    memcached_servers   => $memcached_servers,
+    user_domain_name    => 'default',
+    project_domain_name => 'default',
   }
 
   class { '::glance::api':
@@ -86,10 +88,12 @@ class openstack::profile::glance::api {
   }
 
   class { '::glance::registry::authtoken':
-    password          => $::openstack::config::glance_password,
-    auth_uri          => $::openstack::profile::base::auth_uri,
-    auth_url          => $::openstack::profile::base::auth_url,
-    memcached_servers => $memcached_servers,
+    password            => $::openstack::config::glance_password,
+    auth_uri            => $::openstack::profile::base::auth_uri,
+    auth_url            => $::openstack::profile::base::auth_url,
+    memcached_servers   => $memcached_servers,
+    user_domain_name    => 'default',
+    project_domain_name => 'default',
   }
 
   class { '::glance::registry':
