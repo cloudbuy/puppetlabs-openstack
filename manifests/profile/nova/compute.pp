@@ -24,7 +24,7 @@ class openstack::profile::nova::compute {
   class { '::nova::compute::libvirt':
     libvirt_virt_type       => $::openstack::config::nova_libvirt_type,
     vncserver_listen        => $management_address,
-    libvirt_hw_disk_discard => 'unmap,'
+    libvirt_hw_disk_discard => 'unmap',
     virtlock_service_name   => $virtlock_service_name,
     virtlog_service_name    => $virtlog_service_name,
   }
