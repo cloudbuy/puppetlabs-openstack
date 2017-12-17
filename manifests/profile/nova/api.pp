@@ -47,6 +47,7 @@ class openstack::profile::nova::api {
     enabled                              => false,
     api_bind_address                     => $::openstack::common::nova::nova_api_host,
     metadata_listen                      => $::openstack::common::nova::nova_api_host,
+    allow_resize_to_same_host            => true,
   }
 
   if ($::openstack::config::ssl) {

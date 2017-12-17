@@ -11,6 +11,7 @@ class openstack::profile::nova::compute {
     vnc_enabled                   => true,
     vncserver_proxyclient_address => $management_address,
     vncproxy_host                 => $::openstack::config::controller_address_api,
+    allow_resize_to_same_host     => true,
   }
 
   class { '::nova::compute::libvirt':
