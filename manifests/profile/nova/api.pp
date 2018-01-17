@@ -49,6 +49,10 @@ class openstack::profile::nova::api {
     metadata_listen                      => $::openstack::common::nova::nova_api_host,
   }
 
+  # FIXME: this is added to ::nova::api in later versions
+  # We don't always want to move an instance if it can be resized to the same machine
+  nova_config { 'DEFAULT/allow_resize_to_same_host': value => true }
+
   if ($::openstack::config::ssl) {
     File['/etc/nova/ssl/key.pem']->
     Class['::nova::wsgi::apache']

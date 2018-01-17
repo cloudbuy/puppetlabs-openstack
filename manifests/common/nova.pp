@@ -103,9 +103,6 @@ class openstack::common::nova {
     mode   => '0640',
   }
 
-  # We don't always want to move an instance if it can be resized to the same machine
-  nova_config { 'DEFAULT/allow_resize_to_same_host': value => true }
-
   # Play better with Windows instances when doing a guest shutdown
   nova_config { 'DEFAULT/shutdown_timeout': value => '300'; }
 
