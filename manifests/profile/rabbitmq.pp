@@ -39,6 +39,7 @@ class openstack::profile::rabbitmq {
       ssl_key                     => '/etc/rabbitmq/ssl/key.pem',
       ssl_fail_if_no_peer_cert    => false,
       ssl_verify                  => 'verify_peer',
+      tcp_backlog                 => 1024,
     }
 
     file { '/etc/rabbitmq/ssl/certificate.pem':
@@ -62,6 +63,7 @@ class openstack::profile::rabbitmq {
       port                        => 5672,
       delete_guest_user           => true,
       config_management_variables => {},
+      tcp_backlog                 => 1024,
     }
   }
 }
