@@ -16,7 +16,6 @@ class openstack::profile::firewall::pre {
     proto  => 'all',
     state  => ['RELATED', 'ESTABLISHED'],
     action => 'accept',
-    before => [ Class['::firewall'] ],
   } ->
   firewall { '0002 - localhost':
     proto  => 'icmp',
