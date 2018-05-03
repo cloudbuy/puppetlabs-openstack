@@ -32,6 +32,6 @@ class openstack::profile::firewall::pre {
     state  => ['NEW', 'ESTABLISHED', 'RELATED'],
     action => 'accept',
     dport   => 22,
-    before => [ Firewall['8999 - Accept all management network traffic'] ],
+    before => [ Firewall['8599 - Accept all management network traffic'] ],
   }
 }
