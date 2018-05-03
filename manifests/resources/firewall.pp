@@ -6,7 +6,7 @@ define openstack::resources::firewall ( $port ) {
       state  => ['NEW'],
       action => 'accept',
       dport   => $port,
-      before => Firewall['8999 - Accept all management network traffic'],
+      before => Firewall['8599 - Accept all management network traffic'],
     }
   } else {
     firewall { "${port} - ${title}":
@@ -14,7 +14,7 @@ define openstack::resources::firewall ( $port ) {
       state  => ['NEW'],
       action => 'accept',
       dport   => $port,
-      before => Firewall['8999 - Accept all management network traffic'],
+      before => Firewall['8599 - Accept all management network traffic'],
     }
   }
 }
