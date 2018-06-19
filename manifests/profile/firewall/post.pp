@@ -4,6 +4,7 @@ class openstack::profile::firewall::post {
     proto  => 'all',
     state  => ['NEW'],
     action => 'accept',
+    alias  => '8999 - Accept all management network traffic',
     source => $::openstack::config::network_management,
   } ->
   firewall { '89100 - Accept all vm network traffic':
